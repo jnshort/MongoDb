@@ -12,7 +12,7 @@ class Department:
         self.building: str = building
         self.office: int = office
         self.desc: str = desc
-        self.db_connection = db
+        self.db = MongoClient(db)
         self.active: bool = False
 
 
@@ -51,11 +51,10 @@ class Department:
         if self.constraints():
             rec = Records()
             rec.new_dept_rec(self)
+            rec.db["departments"].insert_one(self.dict_repr())
             self.active = True
 
-            # todo
-            pass
-        
+            
 
 
     def remove_dept(self):
@@ -67,8 +66,9 @@ class Department:
         rec.remove_dept_rec(self)
         self.active = False
 
-        # todo
-        pass
+        to_del = self.db.find(self.dict_repr())
+        self.db.delete_one(to_del)
+
 
 
 

@@ -92,7 +92,8 @@ def main_menu():
     menu ="""Manage Database
     1) Add 
     2) Delete
-    3) List"""
+    3) List
+    4) Load"""
     
     inp = 0
     while inp not in [1,2, 3]:
@@ -107,10 +108,32 @@ def main_menu():
 
     elif inp == 3:
         list_menu()
+
+    elif inp == 4:
+        load_dp()
+
+    elif inp == 5:
+        return True
+
+    return False
     
 
+def load_db():
+    """Takes existing documents in the database and adds them to 
+    the records singleton based on what collection they belong to 
+    for tracking and constraint checking.
+    """
+    # todo 
+    # I don't think we need this for this assignment, but probably will for term project
+    # and the goal of this was to make this scalable
+    pass
 
 
 def main():
-    rec = Records()
+    done = False
+    while !done:
+        done = main_menu()
+
+
     
+
