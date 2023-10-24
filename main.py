@@ -12,6 +12,8 @@ print("Hello Branch!")
 >>>>>>> 68e36a406770038330873d4bf13f79f4d877ad75
 
 
+departments = [] # maybe make this a singleton, just have to remember how to do that
+
 
 def add_menu():
     """Prints a menu for adding to a collection.
@@ -41,10 +43,10 @@ def add_menu():
         if dept.constrains():
             dept.add_dept()
             print("Department added")
+            departments.append(dept) # see comment on global var
         else:
             print("Failed to add department")
 
-        
 
 def remove_menu():
 
