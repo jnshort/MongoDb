@@ -2,6 +2,7 @@ import pymongo
 from pymongo import MongoClient
 from Department import Department
 #from db import db 
+from Records import Records
 
 
 <<<<<<< HEAD
@@ -12,9 +13,6 @@ print("Hello Branch!")
 >>>>>>> 68e36a406770038330873d4bf13f79f4d877ad75
 
 
-departments = [] # maybe make this a singleton, just have to remember how to do that
-
-
 def add_menu():
     """Prints a menu for adding to a collection.
     Prompts user for necessary information and adds to
@@ -22,6 +20,8 @@ def add_menu():
     :return:    None
     """
     
+    rec = Records()
+
     menu = """What would you like to add?
     1) Department
     2) Return to main menu"""
@@ -45,7 +45,6 @@ def add_menu():
         if dept.constrains():
             dept.add_dept()
             print("Department added")
-            departments.append(dept) # see comment on global var
         else:
             print("Failed to add department")
 
