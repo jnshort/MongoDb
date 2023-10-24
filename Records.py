@@ -21,13 +21,13 @@ class Records:
 	def __init__(self):
 		if not Records._initialized:
 			self.db_connect = MongoClient(db)
-           		self.departments = [] # im not sure why the indentation on this line is messed up, it shows correctly on my ide but not in github
+			self.departments = [] # im not sure why the indentation on this line is messed up, it shows correctly on my ide but not in github
 			Singleton._initialized = True
 
 
 	def new_dept_rec(self, dept: Department):
-        	self.departments.append(dept)
+        self.departments.append(dept)
 
-
+	
 	def remove_dept_rec(self, dept: Department):
 		self.departments.remove(dept)
