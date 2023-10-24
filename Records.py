@@ -20,7 +20,7 @@ class Records:
 	def __init__(self, x):
 		if not Records._initialized:
 			self.db_connect = MongoClient(db)
-            		self.departments = []
+           	self.departments = []
 			Singleton._initialized = True
 
     def new_dept_rec(self, dept: Department):
