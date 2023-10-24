@@ -19,8 +19,6 @@ def add_menu():
     the collection the user chose.
     :return:    None
     """
-    
-    rec = Records()
 
     menu = """What would you like to add?
     1) Department
@@ -123,6 +121,5 @@ def main_menu():
 
 
 def main():
-
-    # todo
-    pass
+    rec = Records()
+    
