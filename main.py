@@ -131,7 +131,7 @@ def load_db():
 
 def main():
     done = False
-    while !done:
+    while not done:
         done = main_menu()
 
 
