@@ -51,19 +51,24 @@ class Department:
 
     def remove_dept(self):
         """Removes this department from the database.
-        :return:    None"""
+        :return:    None
+        """
         # todo
         pass
 
 
     def list_dept(self):
         """Lists the departments that are in the database.
-        :return:    String"""
+        :return:    String
+        """
         # todo
         pass
 
 
     def __str__(self):
+        """Returns a string representation of the department.
+        :return:    String
+        """
         text = f"Name: {self.name} Abbreviation: {self.abbreviation}\n"
         text += f"\tChair: {self.chair} Building: {self.building} Office: {self.office}\n"
         text += f"\tDescription: {self.description}"
