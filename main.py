@@ -1,6 +1,6 @@
 import pymongo
 from pymongo import MongoClient
-from db import db 
+#from db import db 
 
 
 def add_menu():
