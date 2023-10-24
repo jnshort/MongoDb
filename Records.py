@@ -1,7 +1,6 @@
 import pymongo
 from pymongo import MongoClient
 from db import db
-from Department import Department
 
 
 class Records:
@@ -25,9 +24,9 @@ class Records:
             Records._initialized = True
 
 
-    def new_dept_rec(self, dept: Department):
+    def new_dept_rec(self, dept):
         self.departments.append(dept)
 
 
-    def remove_dept_rec(self, dept: Department):
+    def remove_dept_rec(self, dept):
         self.departments.remove(dept)
