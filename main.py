@@ -1,16 +1,7 @@
 import pymongo
 from pymongo import MongoClient
 from Department import Department
-#from db import db 
 from Records import Records
-
-
-<<<<<<< HEAD
-print("Hello World!")
-print("Hello Branch!")
-=======
-
->>>>>>> 68e36a406770038330873d4bf13f79f4d877ad75
 
 
 def add_menu():

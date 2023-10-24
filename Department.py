@@ -50,7 +50,7 @@ class Department:
         
         if self.constraints():
             rec = Records()
-            rec.new_dept(self)
+            rec.new_dept_rec(self)
             self.active = True
 
             # todo
@@ -64,12 +64,11 @@ class Department:
         :return:    None
         """
         rec = Records()
-        rec.remove_dept(self)
+        rec.remove_dept_rec(self)
         self.active = False
 
         # todo
         pass
-
 
 
 
