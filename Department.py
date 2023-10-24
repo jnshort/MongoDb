@@ -37,7 +37,7 @@ class Department:
             "chair": self.chair,
             "building": self.building,
             "office": self.office,
-            "description": self.description
+            "description": self.desc
         }
         return dept
 
@@ -51,7 +51,7 @@ class Department:
         if self.constraints():
             rec = Records()
             rec.new_dept_rec(self)
-            rec.db["departments"].insert_one(self.dict_repr())
+            rec.db.singlecollection.departments.insert_one(self.dict_repr())
             self.active = True
 
             
@@ -66,7 +66,7 @@ class Department:
         rec.remove_dept_rec(self)
         self.active = False
 
-        to_del = self.db.find(self.dict_repr())
+        to_del = self.db.singlecollection.departments.find(self.dict_repr())
         self.db.delete_one(to_del)
 
 
