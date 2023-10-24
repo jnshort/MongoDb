@@ -17,6 +17,8 @@ departments = [] # maybe make this a singleton, just have to remember how to do 
 
 def add_menu():
     """Prints a menu for adding to a collection.
+    Prompts user for necessary information and adds to
+    the collection the user chose.
     :return:    None
     """
     
@@ -49,20 +51,76 @@ def add_menu():
 
 
 def remove_menu():
+    """Prints a menu for removing from a collectin.
+    Prompts the user for necessary information and removes
+    from collection of the user's choice.
+    :return:    None
+    """
+    menu = """What would you like to remove?
+    1) Department
+    2) Return to main menu"""
+    inp = 0
+    while inp not in [1,2]:
+        print(menu)
+        inp = int(input("Choice # --> "))
+    
+    
+    if inp == 1:
+        name = input("Enter department name --> ")
+        found = False
+        to_del = None
+        for dept in departments:
+            if dept.name == name:
+                found = True
+                to_del = dept
+        if found:
+            to_del.remove_dept()
+            print("Department removed")
+        else:
+            print("Failed to find department")
 
-    # todo
-    pass
+            
 
 
 def list_menu():
+    menu ="""Which collection would you like to list?
+    1) Department
+    2) Return to main menu"""
+    inp = 0
+    while inp not in [1,2]:
+        print(menu)
+        inp = int(input("Choice # --> "))
+    
+    if inp == 1:
+        print("Departments:")
+        for dept in departments:
+            print(str(dept))
+            
 
-    # todo
-    pass
+  
+
 
 def main_menu():
+    menu ="""Manage Database
+    1) Add 
+    2) Delete
+    3) List"""
+    
+    inp = 0
+    while inp not in [1,2, 3]:
+        print(menu)
+        inp = int(input("Choice # --> "))
 
-    # todo
-    pass
+    if inp == 1:
+        add_menu()
+
+    elif inp == 2:
+        remove_menu()
+
+    elif inp == 3:
+        list_menu()
+    
+
 
 
 def main():
