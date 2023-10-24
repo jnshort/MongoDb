@@ -2,7 +2,6 @@ import pymongo
 from pymongo import MongoClient
 #from db import db 
 
-print("Hello World!")
 
 def add_menu():
 
