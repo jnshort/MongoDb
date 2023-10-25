@@ -100,11 +100,10 @@ def main_menu():
     1) Add 
     2) Delete
     3) List
-    4) Load
-    5) Exit"""
+    4) Exit"""
     
     inp = 0
-    while inp not in [1,2, 3, 4, 5]:
+    while inp not in [1,2, 3, 4]:
         print(menu)
         inp = int(input("Choice # --> "))
 
@@ -118,9 +117,6 @@ def main_menu():
         list_menu()
 
     elif inp == 4:
-        load_db()
-
-    elif inp == 5:
         return True
 
     return False
@@ -154,6 +150,9 @@ def load_dept():
 
 
 def main():
+    # Loads database
+    load_db()
+    
     done = False
     while not done:
         done = main_menu()
