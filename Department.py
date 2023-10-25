@@ -1,6 +1,7 @@
 import pymongo
 from pymongo import MongoClient
 from db import db 
+from Records import Records
 
 class Department:
 
@@ -11,7 +12,7 @@ class Department:
         self.building: str = building
         self.office: int = office
         self.desc: str = desc
-        self.db_connection = db
+        self.db = MongoClient(db)
         self.active: bool = False
 
 
@@ -36,33 +37,39 @@ class Department:
             "chair": self.chair,
             "building": self.building,
             "office": self.office,
-            "description": self.description
+            "description": self.desc
         }
         return dept
 
 
     def add_dept(self):
-        """Adds this department to the database.
+        """Adds this department to the database and the 
+        records list of departments.
         :return:    None
         """
-        # todo
-        pass
+        
+        if self.constraints():
+            rec = Records()
+            rec.new_dept_rec(self)
+            rec.db.singlecollection.departments.insert_one(self.dict_repr())
+            self.active = True
+
+            
 
 
     def remove_dept(self):
         """Removes this department from the database.
+        Main has already verified that this dept is in the database.
         :return:    None
         """
-        # todo
-        pass
+        rec = Records()
+        rec.remove_dept_rec(self)
+        self.active = False
+
+        to_del = self.db.singlecollection.departments.find(self.dict_repr())
+        self.db.delete_one(to_del)
 
 
-    def list_dept(self):
-        """Lists the departments that are in the database.
-        :return:    String
-        """
-        # todo
-        pass
 
 
     def __str__(self):
