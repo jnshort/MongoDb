@@ -20,7 +20,8 @@ class Department:
         return (
             len(self.name) <= 50 and 
             len(self.abbreviation) <= 6 and 
-            len(self.chair) <= 10 and
+            len(self.chair) <= 80 and
+            len(self.building) <= 10 and
             len(self.desc) <= 80)
 
     def constraints(self) -> bool:
@@ -31,7 +32,7 @@ class Department:
         """
         # todo
         
-        # No professor can chair > one department.
+        
         uniqueName = {
             "name":self.name,
         }
@@ -39,6 +40,8 @@ class Department:
         uniqueAbbr = {
             "abbreviation":self.abbreviation
         }
+
+        # No professor can chair > one department.
         unique1 = {
             "chair":self.chair,
         }
@@ -56,8 +59,8 @@ class Department:
 
         rec = Records()
         uniqueCount =  rec.db_connect.singlecollection.departments.count_documents(uniqueName)
-        uniqueCount =  rec.db_connect.singlecollection.departments.count_documents(uniqueAbbr)
-        uniqueCount =  rec.db_connect.singlecollection.departments.count_documents(unique1)
+        uniqueCount +=  rec.db_connect.singlecollection.departments.count_documents(uniqueAbbr)
+        uniqueCount +=  rec.db_connect.singlecollection.departments.count_documents(unique1)
         uniqueCount +=  rec.db_connect.singlecollection.departments.count_documents(unique2)
         uniqueCount +=  rec.db_connect.singlecollection.departments.count_documents(unique3)
         
