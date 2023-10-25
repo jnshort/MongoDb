@@ -4,6 +4,7 @@ from Department import Department
 from Records import Records
 
 
+
 def add_menu():
     """Prints a menu for adding to a collection.
     Prompts user for necessary information and adds to
@@ -99,10 +100,11 @@ def main_menu():
     1) Add 
     2) Delete
     3) List
-    4) Load"""
+    4) Load
+    5) Exit"""
     
     inp = 0
-    while inp not in [1,2, 3]:
+    while inp not in [1,2, 3, 4, 5]:
         print(menu)
         inp = int(input("Choice # --> "))
 
@@ -116,7 +118,7 @@ def main_menu():
         list_menu()
 
     elif inp == 4:
-        load_dp()
+        load_db()
 
     elif inp == 5:
         return True
@@ -129,16 +131,33 @@ def load_db():
     the records singleton based on what collection they belong to 
     for tracking and constraint checking.
     """
-    # todo 
-    # I don't think we need this for this assignment, but probably will for term project
-    # and the goal of this was to make this scalable
-    pass
+    load_dept()
+
+
+def load_dept():
+    """Takes existing departments in the departments collection and
+    loads them into our records as Department objects
+    """
+    rec = Records()
+    col = rec.db_connect.singlecollection.departments.find()
+    for dept in col:
+        name = dept["name"]
+        abrv = dept["abbreviation"]
+        chair = dept["chair"]
+        build = dept["building"]
+        off = dept["office"]
+        desc = dept["description"]
+
+        store = Department(name, abrv, chair, build, off, desc)
+        rec.new_dept_rec(store)
+
 
 
 def main():
     done = False
     while not done:
         done = main_menu()
+    print("Goodbye")
 
 
     
