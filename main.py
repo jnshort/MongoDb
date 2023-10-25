@@ -30,12 +30,16 @@ def add_menu():
             office = input("must be an integer --> ")
         desc = input("Enter description --> ")
 
-        dept = Department(name, abrv, chair, building, office, desc)    
-        if dept.constrains():
-            dept.add_dept()
-            print("Department added")
+        dept = Department(name, abrv, chair, building, office, desc)
+
+        if dept.constraints():
+            if dept.checkFields():
+                dept.add_dept()
+                print("Department added")
+            else:
+                print("Invalid department fields entered!")
         else:
-            print("Failed to add department")
+            print("Not a unique department. Not added")
 
 
 def remove_menu():
@@ -44,6 +48,7 @@ def remove_menu():
     from collection of the user's choice.
     :return:    None
     """
+    rec = Records()
     menu = """What would you like to remove?
     1) Department
     2) Return to main menu"""
@@ -57,7 +62,7 @@ def remove_menu():
         name = input("Enter department name --> ")
         found = False
         to_del = None
-        for dept in departments:
+        for dept in rec.departments:
             if dept.name == name:
                 found = True
                 to_del = dept
@@ -71,6 +76,7 @@ def remove_menu():
 
 
 def list_menu():
+    rec = Records()
     menu ="""Which collection would you like to list?
     1) Department
     2) Return to main menu"""
@@ -81,7 +87,7 @@ def list_menu():
     
     if inp == 1:
         print("Departments:")
-        for dept in departments:
+        for dept in rec.departments:
             print(str(dept))
             
 
@@ -136,4 +142,5 @@ def main():
 
 
     
-
+if __name__ == '__main__':
+    main()

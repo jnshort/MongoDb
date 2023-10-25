@@ -1,6 +1,7 @@
 import pymongo
 from pymongo import MongoClient
 from db import db
+import certifi
 
 
 class Records:
@@ -19,7 +20,7 @@ class Records:
 
     def __init__(self):
         if not Records._initialized:
-            self.db_connect = MongoClient(db)
+            self.db_connect = MongoClient(db, tlsCAFile=certifi.where())
             self.departments = []
             Records._initialized = True
 

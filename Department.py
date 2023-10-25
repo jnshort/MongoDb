@@ -16,6 +16,12 @@ class Department:
         self.active: bool = False
 
 
+    def checkFields(self) -> bool:
+        return (
+            len(self.name) <= 50 and 
+            len(self.abbreviation) <= 6 and 
+            len(self.chair) <= 10 and
+            len(self.desc) <= 80)
 
     def constraints(self) -> bool:
         """Checks uniqueness constraints of the Department class 
@@ -24,7 +30,39 @@ class Department:
         :return:    Boolean
         """
         # todo
-        pass
+        
+        # No professor can chair > one department.
+        uniqueName = {
+            "name":self.name,
+        }
+
+        uniqueAbbr = {
+            "abbreviation":self.abbreviation
+        }
+        unique1 = {
+            "chair":self.chair,
+        }
+
+        # No two departments can occupy the same room.
+        unique2 = {
+            "building":self.building,
+            "office":self.office
+        }
+
+        # No two departments can have the same description.
+        unique3 = {
+            "description":self.desc
+        }
+
+        rec = Records()
+        uniqueCount =  rec.db_connect.singlecollection.departments.count_documents(uniqueName)
+        uniqueCount =  rec.db_connect.singlecollection.departments.count_documents(uniqueAbbr)
+        uniqueCount =  rec.db_connect.singlecollection.departments.count_documents(unique1)
+        uniqueCount +=  rec.db_connect.singlecollection.departments.count_documents(unique2)
+        uniqueCount +=  rec.db_connect.singlecollection.departments.count_documents(unique3)
+        
+        
+        return uniqueCount == 0
 
 
     def dict_repr(self) -> dict:
@@ -51,7 +89,7 @@ class Department:
         if self.constraints():
             rec = Records()
             rec.new_dept_rec(self)
-            rec.db.singlecollection.departments.insert_one(self.dict_repr())
+            rec.db_connect.singlecollection.departments.insert_one(self.dict_repr())
             self.active = True
 
             
@@ -66,8 +104,8 @@ class Department:
         rec.remove_dept_rec(self)
         self.active = False
 
-        to_del = self.db.singlecollection.departments.find(self.dict_repr())
-        self.db.delete_one(to_del)
+        #to_del = rec.db_connect.singlecollection.departments.find()
+        rec.db_connect.singlecollection.departments.delete_one({"name":self.name})
 
 
 
@@ -78,7 +116,7 @@ class Department:
         """
         text = f"Name: {self.name} Abbreviation: {self.abbreviation}\n"
         text += f"\tChair: {self.chair} Building: {self.building} Office: {self.office}\n"
-        text += f"\tDescription: {self.description}"
+        text += f"\tDescription: {self.desc}"
         return text
 
 
