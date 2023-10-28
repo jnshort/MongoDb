@@ -75,7 +75,7 @@ class Department:
         dept = {
             "name": self.name,
             "abbreviation": self.abbreviation,
-            "chair": self.chair,
+            "chair_name": self.chair,
             "building": self.building,
             "office": self.office,
             "description": self.desc
@@ -89,11 +89,10 @@ class Department:
         :return:    None
         """
         
-        if self.constraints():
-            rec = Records()
-            rec.new_dept_rec(self)
-            rec.db_connect.singlecollection.departments.insert_one(self.dict_repr())
-            self.active = True
+        rec = Records()
+        rec.new_dept_rec(self)
+        rec.db_connect.singlecollection.departments.insert_one(self.dict_repr())
+        self.active = True
 
             
 
