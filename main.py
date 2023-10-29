@@ -68,10 +68,11 @@ def remove_menu():
         name = input("Enter department name --> ")
         found = False
         to_del = None
-        for dept in rec.departments:
-            if dept.name == name:
+        col = rec.department_list()
+        for dept in col:
+            if dept['name'] == name:
                 found = True
-                to_del = dept
+                to_del = load_dept(dept)
         if found:
             to_del.remove_dept()
             print("Department removed")
@@ -93,11 +94,10 @@ def list_menu():
     
     if inp == 1:
         print("Departments:")
-        for dept in rec.departments:
+        col = rec.department_list()
+        for dept in col:
             print(str(dept))
             
-
-  
 
 
 def main_menu():
@@ -127,30 +127,18 @@ def main_menu():
     return False
     
 
-def load_db():
-    """Takes existing documents in the database and adds them to 
-    the records singleton based on what collection they belong to 
-    for tracking and constraint checking.
+def load_dept(dept: dict) -> Department:
+    """Takes a dictionary returned by MongoDb representing a department document
+    and creates a Departent object of that document.
     """
-    load_dept()
+    name = dept["name"]
+    abrv = dept["abbreviation"]
+    chair = dept["chair_name"]
+    build = dept["building"]
+    off = dept["office"]
+    desc = dept["description"]
+    return Department(name, abrv, chair, build, off, desc)
 
-
-def load_dept():
-    """Takes existing departments in the departments collection and
-    loads them into our records as Department objects
-    """
-    rec = Records()
-    col = rec.db_connect.singlecollection.departments.find()
-    for dept in col:
-        name = dept["name"]
-        abrv = dept["abbreviation"]
-        chair = dept["chair_name"]
-        build = dept["building"]
-        off = dept["office"]
-        desc = dept["description"]
-
-        store = Department(name, abrv, chair, build, off, desc)
-        rec.new_dept_rec(store)
 1
 def startNewDatabase():
     # connect to database
@@ -172,12 +160,12 @@ def startNewDatabase():
 
 def main():
 
-    """Menu to load existing database, or start over """
+    """Menu to use existing database, or start over """
     validChoice = False
     choiceOptions = [1,2]
     while not validChoice:
-        print("""Would you like to load existing database?
-            1.) Load existing database
+        print("""Would you like to use existing database?
+            1.) Use existing database
             2.) Start from scratch\n""")
         
         inp =  input("Choice # --> ")
@@ -186,7 +174,7 @@ def main():
             validChoice = True
             match inp:
                 case 1:
-                    load_db() # load the database
+                    pass
                 case 2:
                     startNewDatabase() # start over
                 case _:

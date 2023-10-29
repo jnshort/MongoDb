@@ -21,13 +21,10 @@ class Records:
     def __init__(self):
         if not Records._initialized:
             self.db_connect = MongoClient(db, tlsCAFile=certifi.where())
-            self.departments = []
+            self.departments = self.db_connect.singlecollection.departments
             Records._initialized = True
 
 
-    def new_dept_rec(self, dept):
-        self.departments.append(dept)
+    def department_list(self):
+        return self.departments.find()
 
-
-    def remove_dept_rec(self, dept):
-        self.departments.remove(dept)

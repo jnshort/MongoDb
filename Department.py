@@ -58,11 +58,11 @@ class Department:
         }
 
         rec = Records()
-        uniqueCount =  rec.db_connect.singlecollection.departments.count_documents(uniqueName)
-        uniqueCount +=  rec.db_connect.singlecollection.departments.count_documents(uniqueAbbr)
-        uniqueCount +=  rec.db_connect.singlecollection.departments.count_documents(unique1)
-        uniqueCount +=  rec.db_connect.singlecollection.departments.count_documents(unique2)
-        uniqueCount +=  rec.db_connect.singlecollection.departments.count_documents(unique3)
+        uniqueCount =  rec.departments.count_documents(uniqueName)
+        uniqueCount +=  rec.departments.count_documents(uniqueAbbr)
+        uniqueCount +=  rec.departments.count_documents(unique1)
+        uniqueCount +=  rec.departments.count_documents(unique2)
+        uniqueCount +=  rec.departments.count_documents(unique3)
         
         
         return uniqueCount == 0
@@ -90,8 +90,7 @@ class Department:
         """
         
         rec = Records()
-        rec.new_dept_rec(self)
-        rec.db_connect.singlecollection.departments.insert_one(self.dict_repr())
+        rec.departments.insert_one(self.dict_repr())
         self.active = True
 
             
@@ -103,11 +102,10 @@ class Department:
         :return:    None
         """
         rec = Records()
-        rec.remove_dept_rec(self)
         self.active = False
 
         #to_del = rec.db_connect.singlecollection.departments.find()
-        rec.db_connect.singlecollection.departments.delete_one({"name":self.name})
+        rec.departments.delete_one({"name":self.name})
 
 
 
