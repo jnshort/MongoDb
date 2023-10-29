@@ -96,7 +96,7 @@ def list_menu():
         print("Departments:")
         col = rec.department_list()
         for dept in col:
-            print(str(dept))
+            print(str(load_dept(dept)))
             
 
 
