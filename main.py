@@ -14,7 +14,7 @@ def add_menu():
     :return:    None
     """
 
-    menu = """What would you like to add?
+    menu = """\nWhat would you like to add?
     1) Department
     2) Return to main menu"""
     inp = 0
@@ -25,7 +25,7 @@ def add_menu():
     if inp == 1:
         getting_input = True
         while getting_input:
-            print("Adding Department:")
+            print("\nAdding Department:")
             name = input("Enter department name --> ")
             abrv = input("Enter abbreviation --> ")
             chair = input("Enter chair --> ")
@@ -43,7 +43,9 @@ def add_menu():
                 getting_input = False
             except Exception as ex:
                 getting_input = True
+                print("\n*******************************")
                 print("There are errors with the input")
+                print("*******************************\n")
                 print(ex)
 
 
@@ -55,7 +57,7 @@ def remove_menu():
     :return:    None
     """
     rec = Records()
-    menu = """What would you like to remove?
+    menu = """\nWhat would you like to remove?
     1) Department
     2) Return to main menu"""
     inp = 0
@@ -84,7 +86,7 @@ def remove_menu():
 
 def list_menu():
     rec = Records()
-    menu ="""Which collection would you like to list?
+    menu ="""\nWhich collection would you like to list?
     1) Department
     2) Return to main menu"""
     inp = 0
@@ -93,15 +95,18 @@ def list_menu():
         inp = int(input("Choice # --> "))
     
     if inp == 1:
+        print("\n--------------------")
         print("Departments:")
         col = rec.department_list()
         for dept in col:
             print(str(load_dept(dept)))
+            print()
+        print("--------------------")
             
 
 
 def main_menu():
-    menu ="""Manage Database
+    menu ="""\nManage Database
     1) Add 
     2) Delete
     3) List
@@ -163,6 +168,19 @@ def main():
     """Menu to use existing database, or start over """
     validChoice = False
     choiceOptions = [1,2]
+
+    print("""\n
+     _.--\"\"--._
+    /  _    _  \\
+ _  ( (_\  /_) )  _
+{ \._\   /\   /_./ }
+/_\"=-.}______{.-\=\"_\\
+ _  _.=(\"\"\"\")=._  _
+(_\'\"_.-\"`~~`\"-._\"\'_)
+ {_\"            \"_}
+    
+""")
+    print("===== CECS 323 - Single Collection =====\n")
     while not validChoice:
         print("""Would you like to use existing database?
             1.) Use existing database
