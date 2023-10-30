@@ -114,8 +114,8 @@ class Department:
         """Returns a string representation of the department.
         :return:    String
         """
-        text = f"Name: {self.name} Abbreviation: {self.abbreviation}\n"
-        text += f"\tChair: {self.chair} Building: {self.building} Office: {self.office}\n"
+        text = f"Name: {self.name}, Abbreviation: {self.abbreviation}\n"
+        text += f"\tChair: {self.chair}, Building: {self.building}, Office: {self.office}\n"
         text += f"\tDescription: {self.desc}"
         return text
 
