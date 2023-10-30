@@ -115,7 +115,9 @@ def main_menu():
     inp = 0
     while inp not in [1,2, 3, 4]:
         print(menu)
-        inp = int(input("Choice # --> "))
+        inp = input("Choice # --> ")
+        if inp.isdigit():
+            inp = int(inp)
 
     if inp == 1:
         add_menu()
