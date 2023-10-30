@@ -46,7 +46,12 @@ def add_menu():
                 print("\n*******************************")
                 print("There are errors with the input")
                 print("*******************************\n")
-                print(ex)
+                if type(ex) == pymongo.errors.WriteError:
+                    print("At least one invalid field")
+                elif type(ex) == pymongo.errors.DuplicateKeyError:
+                    print("Department would violate at least one uniqueness constraint")
+                else:
+                    print(ex)
 
 
 
@@ -164,9 +169,12 @@ def startNewDatabase():
         database["departments"].create_index(constraint, unique = True)
     
 
+def parse_error(er):
+    pass
+
+
 
 def main():
-
     """Menu to use existing database, or start over """
     validChoice = False
     choiceOptions = [1,2]
