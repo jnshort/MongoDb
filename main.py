@@ -45,14 +45,14 @@ def add_menu():
                 getting_input = True
                 print("\n*******************************")
                 print("There are errors with the input")
-                print("*******************************\n")
                 if type(ex) == pymongo.errors.WriteError:
-                    print("At least one invalid field")
+                    print("\tAt least one invalid field")
+                    print("*******************************")
                 elif type(ex) == pymongo.errors.DuplicateKeyError:
-                    print("Department would violate at least one uniqueness constraint")
+                    print("\tDepartment would violate at least one uniqueness constraint")
+                    print("*******************************")
                 else:
                     print(ex)
-
 
 
 def remove_menu():
@@ -168,11 +168,6 @@ def startNewDatabase():
     for constraint in department_constraints:
         database["departments"].create_index(constraint, unique = True)
     
-
-def parse_error(er):
-    pass
-
-
 
 def main():
     """Menu to use existing database, or start over """
