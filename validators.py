@@ -87,8 +87,28 @@ student_validator = {
                             }
 
                         }
-                    }
+                    },
+                    'enrollments': {
+                            'bsonType': 'array',
+                            'description': 'list of student enrollemnts',
+                            'items':{
+                                'oneOf':[
+                                    {
+                                        'bsonType': 'object',
+                                        'properties': {
+                                            'application_date':{'type':'string'},
+                                        }
+                                    },
+                                    {
+                                        'bsonType': 'object',
+                                        'properties': {
+                                            'letter_grade': {'type':'string'}
+                                        }
+                                    }
+                                ]
+                            }
 
+                    },
                 }
             }
         }
