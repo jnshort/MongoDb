@@ -1,0 +1,36 @@
+validators to-do
+- course
+- section
+- major
+- student
+- studentmajor
+- enrollment
+- department (need to update to add associations to course and major)
+
+Major
+- list of students (references) that have that major
+- reference to it's department
+
+Department
+- list of courses that dept offers (references)
+- list of majors that dept offers (references)
+
+Course
+- list of sections (embedded)
+
+Section (embedded in course)
+- List of student references
+
+Enrollment (embedded in student)
+- reference to a section
+- (validator uses 'OneOf' for PassFail/LetterGrade)
+
+StudentMajor (embedded in student)
+- reference to major
+
+Student
+- list of studentMajors (embedded)
+- list of enrollments (embedded)
+
+
+
