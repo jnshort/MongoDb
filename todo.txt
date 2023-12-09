@@ -2,8 +2,8 @@ validators to-do
 - course
 - section
 - major
-- student
-- studentmajor
+- student ✓
+- studentmajor ✓
 - enrollment
 - department (need to update to add associations to course and major)
 

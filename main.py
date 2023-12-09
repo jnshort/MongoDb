@@ -5,7 +5,7 @@ from Student import Student
 from Records import Records
 from validators import department_validator
 from validators import student_validator
-from constraints import department_constraints
+from constraints import department_constraints, student_constraints
 
 database_name = "singlecollection"
 
@@ -34,9 +34,9 @@ def add_student():
     firstName = input("Enter first name --> ")
     lastName = input("Enter last name --> ")
     email = input("Enter email --> ")
-
     student = Student(lastName, firstName, email)
     student.add_student()
+
 def add_department():
     getting_input = True
     while getting_input:
@@ -182,6 +182,8 @@ def startNewDatabase():
     # apply uniqueness constraints
     for constraint in department_constraints:
         database["departments"].create_index(constraint, unique = True)
+    for constraint in student_constraints:
+        database["students"].create_index(constraint, unique = True)
     
 
 def main():

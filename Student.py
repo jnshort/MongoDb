@@ -2,11 +2,12 @@ import pymongo
 from pymongo import MongoClient
 from db import db
 from Records import Records
+from StudentMajor import StudentMajor
 
 
 # hello world
 class Student:
-
+    self.studentMajors =[]
     def __init__(self, lastName: str, firstName: str, email: str):
         self.lastName: str = lastName
         self.firstName: str = firstName
@@ -20,12 +21,12 @@ class Student:
         """Returns a dictionary representation of the class.
         :return:    dict
         """
-        dept = {
+        student = {
             "last_name": self.lastName,
             "first_name": self.firstName,
             "email": self.email,
         }
-        return dept
+        return student
 
     def add_student(self):
         """Adds this department to the database and the
