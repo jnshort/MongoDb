@@ -118,13 +118,29 @@ student_validator = {
                                     {
                                         'bsonType': 'object',
                                         'properties': {
-                                            'application_date':{'type':'string'},
+                                            'application_date':{
+                                                'bsonType':'string'
+                                            },
+                                            'course': {
+                                                'bsonType': 'objectid',
+                                            },
+                                            'section_number': {
+                                                'bsonType': 'int'
+                                            }
                                         }
                                     },
                                     {
                                         'bsonType': 'object',
                                         'properties': {
-                                            'letter_grade': {'type':'string'}
+                                            'letter_grade': {
+                                                'bsonType':'string'
+                                            },
+                                            'course': {
+                                                'bsonType': 'objectid',
+                                            },
+                                            'section_number': {
+                                                'bsonType': 'int'
+                                            }
                                         }
                                     }
                                 ]
