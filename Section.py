@@ -37,7 +37,7 @@ class Section:
         }
         return section
 
-    def add_dept(self):
+    def add_section(self):
         """Adds this section to the database and the
         records list of sections.
         :return:    None
@@ -47,7 +47,7 @@ class Section:
         rec.sections.insert_one(self.dict_repr())
         self.active = True
 
-    def remove_dept(self):
+    def remove_section(self):
         """Removes this section from the database.
         Main has already verified that this section is in the database.
         :return:    None
