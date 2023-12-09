@@ -54,6 +54,5 @@ class Section:
         """
         rec = Records()
         self.active = False
-
-        #to_del = rec.db_connect.singlecollection.departments.find()
+        
         rec.sections.delete_one({"section_number":self.section_number})
