@@ -34,7 +34,29 @@ department_validator = {
                         'bsonType': 'string',
                         'minLength': 10,
                         'maxLength': 80
-                  },
+                    },
+                    'courses': {
+                        'bsonType': 'array',
+                        'description': 'list of  courses offered by department',
+                        'minItems': 0,
+                        'uniqueItems': True,
+                        'items': {
+                            'bsonType': 'ObjectId',
+                            'description': 'reference to a course',
+                        },
+                    },
+                    'majors': {
+                        'bsonType': 'array',
+                        'description': 'list of majors offered by department',
+                        'minItems': 0,
+                        'uniqueItems': True,
+                        'items': {
+                            'bsonType': 'ObjectId',
+                            'description': 'reference to a major',
+                        },
+                    },
+
+                    
                 }
             }
         }
@@ -113,3 +135,4 @@ student_validator = {
             }
         }
     }
+
