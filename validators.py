@@ -41,7 +41,7 @@ department_validator = {
                         'minItems': 0,
                         'uniqueItems': True,
                         'items': {
-                            'bsonType': 'ObjectId',
+                            'bsonType': 'objectId',
                             'description': 'reference to a course',
                         },
                     },
@@ -51,7 +51,7 @@ department_validator = {
                         'minItems': 0,
                         'uniqueItems': True,
                         'items': {
-                            'bsonType': 'ObjectId',
+                            'bsonType': 'objectId',
                             'description': 'reference to a major',
                         },
                     },
