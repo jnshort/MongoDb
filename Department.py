@@ -3,6 +3,7 @@ from pymongo import MongoClient
 from db import db 
 from Records import Records
 
+# hello world
 class Department:
 
     def __init__(self, name: str, abrv: str, chair: str, building: str, office: int, desc: str):
