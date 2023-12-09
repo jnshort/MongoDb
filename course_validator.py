@@ -62,10 +62,8 @@ course_validator = {
                                             'enum': ['MW', 'TuTh', 'MWF', 'F', 'S']
                                         },
                                         'start_time': {
-                                            'bsonType': 'time',
+                                            'bsonType': 'string',
                                             'description': 'time the section starts',
-                                            'maxLength': '8:00',
-                                            'minLength': '19:30'
                                         },
                                         'instructor': {
                                             'bsonType': 'string',

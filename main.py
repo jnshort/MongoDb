@@ -7,6 +7,7 @@ from validators import department_validator
 from validators import student_validator
 from constraints import department_constraints, student_constraints
 from major_validator import major_validator
+from course_validator import course_validator
 
 database_name = "singlecollection"
 
@@ -188,6 +189,7 @@ def startNewDatabase():
     database.create_collection("departments", **department_validator)
     database.create_collection("students", **student_validator)
     database.create_collection("majors", **major_validator)
+    database.create_collection("courses", **course_validator)
 
     # apply uniqueness constraints
     for constraint in department_constraints:
