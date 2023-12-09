@@ -1,8 +1,10 @@
 import pymongo
 from pymongo import MongoClient
 from Department import Department
+from Student import Student
 from Records import Records
 from validators import department_validator
+from validators import student_validator
 from constraints import department_constraints
 
 database_name = "singlecollection"
@@ -16,9 +18,10 @@ def add_menu():
 
     menu = """\nWhat would you like to add?
     1) Department
-    2) Return to main menu"""
+    2) Student
+    3) Return to main menu"""
     inp = 0
-    while inp not in [1,2]:
+    while inp not in [1,2,3]:
         print(menu)
         inp = int(input("Choice # --> "))
     
@@ -53,6 +56,13 @@ def add_menu():
                     print("*******************************")
                 else:
                     print(ex)
+    elif inp == 2:
+        firstName = input("Enter first name --> ")
+        lastName = input ("Enter last name --> ")
+        email = input ("Enter email --> ")
+
+        student = Student(lastName, firstName, email)
+        student.add_student()
 
 
 def remove_menu():
@@ -163,6 +173,7 @@ def startNewDatabase():
 
     # create collections with validator schemas
     database.create_collection("departments", **department_validator)
+    database.create_collection("students", **student_validator)
 
     # apply uniqueness constraints
     for constraint in department_constraints:

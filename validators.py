@@ -39,3 +39,57 @@ department_validator = {
             }
         }
     }
+
+student_validator = {
+        'validator': {
+            '$jsonSchema': {
+                'description': 'A person who is registered with the university and may enroll in courses',
+                'required': ['last_name', 'first_name', 'email'],
+                'additionalProperties': False,
+                'properties': {
+                    '_id': {},
+                    'last_name': {
+                        'bsonType': 'string',
+                        'description': 'last name of student',
+                        'minLength': 0,
+                        'maxLength': 50
+                    },
+                    'first_name': {
+                        'bsonType': 'string',
+                        'description': 'last name of student',
+                        'minLength':0,
+                        'maxLength': 50
+                    },
+                    'email': {
+                        'bsonType': 'string',
+                        'description': 'email address of a given student',
+                        'maxLength': 80
+                    },
+                    'student_majors' : {
+                        'bsonType':'array',
+                        'description':'List of majors declared by student',
+                        'minItems': 0,
+                        'uniqueItems': True,
+                        'items': {
+                            'bsonType':'object',
+                            'description': 'a major declared by the student',
+                            'required':['declaration_date','major'],
+                            'additionalProperties':False,
+                            'properties': {
+                                'declaration_date': {
+                                    'bsonType':'string',
+                                    'description':'date that a student delcared the given major',
+                                },
+                                'major': {
+                                    'bsonType':'objectId',
+                                    'description':'a reference to a major'
+                                },
+                            }
+
+                        }
+                    }
+
+                }
+            }
+        }
+    }
