@@ -26,44 +26,48 @@ def add_menu():
         inp = int(input("Choice # --> "))
     
     if inp == 1:
-        getting_input = True
-        while getting_input:
-            print("\nAdding Department:")
-            name = input("Enter department name --> ")
-            abrv = input("Enter abbreviation --> ")
-            chair = input("Enter chair --> ")
-            building = input("Enter building -->")
-            office = input("Enter office (must be an integer)--> ")
-            while not office.isnumeric():
-                office = input("must be an integer --> ")
-            office = int(office)
-            desc = input("Enter description --> ")
-
-            dept = Department(name, abrv, chair, building, office, desc)
-
-            try:
-                dept.add_dept()
-                getting_input = False
-            except Exception as ex:
-                getting_input = True
-                print("\n*******************************")
-                print("There are errors with the input")
-                if type(ex) == pymongo.errors.WriteError:
-                    print("\tAt least one invalid field")
-                    print("*******************************")
-                elif type(ex) == pymongo.errors.DuplicateKeyError:
-                    print("\tDepartment would violate at least one uniqueness constraint")
-                    print("*******************************")
-                else:
-                    print(ex)
+        add_department()
     elif inp == 2:
-        firstName = input("Enter first name --> ")
-        lastName = input ("Enter last name --> ")
-        email = input ("Enter email --> ")
+        add_student()
 
-        student = Student(lastName, firstName, email)
-        student.add_student()
+def add_student():
+    firstName = input("Enter first name --> ")
+    lastName = input("Enter last name --> ")
+    email = input("Enter email --> ")
 
+    student = Student(lastName, firstName, email)
+    student.add_student()
+def add_department():
+    getting_input = True
+    while getting_input:
+        print("\nAdding Department:")
+        name = input("Enter department name --> ")
+        abrv = input("Enter abbreviation --> ")
+        chair = input("Enter chair --> ")
+        building = input("Enter building -->")
+        office = input("Enter office (must be an integer)--> ")
+        while not office.isnumeric():
+            office = input("must be an integer --> ")
+        office = int(office)
+        desc = input("Enter description --> ")
+
+        dept = Department(name, abrv, chair, building, office, desc)
+
+        try:
+            dept.add_dept()
+            getting_input = False
+        except Exception as ex:
+            getting_input = True
+            print("\n*******************************")
+            print("There are errors with the input")
+            if type(ex) == pymongo.errors.WriteError:
+                print("\tAt least one invalid field")
+                print("*******************************")
+            elif type(ex) == pymongo.errors.DuplicateKeyError:
+                print("\tDepartment would violate at least one uniqueness constraint")
+                print("*******************************")
+            else:
+                print(ex)
 
 def remove_menu():
     """Prints a menu for removing from a collectin.
@@ -196,12 +200,12 @@ def main():
                                     {_\"            \"_}
         """)
     print("""
-  _________.__               .__           _________        .__  .__                 __  .__               
- /   _____/|__| ____    ____ |  |   ____   \\_   ___ \\  ____ |  | |  |   ____   _____/  |_|__| ____   ____  
- \\_____  \\ |  |/    \\  / ___\\|  | _/ __ \\  /    \\  \\/ /  _ \\|  | |  | _/ __ \\_/ ___\\   __\\  |/  _ \\ /    \\ 
- /        \\|  |   |  \\/ /_/  >  |_\\  ___/  \\     \\___(  <_> )  |_|  |_\\  ___/\\  \\___|  | |  (  <_> )   |  \\
-/_______  /|__|___|  /\\___  /|____/\\___  >  \\______  /\\____/|____/____/\\___  >\\___  >__| |__|\\____/|___|  /
-        \\/         \\//_____/           \\/          \\/                      \\/     \\/                    \\/ 
+     ___________                    __________                   __               __   
+    \\__    ___/__________  _____   \\______   \\_______  ____    |__| ____   _____/  |_ 
+      |    |_/ __ \\_  __ \\/     \\   |     ___/\\_  __ \\/  _ \\   |  |/ __ \\_/ ___\\   __\\
+      |    |\\  ___/|  | \\/  Y Y  \\  |    |     |  | \\(  <_> )  |  \\  ___/\\  \\___|  |  
+      |____| \\___  >__|  |__|_|  /  |____|     |__|   \\____/\\__|  |\\___  >\\___  >__|  
+                 \\/            \\/                          \\______|    \\/     \\/      
 """)
     print("=================================== CECS 323 - Term Project ======================================\n")
     while not validChoice:
