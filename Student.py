@@ -7,7 +7,7 @@ from StudentMajor import StudentMajor
 
 # hello world
 class Student:
-    self.studentMajors =[]
+    studentMajors = []
     def __init__(self, lastName: str, firstName: str, email: str):
         self.lastName: str = lastName
         self.firstName: str = firstName

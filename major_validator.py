@@ -1,4 +1,4 @@
-validator = {
+major_validator = {
         'validator': {
             '$jsonSchema': {
                 'description': 'A major associated with a particular department at a university',
@@ -17,18 +17,18 @@ validator = {
                         'description': 'description of major'
                     },
                     'department': {
-                        'bsonType': 'ObjectId',
+                        'bsonType': 'objectId',
                         'description': 'reference to a department'
                     },
                     'students': {
                         'bsonType': 'array',
-                        'description': 'list of student references'
+                        'description': 'list of student references',
                         'minItems': 0,
                         'items': {
-                            'bsonType': 'ObjectId',
+                            'bsonType': 'objectId',
                             'description': 'reference to a student'
-                        }
-                    }
+                        },
+                    },
                 }
             }
         }

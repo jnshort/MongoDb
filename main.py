@@ -6,6 +6,7 @@ from Records import Records
 from validators import department_validator
 from validators import student_validator
 from constraints import department_constraints, student_constraints
+from major_validator import major_validator
 
 database_name = "singlecollection"
 
@@ -19,9 +20,10 @@ def add_menu():
     menu = """\nWhat would you like to add?
     1) Department
     2) Student
-    3) Return to main menu"""
+    3) Major to Student
+    4) Return to main menu"""
     inp = 0
-    while inp not in [1,2,3]:
+    while inp not in [1,2,3,4]:
         print(menu)
         inp = int(input("Choice # --> "))
     
@@ -29,6 +31,13 @@ def add_menu():
         add_department()
     elif inp == 2:
         add_student()
+    elif ip == 3:
+        add_major_to_student()
+
+def add_major_to_student():
+    database = Records()
+    firstName = input("Student first name ->")
+    lastName = input("Student last name ->")
 
 def add_student():
     firstName = input("Enter first name --> ")
@@ -178,6 +187,7 @@ def startNewDatabase():
     # create collections with validator schemas
     database.create_collection("departments", **department_validator)
     database.create_collection("students", **student_validator)
+    database.create_collection("majors", **major_validator)
 
     # apply uniqueness constraints
     for constraint in department_constraints:
