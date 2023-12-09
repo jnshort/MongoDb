@@ -122,7 +122,7 @@ student_validator = {
                                                 'bsonType':'string'
                                             },
                                             'course': {
-                                                'bsonType': 'objectid',
+                                                'bsonType': 'objectId',
                                             },
                                             'section_number': {
                                                 'bsonType': 'int'
@@ -136,7 +136,7 @@ student_validator = {
                                                 'bsonType':'string'
                                             },
                                             'course': {
-                                                'bsonType': 'objectid',
+                                                'bsonType': 'objectId',
                                             },
                                             'section_number': {
                                                 'bsonType': 'int'
@@ -145,7 +145,6 @@ student_validator = {
                                     }
                                 ]
                             }
-
                     },
                 }
             }
