@@ -48,5 +48,4 @@ class Course:
         rec = Records()
         self.active = False
 
-        #to_del = rec.db_connect.singlecollection.departments.find()
         rec.courses.delete_one({"course_name":self.course_name})
