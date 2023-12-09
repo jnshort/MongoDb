@@ -8,29 +8,66 @@ validators to-do
 - department (need to update to add associations to course and major)
 
 Major
+attr
 - list of students (references) that have that major
 - reference to it's department
 
+methods:
+- add/remove Major
+- add/remove student to major
+- select a major (returns mongodb object)
+
 Department
+attr:
 - list of courses that dept offers (references)
 - list of majors that dept offers (references)
 
+methods:
+- add/remove dept
+- add/remove courses to dept
+- add/remove majors to dept
+- select dept (returns mongodb object)
+
 Course
+attr:
 - list of sections (embedded)
 
+methods:
+- add/remove course
+- add/remove sections from course
+- select course (returns mongodb object)
+
 Section (embedded in course)
+attr:
 - List of student references
 
+methods:
+- add/remove section
+- add/remove students from section
+- select section (returns mongodb object)
+
 Enrollment (embedded in student)
+attr:
 - reference to a section
 - (validator uses 'OneOf' for PassFail/LetterGrade)
 
+methods:
+- add/remove enrollment
+- select enrollment (returns mongodb object)
+
 StudentMajor (embedded in student)
+attr:
 - reference to major
 
+methods:
+- add/remove StudentMajor
+- select student major (returns mongodb object)
+
 Student
+attr:
 - list of studentMajors (embedded)
 - list of enrollments (embedded)
 
-
-
+methods:
+- add/remove student
+- select student (returns mongodb object)
