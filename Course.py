@@ -30,7 +30,7 @@ class Course:
         }
         return course
 
-    def add_dept(self):
+    def add_course(self):
         """Adds this course to the database and the
         records list of courses.
         :return:    None
@@ -40,7 +40,7 @@ class Course:
         rec.courses.insert_one(self.dict_repr())
         self.active = True
 
-    def remove_dept(self):
+    def remove_course(self):
         """Removes this course from the database.
         Main has already verified that this course is in the database.
         :return:    None
