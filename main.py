@@ -1,8 +1,10 @@
 import pymongo
 from pymongo import MongoClient
 from Department import Department
+from Student import Student
 from Records import Records
 from validators import department_validator
+from validators import student_validator
 from constraints import department_constraints
 
 database_name = "singlecollection"
@@ -16,44 +18,56 @@ def add_menu():
 
     menu = """\nWhat would you like to add?
     1) Department
-    2) Return to main menu"""
+    2) Student
+    3) Return to main menu"""
     inp = 0
-    while inp not in [1,2]:
+    while inp not in [1,2,3]:
         print(menu)
         inp = int(input("Choice # --> "))
     
     if inp == 1:
-        getting_input = True
-        while getting_input:
-            print("\nAdding Department:")
-            name = input("Enter department name --> ")
-            abrv = input("Enter abbreviation --> ")
-            chair = input("Enter chair --> ")
-            building = input("Enter building -->")
-            office = input("Enter office (must be an integer)--> ")
-            while not office.isnumeric():
-                office = input("must be an integer --> ")
-            office = int(office)
-            desc = input("Enter description --> ")
+        add_department()
+    elif inp == 2:
+        add_student()
 
-            dept = Department(name, abrv, chair, building, office, desc)
+def add_student():
+    firstName = input("Enter first name --> ")
+    lastName = input("Enter last name --> ")
+    email = input("Enter email --> ")
 
-            try:
-                dept.add_dept()
-                getting_input = False
-            except Exception as ex:
-                getting_input = True
-                print("\n*******************************")
-                print("There are errors with the input")
-                if type(ex) == pymongo.errors.WriteError:
-                    print("\tAt least one invalid field")
-                    print("*******************************")
-                elif type(ex) == pymongo.errors.DuplicateKeyError:
-                    print("\tDepartment would violate at least one uniqueness constraint")
-                    print("*******************************")
-                else:
-                    print(ex)
+    student = Student(lastName, firstName, email)
+    student.add_student()
+def add_department():
+    getting_input = True
+    while getting_input:
+        print("\nAdding Department:")
+        name = input("Enter department name --> ")
+        abrv = input("Enter abbreviation --> ")
+        chair = input("Enter chair --> ")
+        building = input("Enter building -->")
+        office = input("Enter office (must be an integer)--> ")
+        while not office.isnumeric():
+            office = input("must be an integer --> ")
+        office = int(office)
+        desc = input("Enter description --> ")
 
+        dept = Department(name, abrv, chair, building, office, desc)
+
+        try:
+            dept.add_dept()
+            getting_input = False
+        except Exception as ex:
+            getting_input = True
+            print("\n*******************************")
+            print("There are errors with the input")
+            if type(ex) == pymongo.errors.WriteError:
+                print("\tAt least one invalid field")
+                print("*******************************")
+            elif type(ex) == pymongo.errors.DuplicateKeyError:
+                print("\tDepartment would violate at least one uniqueness constraint")
+                print("*******************************")
+            else:
+                print(ex)
 
 def remove_menu():
     """Prints a menu for removing from a collectin.
@@ -163,6 +177,7 @@ def startNewDatabase():
 
     # create collections with validator schemas
     database.create_collection("departments", **department_validator)
+    database.create_collection("students", **student_validator)
 
     # apply uniqueness constraints
     for constraint in department_constraints:
@@ -185,14 +200,14 @@ def main():
                                     {_\"            \"_}
         """)
     print("""
-  _________.__               .__           _________        .__  .__                 __  .__               
- /   _____/|__| ____    ____ |  |   ____   \\_   ___ \\  ____ |  | |  |   ____   _____/  |_|__| ____   ____  
- \\_____  \\ |  |/    \\  / ___\\|  | _/ __ \\  /    \\  \\/ /  _ \\|  | |  | _/ __ \\_/ ___\\   __\\  |/  _ \\ /    \\ 
- /        \\|  |   |  \\/ /_/  >  |_\\  ___/  \\     \\___(  <_> )  |_|  |_\\  ___/\\  \\___|  | |  (  <_> )   |  \\
-/_______  /|__|___|  /\\___  /|____/\\___  >  \\______  /\\____/|____/____/\\___  >\\___  >__| |__|\\____/|___|  /
-        \\/         \\//_____/           \\/          \\/                      \\/     \\/                    \\/ 
+     ___________                    __________                   __               __   
+    \\__    ___/__________  _____   \\______   \\_______  ____    |__| ____   _____/  |_ 
+      |    |_/ __ \\_  __ \\/     \\   |     ___/\\_  __ \\/  _ \\   |  |/ __ \\_/ ___\\   __\\
+      |    |\\  ___/|  | \\/  Y Y  \\  |    |     |  | \\(  <_> )  |  \\  ___/\\  \\___|  |  
+      |____| \\___  >__|  |__|_|  /  |____|     |__|   \\____/\\__|  |\\___  >\\___  >__|  
+                 \\/            \\/                          \\______|    \\/     \\/      
 """)
-    print("=================================== CECS 323 - Single Collection ======================================\n")
+    print("=================================== CECS 323 - Term Project ======================================\n")
     while not validChoice:
         print("""Would you like to use existing database?
             1.) Use existing database
