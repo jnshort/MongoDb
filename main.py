@@ -117,7 +117,21 @@ def add_major_to_department():
 def add_course_to_department():
     database = Records()
     courseNotAdded = True
-    pass
+    while courseNotAdded:
+        departmentNotExist = True
+        while departmentNotExist:
+            departmentAbbreviation = input("Department Abbreviation --> ")
+            result = database.departments.find_one({"abbreviation": department})
+            if (result is not None):
+                department_id = result['_id']
+                departmentNotExist = False
+            else:
+                print("Could not find department!")
+
+        courseName = input("Course name --> ")
+        courseNumber = input("Course number --> ")
+
+
 
 
 def add_student():
