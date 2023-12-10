@@ -6,6 +6,7 @@ from Records import Records
 from Major import Major
 from StudentMajor import StudentMajor
 from Course import Course
+from Enrollment import Enrollment
 from validators import department_validator
 from validators import student_validator
 from constraints import department_constraints, student_constraints, major_constraints, course_constraints
@@ -183,6 +184,120 @@ def add_course_to_department():
 
 
 
+def add_enrollment():
+    rec = Records()
+
+    # get student to add
+    student = None
+    valid_input = False
+    while not valid_input:
+        firstName = input("Enter first name -->")
+        lastName = input("Enter last name -->")
+        studentQuery = {"first_name": firstName, "last_name":lastName}
+
+        student = database.students.find_one(studentQuery)
+        if student:
+            valid_input = True
+    student_obj = Student(student["first_name"], student["last_name"], student["email"])
+
+    student_enrollments = student["enrollments"]
+    # choose section to add to (and check student doesn't already have enrollment)
+    valid_section = False
+    course = None
+    sectionNum = ""
+    grade_type = None
+    while not valid_section:
+        courseName = input("Enter course name -->")
+        sectionNum = input("Enter section number -->")
+        grade_type = input("Enter 1 for Pass/Fail, or 2")
+        course = rec.courses.find_one({"course_name": courseName})
+        if course:
+            valid_section = True
+        else:
+            print("Invalid section please try again")
+        if grade_type not in ["1", "2"]:
+            valid_section = False
+            print("Invalid grade type")
+        else:
+            grade_type = int(grade_type)
+    field = ""
+    match grade_type:
+        case 1:
+            field += input("Enter application date")
+
+        case 2:
+            field += input("Enter minimum satisfactory grade")
+            while field.upper() not in ["A", "B", "C", "D", "F"]:
+                print("Invalid grade, valid choices are: A, B, C, D, F")
+                field = input("Enter minium satisfactory grade")
+    course_obj = Course(course["dept_abrv"], course["course_number"], course["course_name"], course["description"], course["units"])
+    enrollment_obj = Enrollment(student_obj, course_obj, sectionNum, grade_type, field)
+    try:
+        enrollment_obj.add_enrollment()
+    except Exception as e:
+        print("\n*******************************")
+        print("There are errors with the input")
+        if type(ex) == pymongo.errors.WriteError:
+            print("\tAt least one invalid field")
+            print("*******************************")
+        elif type(ex) == ValueError:
+            print("\tStudent is already enrolled in that course")
+            print("*******************************")
+        else:
+            print(ex)
+        
+    
+
+def remove_enrollment():
+    rec = Records()
+
+    student = None
+    valid_student = False
+    while not valid_student:
+        firstName = input("Enter first name -->")
+        lastName = input("Enter last name -->")
+        studentQuery = {"first_name": firstName, "last_name":lastName}
+
+        student = database.students.find_one(studentQuery)
+        if student:
+            valid_student = True
+
+    valid_course = False
+    course = None
+    while not valid_course:
+        course_name = input("Enter course name -->")
+        course = rec.courses.find_one({"course_name":course_name})
+        if course:
+            valid_course = True
+        else:
+            print("Unable to find course, enter a valid course name")
+    
+
+    if not student["enrollments"]:
+        print("Student does not have any enrollments to remove")
+        return False
+
+    enrollment_found = False
+    enroll_to_rem = None
+    for enroll in student["enrollments"]:
+        if enroll["course"] == course["_id"]:
+            enroll_to_rem = enroll
+            enrollment_found = True
+    
+    if enrollment_found:
+        student_obj = Student(student["first_name"], student["last_name"], student["email"])
+        course_obj = Course(course["dept_abrv"], course["course_number"], course["course_name"], course["description"], course["units"])
+        enroll_obj = Enrollment(student_obj, course_obj, enroll["section_number"], enroll["type"])
+        try:
+            enroll_obj.remove_enrollment()
+        except Exception as e:
+            print("\n*******************************")
+            print("There are errors with the input")
+            if type(e) == pymongo.errors.WriteError:
+                print("\tAt least one invalid field")
+                print("*******************************")
+            else:
+                print(ex)
 
 
 
