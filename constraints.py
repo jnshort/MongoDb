@@ -20,3 +20,9 @@ course_constraints =[
     [("dept_abrv", pymongo.ASCENDING), ("course_number", pymongo.ASCENDING)],
     [("dept_abrv", pymongo.ASCENDING), ("course_name", pymongo.ASCENDING)]
 ]
+
+section_constraints = [
+    [("course_id", pymongo.ASCENDING),("section_number",pymongo.ASCENDING),("semester",pymongo.ASCENDING),("section_year",pymongo.ASCENDING)],
+    [("semester", pymongo.ASCENDING),("section_year",pymongo.ASCENDING),("building",pymongo.ASCENDING),("room",pymongo.ASCENDING),("schedule",pymongo.ASCENDING),("start_time",pymongo.ASCENDING)],
+    [("semester",pymongo.ASCENDING),("section_year",pymongo.ASCENDING),("schedule",pymongo.ASCENDING),("start_time",pymongo.ASCENDING),("instructor",pymongo.ASCENDING)],
+]

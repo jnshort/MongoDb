@@ -1,5 +1,4 @@
 import pymongo
-from pymongo import MongoClient
 from Department import Department
 from Student import Student
 from Records import Records
@@ -8,11 +7,11 @@ from StudentMajor import StudentMajor
 from Course import Course
 from Enrollment import Enrollment
 from Section import Section
-from validators import department_validator
-from validators import student_validator
-from constraints import department_constraints, student_constraints, major_constraints, course_constraints
-from major_validator import major_validator
-from course_validator import course_validator
+from validators.validators import department_validator, student_validator
+from validators.major_validator import major_validator
+from validators.course_validator import course_validator
+from validators.section_validator import section_validator
+from constraints import department_constraints, student_constraints, major_constraints, course_constraints, section_constraints
 
 database_name = "singlecollection"
 database = Records()
@@ -320,39 +319,28 @@ def add_section_to_course():
         courseNotExist = True
         while courseNotExist:
             departmentAbbreviation = input("Department Abbreviation --> ")
-            courseNumber = input("Course Number -->")
-            courseQuery = {"course number": courseNumber,"abbreviation": departmentAbbreviation}
+            courseNumber = int(input("Course Number -->"))
+            courseQuery = {"course_number": courseNumber,"dept_abrv": departmentAbbreviation}
             result = database.courses.find_one(courseQuery)
             if (result is not None):
                 courseNotExist = False
             else:
                 print("Could not find course!")
 
-        # checking if this section already exists in the course
-        sectionInCourse = True
-        while sectionInCourse:
-            sectionNumber = int(input("Section number --> "))
 
-            # section is not in course unless one of the section references has the
-            # same name
-            sectionInCourse = False
-            for sectionId in result['section']:
-                exisitingSection = database.sections.find_one({'_id':sectionId})
-                if exisitingSection is not None:
-                    if exisitingSection['section_number'] == sectionNumber:
-                        sectionInCourse = True
-            if sectionInCourse:
-                print("The course already has this section!")
-
+        # removed check, relying on uniqueness constraints
+        # if section passes uniqueness constraints, it's a unique
+        # section and it cannot already be in a course
+        sectionNumber = int(input("Section number --> "))
         semester = input("Semester --> ")
         sectionYear = int(input("Section Year --> "))
         building = input("Building --> ")
-        room = input("Room --> ")
+        room = int(input("Room --> "))
         schedule = input("Schedule --> ")
         startTime = input("Start Time --> ")
         instructor = input("Instructor --> ")
 
-        section = Section(sectionNumber, semester, sectionYear, building, room, schedule, startTime, instructor)
+        section = Section(result['_id'],sectionNumber, semester, sectionYear, building, room, schedule, startTime, instructor)
         try:
             # add section to section collection
             section.add_section()
@@ -626,6 +614,7 @@ def startNewDatabase():
     database.create_collection("students", **student_validator)
     database.create_collection("majors", **major_validator)
     database.create_collection("courses", **course_validator)
+    database.create_collection("sections", **section_validator)
 
     # apply uniqueness constraints
     for constraint in department_constraints:
@@ -636,6 +625,8 @@ def startNewDatabase():
         database["majors"].create_index(constraint, unique=True)
     for constraint in course_constraints:
         database["courses"].create_index(constraint, unique=True)
+    for constraint in section_constraints:
+        database["sections"].create_index(constraint, unique=True)
 
     
 
