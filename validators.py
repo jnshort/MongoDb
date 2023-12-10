@@ -107,7 +107,6 @@ student_validator = {
                                     'description':'a reference to a major'
                                 },
                             }
-
                         }
                     },
                     'enrollments': {
