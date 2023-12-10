@@ -24,6 +24,7 @@ class Records:
             self.departments = self.db_connect.singlecollection.departments
             self.students = self.db_connect.singlecollection.students
             self.majors = self.db_connect.singlecollection.majors
+            self.courses = self.db_connect.singlecollection.courses
             Records._initialized = True
 
 
@@ -37,3 +38,6 @@ class Records:
 
     def majors_list(self):
         return self.majors.find()
+    
+    def courses_list(self):
+        return self.courses.find()

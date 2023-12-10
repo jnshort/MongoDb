@@ -22,20 +22,42 @@ class Enrollment:
     def dict_repr(self):
         if self.type == 1:
             enroll = {
-                "course": self.course,
+                "course": self.course.get_id(),
                 "section_number": self.sectionNum,
                 "application_data": self.applicationDate
             }
             return enroll
         elif self.type == 2:
             enroll = {
-                "course": self.course,
+                "course": self.course.get_id(),
                 "section_number": self.sectionNum,
                 "min_satisfactory": self.minSatisfactory
             }
 
     def add_enrollment(self):
-        pass
+        rec = Records()
+
+        student = rec.students.find_one({"lastname": self.students.lastname ,"firstname": self.students.firstname})
+        enrollments = student["enrollments"]
+
+
+        course = rec.courses.find_one({"course": self.course.get_id()})
+        section_list = course["sections"]
+
+        section_found = False
+        for section in section_list:
+            if section["section_number"] == self.sectionNum:
+                section_found = True
+        
+        if section_found:
+            enrollments.append(self.dict_repr())
+            filter = {"lastname": self.students.lastname ,"firstname": self.students.firstname}
+            rec.students.update_one(filter, {"enrollments": enrollments})
+            return True
+        else:
+            return False
+        
+
 
     def remove_enrollment(self):
         pass
