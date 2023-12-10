@@ -57,3 +57,7 @@ class Course:
         self.active = False
 
         rec.courses.delete_one({"course_name":self.course_name})
+
+    def get_id(self):
+        rec = Records()
+        return rec.courses.find_one({"course_name":self.course_name})["_id"]

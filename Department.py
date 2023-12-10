@@ -63,5 +63,7 @@ class Department:
         text += f"\tDescription: {self.desc}"
         return text
 
-
+    def get_id(self):
+        rec = Records()
+        return rec.departments.find_one({"name":self.name})["_id"]
 

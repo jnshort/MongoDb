@@ -65,4 +65,5 @@ class Major:
         return False
 
     def get_id(self):
-        pass
+        rec = Records()
+        return rec.majors.find_one({"name":self.name})["_id"]

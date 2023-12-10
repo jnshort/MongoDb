@@ -7,7 +7,7 @@ from Section import Section
 from Course import Course
 
 class Enrollment:
-    def __init__(self, student: Student, course: Course, sectionNum: Section, type: int, field: str):
+    def __init__(self, student: Student, course: Course, sectionNum: int, type: int, field: str = ""):
         # type 1 = PassFail, type 2 = LetterGrade
         self.student = student
         self.sectionNum = sectionNum
@@ -48,7 +48,7 @@ class Enrollment:
 
         section_found = False
         for section in section_list:
-            if section["section_number"] == self.sectionNum:
+            if (section["section_number"] == self.sectionNum) and (section["course"]):
                 section_found = True
         
         if section_found:
@@ -56,8 +56,8 @@ class Enrollment:
             filter = {"lastname": self.students.lastname ,"firstname": self.students.firstname}
             rec.students.update_one(filter, {"$set": {"enrollments": enrollments}})
             return True
-        else:
-            return False
+        else: #throw error myself since I have to do constrainsts of embedded docs clientside
+            raise ValueError("Could not find section")
         
 
 
@@ -80,3 +80,4 @@ class Enrollment:
         else:
             return False
         
+    
