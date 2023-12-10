@@ -22,9 +22,18 @@ class Records:
         if not Records._initialized:
             self.db_connect = MongoClient(db, tlsCAFile=certifi.where())
             self.departments = self.db_connect.singlecollection.departments
+            self.students = self.db_connect.singlecollection.students
+            self.majors = self.db_connect.singlecollection.majors
             Records._initialized = True
 
 
     def department_list(self):
         return self.departments.find()
 
+    
+    def students_list(self):
+        return self.students.find()
+    
+
+    def majors_list(self):
+        return self.majors.find()

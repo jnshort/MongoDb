@@ -3,69 +3,17 @@ from pymongo import MongoClient
 from db import db 
 from Records import Records
 
+# hello world
 class Department:
-
-    def __init__(self, name: str, abrv: str, chair: str, building: str, office: int, desc: str):
+    def __init__(self, name: str, abrv: str, chair: str, building: str, office: int, desc: str, courses=[], majors=[]):
         self.name: str = name
         self.abbreviation: str = abrv
         self.chair: str = chair
         self.building: str = building
         self.office: int = office
         self.desc: str = desc
-        self.db = MongoClient(db)
-        self.active: bool = False
-
-
-    def checkFields(self) -> bool:
-        return (
-            len(self.name) <= 50 and 
-            len(self.abbreviation) <= 6 and 
-            len(self.chair) <= 80 and
-            len(self.building) <= 10 and
-            len(self.desc) <= 80)
-
-    def constraints(self) -> bool:
-        """Checks uniqueness constraints of the Department class 
-        and that the departent does not already exist in the database.
-        Returns True if it passes.
-        :return:    Boolean
-        """
-        # todo
-        
-        
-        uniqueName = {
-            "name":self.name,
-        }
-
-        uniqueAbbr = {
-            "abbreviation":self.abbreviation
-        }
-
-        # No professor can chair > one department.
-        unique1 = {
-            "chair":self.chair,
-        }
-
-        # No two departments can occupy the same room.
-        unique2 = {
-            "building":self.building,
-            "office":self.office
-        }
-
-        # No two departments can have the same description.
-        unique3 = {
-            "description":self.desc
-        }
-
-        rec = Records()
-        uniqueCount =  rec.departments.count_documents(uniqueName)
-        uniqueCount +=  rec.departments.count_documents(uniqueAbbr)
-        uniqueCount +=  rec.departments.count_documents(unique1)
-        uniqueCount +=  rec.departments.count_documents(unique2)
-        uniqueCount +=  rec.departments.count_documents(unique3)
-        
-        
-        return uniqueCount == 0
+        self.courses = courses
+        self.majors = majors
 
 
     def dict_repr(self) -> dict:
@@ -78,7 +26,9 @@ class Department:
             "chair_name": self.chair,
             "building": self.building,
             "office": self.office,
-            "description": self.desc
+            "description": self.desc,
+            "courses": self.courses,
+            "majors": self.majors
         }
         return dept
 
@@ -91,7 +41,6 @@ class Department:
         
         rec = Records()
         rec.departments.insert_one(self.dict_repr())
-        self.active = True
 
             
 
@@ -102,12 +51,7 @@ class Department:
         :return:    None
         """
         rec = Records()
-        self.active = False
-
-        #to_del = rec.db_connect.singlecollection.departments.find()
         rec.departments.delete_one({"name":self.name})
-
-
 
 
     def __str__(self):
