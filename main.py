@@ -244,7 +244,7 @@ def add_enrollment():
     enrollment_obj = Enrollment(student_obj, course_obj, sectionNum, grade_type, field)
     try:
         enrollment_obj.add_enrollment()
-    except Exception as e:
+    except Exception as ex:
         print("\n*******************************")
         print("There are errors with the input")
         if type(ex) == pymongo.errors.WriteError:
@@ -300,10 +300,10 @@ def remove_enrollment():
         enroll_obj = Enrollment(student_obj, course_obj, enroll["section_number"], enroll["type"])
         try:
             enroll_obj.remove_enrollment()
-        except Exception as e:
+        except Exception as ex:
             print("\n*******************************")
             print("There are errors with the input")
-            if type(e) == pymongo.errors.WriteError:
+            if type(ex) == pymongo.errors.WriteError:
                 print("\tAt least one invalid field")
                 print("*******************************")
             else:
