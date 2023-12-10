@@ -57,4 +57,6 @@ class Student:
         return text
 
 
-
+    def get_id(self):
+        rec = Records()
+        return rec.students.find_one({"first_name":self.firstName, "last_name": self.lastName})["_id"]

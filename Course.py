@@ -4,7 +4,7 @@ from db import db
 from Records import Records
 
 class Course:
-
+    sections = []
     def __init__(self, dept_abrv: str, course_number: int, course_name: str, description: str, units: int):
         self.dept_abrv: str = dept_abrv
         self.course_number: int = course_number
@@ -29,6 +29,7 @@ class Course:
             "course_name": self.course_name,
             "description": self.description,
             "units": self.units,
+            "sections":self.get_sections_list()
         }
         return course
 
@@ -57,3 +58,7 @@ class Course:
         self.active = False
 
         rec.courses.delete_one({"course_name":self.course_name})
+
+    def get_id(self):
+        rec = Records()
+        return rec.courses.find_one({"course_name":self.course_name})["_id"]

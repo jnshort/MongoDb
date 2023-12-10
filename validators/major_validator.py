@@ -24,6 +24,7 @@ major_validator = {
                         'bsonType': 'array',
                         'description': 'list of student references',
                         'minItems': 0,
+                        'uniqueItems': True,
                         'items': {
                             'bsonType': 'objectId',
                             'description': 'reference to a student'

@@ -1,11 +1,11 @@
 validators to-do
-- course
-- section
-- major
+- course ✓
+- section ✓
+- major ✓
 - student ✓
 - studentmajor ✓
-- enrollment
-- department (need to update to add associations to course and major)
+- enrollment ✓
+- department (need to update to add associations to course and major) ✓
 
 Major
 attr

@@ -5,7 +5,8 @@ from Records import Records
 
 class Section:
 
-    def __init__(self, section_number: int, semester: str, section_year: str, building: str, room: int, schedule: str, start_time: str, instructor: str):
+    def __init__(self, courseId: str, section_number: int, semester: str, section_year: str, building: str, room: int, schedule: str, start_time: str, instructor: str):
+        self.courseId = courseId
         self.section_number: int = section_number
         self.semester: str = semester
         self.section_year: str = section_year
@@ -14,8 +15,6 @@ class Section:
         self.schedule: str = schedule
         self.start_time: str = start_time
         self.instructor: str = instructor
-        self.db = MongoClient(db)
-        self.active: bool = False
 
     def checkFields(self) -> bool:
         return (
@@ -26,6 +25,7 @@ class Section:
         :return:    dict
         """
         section = {
+            "course_id":self.courseId,
             "section_number": self.section_number,
             "semester": self.semester,
             "section_year": self.section_year,
