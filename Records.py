@@ -30,3 +30,10 @@ class Records:
     def department_list(self):
         return self.departments.find()
 
+    
+    def students_list(self):
+        return self.students.find()
+    
+
+    def majors_list(self):
+        return self.majors.find()
