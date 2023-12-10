@@ -310,6 +310,32 @@ def remove_enrollment():
                 print("*******************************")
             else:
                 print(ex)
+
+def remove_student():
+    rec = Records()
+    valid_student = False
+    
+    firstName = input("Enter first name -->")
+    lastName = input("Enter last name -->")
+    studentQuery = {"first_name": firstName, "last_name": lastName}
+
+    student = database.students.find_one(studentQuery)
+    if student:
+        valid_student = True
+
+    if valid_student:
+        student_obj = Student(student["first_name"], student["last_name"], student["email"])
+        try:
+            student_obj.remove_student()
+        except Exception as ex:
+            print("\n*******************************")
+            print("There are errors with the input")
+            if type(ex) == pymongo.errors.WriteError:
+                print("\tAt least one invalid field")
+                print("*******************************")
+            else:
+                print(ex)
+
 def add_section_to_course():
     database = Records()
     sectionNotAdded = True
