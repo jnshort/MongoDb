@@ -5,8 +5,8 @@ course_validator = {
                 'required': ['course_number, course_name, description, units'],
                 'additionalProperties': False,
                 'properties': {
-                    'course_number': {
                     '_id': {},
+                    'course_number': {
                         'bsonType': 'int',
                         'description': 'number of a course',
                         'maxLength': 700,
