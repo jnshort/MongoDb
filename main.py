@@ -6,6 +6,7 @@ from Records import Records
 from Major import Major
 from StudentMajor import StudentMajor
 from Course import Course
+from Section import Section
 from validators import department_validator
 from validators import student_validator
 from constraints import department_constraints, student_constraints, major_constraints, course_constraints
