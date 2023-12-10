@@ -16,6 +16,7 @@ major_constraints = [
     [("name", pymongo.ASCENDING)]
 ]
 
-course_contraints =[
-
+course_constraints =[
+    [("dept_abrv", pymongo.ASCENDING), ("course_number", pymongo.ASCENDING)],
+    [("dept_abrv", pymongo.ASCENDING), ("course_name", pymongo.ASCENDING)]
 ]
