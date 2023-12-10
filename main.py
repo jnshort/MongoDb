@@ -86,7 +86,8 @@ def add_major_to_department():
     found = False
     while not found:
         department = input("Department Abbreviation --> ")
-        result = database.departments.find_one({"abbreviation":department})
+        departmentQuery = {"abbreviation":department}
+        result = database.departments.find_one(departmentQuery)
         if(result is not None):
             department_id = result['_id']
             found = True
@@ -101,8 +102,17 @@ def add_major_to_department():
         newMajor = Major(name, description, department_id)
 
         # Try adding new major. Catch any errors MongoDB may throw
+        # need to add major to deparments
         try:
             newMajor.add_major()
+
+            # get mongoDB major we just added
+            majorAdded = database.majors.find_one({"name": name})
+
+            # update the departments collection using the mongoDB major ID
+            updateDepartments = {'$push': {'majors': majorAdded['_id']}}
+            database.departments.update_one(departmentQuery, updateDepartments)
+
             majorAdded = True
         except Exception as ex:
             majorAdded = False
@@ -445,7 +455,7 @@ def list_majors_menu():
         inp = int(input('Choice # --> '))
         if inp == 1:
             # todo
-            #list_students_in_majors()
+            list_students_in_majors()
             pass
         elif inp == 2:
             #todo
@@ -454,6 +464,15 @@ def list_majors_menu():
         elif inp == 3:
             #todo
             list_majors_by_student()
+
+def list_students_in_majors():
+    majorName = input("Major name -->")
+    description = "test"
+    department = "test"
+
+    testMajor = Major(majorName, description, department)
+    for student in testMajor.dict_repr()['students']:
+        print(student)
 
 def list_majors_by_student():
     database = Records()
@@ -547,7 +566,7 @@ def startNewDatabase():
     for constraint in major_constraints:
         database["majors"].create_index(constraint, unique=True)
     for constraint in course_constraints:
-        database["course"].create_index(constraint, unique=True)
+        database["courses"].create_index(constraint, unique=True)
 
     
 
