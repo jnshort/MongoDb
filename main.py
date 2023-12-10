@@ -28,9 +28,11 @@ def add_menu():
     1) Department
     2) Major to Department
     3) Course to Department
-    4) Student
-    5) Student to Major
-    6) Return to main menu"""
+    4) Section to Course
+    5) Student
+    6) Student to Major
+    7) Student to Course
+    8) Return to main menu"""
     inp = 0
     while inp not in [1,2,3,4,5,6]:
         print(menu)
@@ -43,9 +45,13 @@ def add_menu():
     elif inp == 3:
         add_course_to_department()
     elif inp == 4:
-        add_student()
+        add_section_to_course()
     elif inp == 5:
+        add_student()
+    elif inp == 6:
         add_student_to_major()
+    elif inp == 7:
+        add_enrollment()
 
 def add_department():
     getting_input = True
