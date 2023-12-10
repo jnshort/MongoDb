@@ -5,9 +5,10 @@ from Student import Student
 from Records import Records
 from Major import Major
 from StudentMajor import StudentMajor
+from Course import Course
 from validators import department_validator
 from validators import student_validator
-from constraints import department_constraints, student_constraints, major_constraints
+from constraints import department_constraints, student_constraints, major_constraints, course_constraints
 from major_validator import major_validator
 from course_validator import course_validator
 
@@ -37,7 +38,7 @@ def add_menu():
         add_department()
     elif inp == 2:
         add_major_to_department()
-    elif inpt == 3:
+    elif inp == 3:
         add_course_to_department()
     elif inp == 4:
         add_student()
@@ -84,7 +85,8 @@ def add_major_to_department():
     found = False
     while not found:
         department = input("Department Abbreviation --> ")
-        result = database.departments.find_one({"abbreviation":department})
+        departmentQuery = {"abbreviation":department}
+        result = database.departments.find_one(departmentQuery)
         if(result is not None):
             department_id = result['_id']
             found = True
@@ -99,8 +101,17 @@ def add_major_to_department():
         newMajor = Major(name, description, department_id)
 
         # Try adding new major. Catch any errors MongoDB may throw
+        # need to add major to deparments
         try:
             newMajor.add_major()
+
+            # get mongoDB major we just added
+            majorAdded = database.majors.find_one({"name": name})
+
+            # update the departments collection using the mongoDB major ID
+            updateDepartments = {'$push': {'majors': majorAdded['_id']}}
+            database.departments.update_one(departmentQuery, updateDepartments)
+
             majorAdded = True
         except Exception as ex:
             majorAdded = False
@@ -116,7 +127,73 @@ def add_major_to_department():
                 print(ex)
 
 def add_course_to_department():
-    pass
+    database = Records()
+
+    courseNotAdded = True
+    while courseNotAdded:
+
+        # make sure that the department exists
+        departmentNotExist = True
+        while departmentNotExist:
+            departmentAbbreviation = input("Department Abbreviation --> ")
+            departmentQuery = {"abbreviation": departmentAbbreviation}
+            result = database.departments.find_one(departmentQuery)
+            if (result is not None):
+                departmentNotExist = False
+            else:
+                print("Could not find department!")
+
+        # checking if this course already exists in the department
+        courseInDepartment = True
+        while courseInDepartment:
+            courseName = input("Course name --> ")
+            courseNumber = int(input("Course number --> "))
+
+            # course is not in department unless one of the course references has the
+            # same name
+            courseInDepartment = False
+            for courseId in result['courses']:
+                exisitingCourse = database.courses.find_one({'_id':courseId})
+                if exisitingCourse is not None:
+                    if exisitingCourse['course_name'] == courseName:
+                        courseInDepartment = True
+            if courseInDepartment:
+                print("The department already offers this course!")
+
+        description = input("Description --> ")
+        units = int(input("Units --> "))
+
+        course = Course(departmentAbbreviation, courseNumber, courseName, description, units)
+        try:
+            # add course to course collection
+            course.add_course()
+
+            # add course reference to departments
+            # get course ID of the course we just added
+            courseAdded = database.courses.find_one({"course_name":courseName})
+
+            # update the departments collection
+            updateDepartments = {'$push': {'courses': courseAdded['_id']}}
+            database.departments.update_one(departmentQuery, updateDepartments)
+            courseNotAdded = False
+
+        except Exception as ex:
+            courseNotAdded = True
+            print("\n*******************************")
+            print("There are errors with the input")
+            if type(ex) == pymongo.errors.WriteError:
+                print("\tAt least one invalid field")
+                print(ex)
+                print("*******************************")
+            elif type(ex) == pymongo.errors.DuplicateKeyError:
+                print("\tDepartment would violate at least one uniqueness constraint")
+                print("*******************************")
+            else:
+                print(ex)
+
+
+
+
 
 
 def add_student():
@@ -263,7 +340,7 @@ def list_majors_menu():
         inp = int(input('Choice # --> '))
         if inp == 1:
             # todo
-            #list_students_in_majors()
+            list_students_in_majors()
             pass
         elif inp == 2:
             #todo
@@ -272,6 +349,15 @@ def list_majors_menu():
         elif inp == 3:
             #todo
             list_majors_by_student()
+
+def list_students_in_majors():
+    majorName = input("Major name -->")
+    description = "test"
+    department = "test"
+
+    testMajor = Major(majorName, description, department)
+    for student in testMajor.dict_repr()['students']:
+        print(student)
 
 def list_majors_by_student():
     database = Records()
@@ -364,6 +450,9 @@ def startNewDatabase():
         database["students"].create_index(constraint, unique = True)
     for constraint in major_constraints:
         database["majors"].create_index(constraint, unique=True)
+    for constraint in course_constraints:
+        database["courses"].create_index(constraint, unique=True)
+
     
 
 def main():

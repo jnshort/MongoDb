@@ -12,7 +12,6 @@ class Student:
         self.lastName: str = lastName
         self.firstName: str = firstName
         self.email: str = email
-        self.db = MongoClient(db)
         self.active: bool = False
 
 
@@ -36,7 +35,6 @@ class Student:
 
         rec = Records()
         rec.students.insert_one(self.dict_repr())
-        self.active = True
 
     """
     def remove_dept(self):

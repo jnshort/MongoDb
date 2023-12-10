@@ -2,15 +2,19 @@ course_validator = {
         'validator': {
             '$jsonSchema': {
                 'description': 'A course associated with a particular department at a university',
-                'required': ['course_number, course_name, description, units'],
+                'required': ['course_number', 'course_name', 'description', 'units'],
                 'additionalProperties': False,
                 'properties': {
-                    'course_number': {
                     '_id': {},
+                    'dept_abrv': {
+                        'bsonType': 'string',
+                        'description': 'abbreviation of department course is part of',
+                    },
+                    'course_number': {
                         'bsonType': 'int',
                         'description': 'number of a course',
-                        'maxLength': 700,
-                        'minLength': 100
+                        'maximum': 700,
+                        'minimum': 100
                     },
                     'course_name': {
                         'bsonType': 'string',
@@ -23,8 +27,8 @@ course_validator = {
                     'units': {
                         'bsonType': 'int',
                         'description': 'number of units of a course',
-                        'maxLength': 5,
-                        'minLength': 1
+                        'maximum': 5,
+                        'minimum': 1
                     },
                     'sections': {
                         'bsonType': 'array',
@@ -54,8 +58,8 @@ course_validator = {
                                         'room': {
                                             'bsonType': 'int',
                                             'description': 'room of a course section',
-                                            'maxLength': 1000,
-                                            'minLength': 0
+                                            'maximum': 1000,
+                                            'minimum': 0
                                         },
                                         'schedule': {
                                             'bsonType': 'string',
