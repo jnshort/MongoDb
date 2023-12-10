@@ -129,7 +129,7 @@ def add_major_to_department():
                 print("\tAt least one invalid field")
                 print("*******************************")
             elif type(ex) == pymongo.errors.DuplicateKeyError:
-                print("\tDepartment would violate at least one uniqueness constraint")
+                print("\tMajor would violate at least one uniqueness constraint")
                 print("*******************************")
             else:
                 print(ex)
@@ -194,7 +194,7 @@ def add_course_to_department():
                 print(ex)
                 print("*******************************")
             elif type(ex) == pymongo.errors.DuplicateKeyError:
-                print("\tDepartment would violate at least one uniqueness constraint")
+                print("\tCourse would violate at least one uniqueness constraint")
                 print("*******************************")
             else:
                 print(ex)
