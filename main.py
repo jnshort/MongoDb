@@ -7,6 +7,7 @@ from Major import Major
 from StudentMajor import StudentMajor
 from Course import Course
 from Enrollment import Enrollment
+from Section import Section
 from validators import department_validator
 from validators import student_validator
 from constraints import department_constraints, student_constraints, major_constraints, course_constraints
@@ -192,8 +193,6 @@ def add_course_to_department():
             else:
                 print(ex)
 
-
-
 def add_enrollment():
     rec = Records()
 
@@ -255,8 +254,6 @@ def add_enrollment():
             print("*******************************")
         else:
             print(ex)
-        
-    
 
 def remove_enrollment():
     rec = Records()
@@ -305,6 +302,72 @@ def remove_enrollment():
             print("There are errors with the input")
             if type(ex) == pymongo.errors.WriteError:
                 print("\tAt least one invalid field")
+                print("*******************************")
+            else:
+                print(ex)
+def add_section_to_course():
+    database = Records()
+    sectionNotAdded = True
+    while sectionNotAdded:
+
+        # make sure that the section exists
+        courseNotExist = True
+        while courseNotExist:
+            departmentAbbreviation = input("Department Abbreviation --> ")
+            courseNumber = input("Course Number -->")
+            courseQuery = {"course number": courseNumber,"abbreviation": departmentAbbreviation}
+            result = database.courses.find_one(courseQuery)
+            if (result is not None):
+                courseNotExist = False
+            else:
+                print("Could not find course!")
+
+        # checking if this section already exists in the course
+        sectionInCourse = True
+        while sectionInCourse:
+            sectionNumber = int(input("Section number --> "))
+
+            # section is not in course unless one of the section references has the
+            # same name
+            sectionInCourse = False
+            for sectionId in result['section']:
+                exisitingSection = database.sections.find_one({'_id':sectionId})
+                if exisitingSection is not None:
+                    if exisitingSection['section_number'] == sectionNumber:
+                        sectionInCourse = True
+            if sectionInCourse:
+                print("The course already has this section!")
+
+        semester = input("Semester --> ")
+        sectionYear = int(input("Section Year --> "))
+        building = input("Building --> ")
+        room = input("Room --> ")
+        schedule = input("Schedule --> ")
+        startTime = input("Start Time --> ")
+        instructor = input("Instructor --> ")
+
+        section = Section(sectionNumber, semester, sectionYear, building, room, schedule, startTime, instructor)
+        try:
+            # add section to section collection
+            section.add_section()
+
+            # get section ID of the section we just added
+            sectionAdded = database.sections.find_one({"section_number":sectionNumber})
+
+            # update the course collection
+            updateCourse = {'$push': {'sections': sectionAdded['_id']}}
+            database.courses.update_one(courseQuery, updateCourse)
+            sectionNotAdded = False
+
+        except Exception as ex:
+            sectionNotAdded = True
+            print("\n*******************************")
+            print("There are errors with the input")
+            if type(ex) == pymongo.errors.WriteError:
+                print(ex)
+                print("*******************************")
+            elif type(ex) == pymongo.errors.DuplicateKeyError:
+                print("\tSection would violate at least one uniqueness constraint")
                 print("*******************************")
             else:
                 print(ex)
