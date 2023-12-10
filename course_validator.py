@@ -6,6 +6,10 @@ course_validator = {
                 'additionalProperties': False,
                 'properties': {
                     '_id': {},
+                    'dept_abrv': {
+                        'bsonType': 'string',
+                        'description': 'abbreviation of department course is part of',
+                    },
                     'course_number': {
                         'bsonType': 'int',
                         'description': 'number of a course',
