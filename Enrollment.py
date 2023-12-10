@@ -62,4 +62,21 @@ class Enrollment:
 
 
     def remove_enrollment(self):
-        pass
+        rec = Records()
+        
+        student = rec.students.find_one({"lastname": self.students.lastname ,"firstname": self.students.firstname})
+        enrollments = student["enrollments"]
+
+        enrollment_found = False
+        for enroll in enrollments:
+            if enroll["course"] == self.course.get_id():
+                enrollments.remove(enroll)
+                enrollment_found = True
+        
+        if enrollment_found:
+            filter = {"lastname": self.students.lastname ,"firstname": self.students.firstname}
+            rec.students.update_one(filter, {"$set": {"enrollments": enrollments}})
+            return True
+        else:
+            return False
+        
