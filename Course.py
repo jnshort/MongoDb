@@ -30,6 +30,12 @@ class Course:
         }
         return course
 
+    def get_sections_list(self):
+        result = []
+        for section in self.sections:
+            result.append(section.dict_repr())
+        return result
+        
     def add_course(self):
         """Adds this course to the database and the
         records list of courses.
