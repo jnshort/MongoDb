@@ -11,3 +11,7 @@ student_constraints = [
     [("email", pymongo.ASCENDING)],
     [("last_name", pymongo.ASCENDING),("first_name", pymongo.ASCENDING)]
 ]
+
+major_constraints = [
+    [("name", pymongo.ASCENDING)]
+]
