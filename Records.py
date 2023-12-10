@@ -23,6 +23,7 @@ class Records:
             self.db_connect = MongoClient(db, tlsCAFile=certifi.where())
             self.departments = self.db_connect.singlecollection.departments
             self.students = self.db_connect.singlecollection.students
+            self.majors = self.db_connect.singlecollection.majors
             Records._initialized = True
 
 

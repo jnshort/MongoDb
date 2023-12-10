@@ -6,11 +6,11 @@ from Department import Department
 from Student import Student
 
 class Major:
-    def __init__(self, name: str, description: str, department: Department, students = []):
+    students = []
+    def __init__(self, name: str, description: str, department: str):
         self.name = name
         self.description = description
         self.department = department
-        self.students = students
 
     def dict_repr(self) -> dict:
         major = {
