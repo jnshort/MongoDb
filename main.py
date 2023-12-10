@@ -7,7 +7,7 @@ from Major import Major
 from StudentMajor import StudentMajor
 from validators import department_validator
 from validators import student_validator
-from constraints import department_constraints, student_constraints, major_constraints
+from constraints import department_constraints, student_constraints, major_constraints, course_constraints
 from major_validator import major_validator
 from course_validator import course_validator
 
@@ -115,6 +115,8 @@ def add_major_to_department():
                 print(ex)
 
 def add_course_to_department():
+    database = Records()
+    courseNotAdded = True
     pass
 
 
@@ -363,6 +365,9 @@ def startNewDatabase():
         database["students"].create_index(constraint, unique = True)
     for constraint in major_constraints:
         database["majors"].create_index(constraint, unique=True)
+    for constraint in course_constraints:
+        database["course"].create_index(constraint, unique=True)
+
     
 
 def main():
