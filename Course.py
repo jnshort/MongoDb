@@ -5,7 +5,8 @@ from Records import Records
 
 class Course:
 
-    def __init__(self, course_number: int, course_name: str, description: str, units: int):
+    def __init__(self, dept_abrv: str, course_number: int, course_name: str, description: str, units: int):
+        self.dept_abrv: str = dept_abrv
         self.course_number: int = course_number
         self.course_name: str = course_name
         self.description: str = description
@@ -23,6 +24,7 @@ class Course:
         :return:    dict
         """
         course = {
+            "dept_abrv": self.dept_abrv,
             "course_number": self.course_number,
             "course_name": self.course_name,
             "description": self.description,
