@@ -12,6 +12,7 @@ from major_validator import major_validator
 from course_validator import course_validator
 
 database_name = "singlecollection"
+database = Records()
 
 def add_menu():
     """Prints a menu for adding to a collection.
