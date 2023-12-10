@@ -115,7 +115,10 @@ def add_major_to_department():
                 print(ex)
 
 def add_course_to_department():
-    pass
+    database = Records()
+    courseNotAdded = True
+    while courseNotAdded:
+        department =
 
 
 def add_student():

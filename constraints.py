@@ -15,3 +15,7 @@ student_constraints = [
 major_constraints = [
     [("name", pymongo.ASCENDING)]
 ]
+
+course_contraints =[
+
+]
