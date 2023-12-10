@@ -18,7 +18,8 @@ class Enrollment:
         elif type == 2: # LetterGrade
             self.type = 2
             self.minSatisfactory = field
-        
+
+
     def dict_repr(self):
         if self.type == 1:
             enroll = {
@@ -26,13 +27,14 @@ class Enrollment:
                 "section_number": self.sectionNum,
                 "application_data": self.applicationDate
             }
-            return enroll
         elif self.type == 2:
             enroll = {
                 "course": self.course.get_id(),
                 "section_number": self.sectionNum,
                 "min_satisfactory": self.minSatisfactory
             }
+        return enroll
+
 
     def add_enrollment(self):
         rec = Records()
@@ -52,7 +54,7 @@ class Enrollment:
         if section_found:
             enrollments.append(self.dict_repr())
             filter = {"lastname": self.students.lastname ,"firstname": self.students.firstname}
-            rec.students.update_one(filter, {"enrollments": enrollments})
+            rec.students.update_one(filter, {"$set": {"enrollments": enrollments}})
             return True
         else:
             return False
