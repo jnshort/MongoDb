@@ -3,6 +3,8 @@ from pymongo import MongoClient
 from Department import Department
 from Student import Student
 from Records import Records
+from Major import Major
+from StudentMajor import StudentMajor
 from validators import department_validator
 from validators import student_validator
 from constraints import department_constraints, student_constraints
@@ -20,9 +22,10 @@ def add_menu():
 
     menu = """\nWhat would you like to add?
     1) Department
-    2) Student
-    3) Major to Student
-    4) Return to main menu"""
+    2) Major to Department
+    3) Student
+    4) Major to Student
+    5) Return to main menu"""
     inp = 0
     while inp not in [1,2,3,4]:
         print(menu)
@@ -31,14 +34,79 @@ def add_menu():
     if inp == 1:
         add_department()
     elif inp == 2:
+        add_major_to_department()
+    elif inp == 3:
         add_student()
-    elif ip == 3:
+    elif inp == 4:
         add_major_to_student()
 
 def add_major_to_student():
     database = Records()
-    firstName = input("Student first name ->")
-    lastName = input("Student last name ->")
+    studentFound = False
+
+    # find student that is going to add major
+    while not studentFound:
+        firstName = input("Student first name --> ")
+        lastName = input("Student last name --> ")
+
+        studentQuery = {"first_name": firstName, "last_name":lastName}
+
+        student = database.students.find_one(studentQuery)
+        if student is not None:
+            studentFound = True
+        else:
+            print("Student could not be found!")
+
+    #find major student wants to add
+    majorFound = False
+    while not majorFound:
+        majorName = input("Enter major -->")
+        majorQuery = {"name":majorName}
+        major = database.majors.find_one(majorQuery)
+
+        if major is not None:
+            majorFound = True
+        else:
+            print("Could not find major!")
+
+    declarationDate = input("Declaration Date --> ")
+    studentMajor = StudentMajor(declarationDate, major['_id'])
+
+    #add studentMajor to student_majors inside given student
+    updateStudent = {'$push': {'student_majors':studentMajor.dict_repr()}}
+    database.students.update_one(studentQuery, updateStudent )
+
+    #add student to students inside given major
+    updateMajor = {'$push':{'students':student['_id']}}
+    database.majors.update_one(majorQuery, updateMajor)
+
+
+def add_major_to_department():
+    database = Records()
+    department_id = 0
+    # get department id using department abbreviation
+    found = False
+    while not found:
+        department = input("Department Abbreviation --> ")
+        result = database.departments.find_one({"abbreviation":department})
+        if(result is not None):
+            department_id = result['_id']
+            found = True
+        else:
+            print("Could not find department!")
+
+    # the rest of the required fields for major
+    name = input("Major Name --> ")
+    description = input("Description --> ")
+
+    # Create major object
+    newMajor = Major(name, description, department_id)
+
+    # insert into db
+    database.majors.insert_one(newMajor.dict_repr())
+
+
+
 
 def add_student():
     firstName = input("Enter first name --> ")
