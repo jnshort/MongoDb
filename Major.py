@@ -6,11 +6,12 @@ from Department import Department
 from Student import Student
 
 class Major:
-    students = []
+
     def __init__(self, name: str, description: str, department: str):
         self.name = name
         self.description = description
         self.department = department
+
 
     def dict_repr(self) -> dict:
         major = {
@@ -22,9 +23,17 @@ class Major:
         return major
 
     def get_students_list(self):
+        rec = Records()
         result = []
-        for student in self.students:
-            result.append(student.dict_repr())
+        students = rec.students.find({})
+
+        for student in students:
+            found = False
+            for student_major in student["student_majors"]:
+                if student_major.major == self.get_id():
+                    found = True
+            if found:
+                result.append(student["_id"])
         return result
     
     def add_major(self):
@@ -40,3 +49,6 @@ class Major:
             return True
         else:
             return False
+
+    def get_id(self):
+        pass
