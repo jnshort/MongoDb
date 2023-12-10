@@ -38,6 +38,7 @@ course_validator = {
                                 {
                                     'bsonType': 'object',
                                     'properties': {
+                                        '_id': {},
                                         'section_number': {
                                             'bsonType': 'int',
                                             'description': 'number of a section'
