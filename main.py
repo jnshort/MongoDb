@@ -330,7 +330,7 @@ def list_majors_menu():
         inp = int(input('Choice # --> '))
         if inp == 1:
             # todo
-            #list_students_in_majors()
+            list_students_in_majors()
             pass
         elif inp == 2:
             #todo
@@ -339,6 +339,15 @@ def list_majors_menu():
         elif inp == 3:
             #todo
             list_majors_by_student()
+
+def list_students_in_majors():
+    majorName = input("Major name -->")
+    description = "test"
+    department = "test"
+
+    testMajor = Major(majorName, description, department)
+    for student in testMajor.dict_repr()['students']:
+        print(student)
 
 def list_majors_by_student():
     database = Records()
@@ -432,7 +441,7 @@ def startNewDatabase():
     for constraint in major_constraints:
         database["majors"].create_index(constraint, unique=True)
     for constraint in course_constraints:
-        database["course"].create_index(constraint, unique=True)
+        database["courses"].create_index(constraint, unique=True)
 
     
 

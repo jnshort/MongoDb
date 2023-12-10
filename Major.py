@@ -23,7 +23,9 @@ class Major:
         return major
 
     def get_students_list(self):
+
         rec = Records()
+        """
         result = []
         students = rec.students.find({})
 
@@ -35,6 +37,13 @@ class Major:
             if found:
                 result.append(student["_id"])
         return result
+        """
+        result = rec.majors.find_one({"name":self.name})
+        students = []
+        if result is not None:
+            for student in result['students']:
+                students.append(student)
+        return students
     
     def add_major(self):
         rec = Records()
