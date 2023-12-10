@@ -52,7 +52,7 @@ class Major:
 
     def remove_dept(self):
         rec = Records()
-
+        get_student_list() # make sure student list is up to date
         if not self.students: # can only delete majors with no students
             rec.majors.delete_one({"name": self.name})
             return True
