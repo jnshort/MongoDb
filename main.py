@@ -85,7 +85,8 @@ def add_major_to_department():
     found = False
     while not found:
         department = input("Department Abbreviation --> ")
-        result = database.departments.find_one({"abbreviation":department})
+        departmentQuery = {"abbreviation":department}
+        result = database.departments.find_one(departmentQuery)
         if(result is not None):
             department_id = result['_id']
             found = True
@@ -100,8 +101,17 @@ def add_major_to_department():
         newMajor = Major(name, description, department_id)
 
         # Try adding new major. Catch any errors MongoDB may throw
+        # need to add major to deparments
         try:
             newMajor.add_major()
+
+            # get mongoDB major we just added
+            majorAdded = database.majors.find_one({"name": name})
+
+            # update the departments collection using the mongoDB major ID
+            updateDepartments = {'$push': {'majors': majorAdded['_id']}}
+            database.departments.update_one(departmentQuery, updateDepartments)
+
             majorAdded = True
         except Exception as ex:
             majorAdded = False
