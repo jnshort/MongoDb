@@ -39,32 +39,29 @@ class Enrollment:
     def add_enrollment(self):
         rec = Records()
 
-        student = rec.students.find_one({"lastname": self.students.lastname ,"firstname": self.students.firstname})
-        enrollments = student["enrollments"]
+        student = rec.students.find_one({"last_name": self.student.lastName ,"first_name": self.student.firstName})
+        if student:
+            enrollments = student["enrollments"]
+        else:
+            raise KeyError("Student not found")
 
 
-        course = rec.courses.find_one({"course": self.course.get_id()})
-        section_list = course["sections"]
-
-        section_found = False
-        for section in section_list:
-            if (section["section_number"] == self.sectionNum) and (section["course"]):
-                section_found = True
+        section = rec.sections.find_one({"course_id": self.course.get_id(), "section_number": self.sectionNum})
         
-        if section_found:
+        if section:
             enrollments.append(self.dict_repr())
-            filter = {"lastname": self.students.lastname ,"firstname": self.students.firstname}
+            filter = {"last_name": self.student.lastName ,"first_name": self.student.firstName}
             rec.students.update_one(filter, {"$set": {"enrollments": enrollments}})
             return True
         else: #throw error myself since I have to do constrainsts of embedded docs clientside
-            raise ValueError("Could not find section")
-        
+            raise KeyError("Section not found")
+
 
 
     def remove_enrollment(self):
         rec = Records()
         
-        student = rec.students.find_one({"lastname": self.students.lastname ,"firstname": self.students.firstname})
+        student = rec.students.find_one({"last_name": self.student.lastName ,"first_name": self.student.firstName})
         enrollments = student["enrollments"]
 
         enrollment_found = False
@@ -74,7 +71,7 @@ class Enrollment:
                 enrollment_found = True
         
         if enrollment_found:
-            filter = {"lastname": self.students.lastname ,"firstname": self.students.firstname}
+            filter = {"last_name": self.student.lastName ,"first_name": self.student.firstName}
             rec.students.update_one(filter, {"$set": {"enrollments": enrollments}})
             return True
         else:
