@@ -548,6 +548,7 @@ def list_menu():
     2) Majors
     3) Students
     4) Courses
+    5) Enrollments
     5) Return to main menu"""
     inp = 0
     while inp not in [1,2,3,4,5]:
@@ -568,6 +569,8 @@ def list_menu():
         ListUi.list_students_menu()
     if inp == 4:
         ListUi.list_courses_menu()
+    if inp == 5:
+        ListUi.list_enrollments_menu()
 
 
 
