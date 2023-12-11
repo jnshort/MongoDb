@@ -516,7 +516,8 @@ def remove_menu():
     rec = Records()
     menu = """\nWhat would you like to remove?
     1) Department
-    2) Return to main menu"""
+    2) Enrollment
+    3) Return to main menu"""
     inp = 0
     while inp not in [1,2]:
         print(menu)
@@ -537,8 +538,10 @@ def remove_menu():
             print("Department removed")
         else:
             print("Failed to find department")
+    if inp == 2:
+        remove_enrollment_by_student()
 
-            
+
 
 
 def list_menu():

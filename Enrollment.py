@@ -23,12 +23,14 @@ class Enrollment:
     def dict_repr(self):
         if self.type == 1:
             enroll = {
+                "type": "Pass Fail",
                 "course": self.course.get_id(),
                 "section_number": self.sectionNum,
-                "application_data": self.applicationDate
+                "application_date": self.applicationDate
             }
         elif self.type == 2:
             enroll = {
+                "type": "Letter Grade",
                 "course": self.course.get_id(),
                 "section_number": self.sectionNum,
                 "min_satisfactory": self.minSatisfactory
@@ -52,7 +54,6 @@ class Enrollment:
             student_ids = section["students"]
             student_ids.append(student["_id"])
             enrollments.append(self.dict_repr())
-            print(enrollments)
             filter1 = {"last_name": self.student.lastName ,"first_name": self.student.firstName}
             filter2 = {"course_id": self.course.get_id(), "section_number": self.sectionNum}
             rec.students.update_one(filter1, {"$set": {"enrollments": enrollments}})
