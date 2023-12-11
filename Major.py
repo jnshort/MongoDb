@@ -7,11 +7,17 @@ from Student import Student
 
 class Major:
 
-    def __init__(self, name: str, description: str, department: str):
+    def __init__(self, name: str = "", description: str = "", department: str = ""):
         self.name = name
         self.description = description
         self.department = department
 
+
+    def load_from_db(self, database_file):
+        self.name = database_file['name']
+        self.description = database_file['description']
+        self.department = database_file['department']
+        self.students = database_file['students']
 
     def dict_repr(self) -> dict:
         major = {

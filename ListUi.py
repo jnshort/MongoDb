@@ -1,4 +1,5 @@
 from Major import Major
+from Student import Student
 from Records import Records
 
 """
@@ -40,7 +41,9 @@ def list_students_in_majors():
         query = {'_id':student}
         result = database.students.find_one(query)
         if result is not None:
-            print(result['first_name'], " ", result['last_name'])
+            printStudent = Student()
+            printStudent.load_from_db(result)
+            print(printStudent)
     print("-----------------------------------------------------")
 
 def list_majors_in_departments():
@@ -120,7 +123,10 @@ def list_all_students():
     result = database.students.find({})
     if result is not None:
         for student in result:
-            print(student['first_name'], " ", student['last_name'])
+            printStudent = Student()
+            printStudent.load_from_db(student)
+            print(printStudent)
+
 
 """
 ********************************************************************************* 
