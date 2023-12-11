@@ -25,6 +25,7 @@ class Records:
             self.students = self.db_connect.singlecollection.students
             self.majors = self.db_connect.singlecollection.majors
             self.courses = self.db_connect.singlecollection.courses
+            self.sections = self.db_connect.singlecollection.sections
             Records._initialized = True
 
 

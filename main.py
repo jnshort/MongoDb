@@ -1,5 +1,4 @@
 import pymongo
-from pymongo import MongoClient
 from Department import Department
 from Student import Student
 from Records import Records
@@ -7,11 +6,12 @@ from Major import Major
 from StudentMajor import StudentMajor
 from Course import Course
 from Enrollment import Enrollment
-from validators import department_validator
-from validators import student_validator
-from constraints import department_constraints, student_constraints, major_constraints, course_constraints
-from major_validator import major_validator
-from course_validator import course_validator
+from Section import Section
+from validators.validators import department_validator, student_validator
+from validators.major_validator import major_validator
+from validators.course_validator import course_validator
+from validators.section_validator import section_validator
+from constraints import department_constraints, student_constraints, major_constraints, course_constraints, section_constraints
 
 database_name = "singlecollection"
 database = Records()
@@ -27,9 +27,11 @@ def add_menu():
     1) Department
     2) Major to Department
     3) Course to Department
-    4) Student
-    5) Student to Major
-    6) Return to main menu"""
+    4) Section to Course
+    5) Student
+    6) Student to Major
+    7) Student to Course
+    8) Return to main menu"""
     inp = 0
     while inp not in [1,2,3,4,5,6]:
         print(menu)
@@ -42,9 +44,13 @@ def add_menu():
     elif inp == 3:
         add_course_to_department()
     elif inp == 4:
-        add_student()
+        add_section_to_course()
     elif inp == 5:
+        add_student()
+    elif inp == 6:
         add_student_to_major()
+    elif inp == 7:
+        add_enrollment()
 
 def add_department():
     getting_input = True
@@ -122,7 +128,7 @@ def add_major_to_department():
                 print("\tAt least one invalid field")
                 print("*******************************")
             elif type(ex) == pymongo.errors.DuplicateKeyError:
-                print("\tDepartment would violate at least one uniqueness constraint")
+                print("\tMajor would violate at least one uniqueness constraint")
                 print("*******************************")
             else:
                 print(ex)
@@ -187,12 +193,10 @@ def add_course_to_department():
                 print(ex)
                 print("*******************************")
             elif type(ex) == pymongo.errors.DuplicateKeyError:
-                print("\tDepartment would violate at least one uniqueness constraint")
+                print("\tCourse would violate at least one uniqueness constraint")
                 print("*******************************")
             else:
                 print(ex)
-
-
 
 def add_enrollment():
     rec = Records()
@@ -244,7 +248,7 @@ def add_enrollment():
     enrollment_obj = Enrollment(student_obj, course_obj, sectionNum, grade_type, field)
     try:
         enrollment_obj.add_enrollment()
-    except Exception as e:
+    except Exception as ex:
         print("\n*******************************")
         print("There are errors with the input")
         if type(ex) == pymongo.errors.WriteError:
@@ -255,8 +259,6 @@ def add_enrollment():
             print("*******************************")
         else:
             print(ex)
-        
-    
 
 def remove_enrollment():
     rec = Records()
@@ -300,11 +302,66 @@ def remove_enrollment():
         enroll_obj = Enrollment(student_obj, course_obj, enroll["section_number"], enroll["type"])
         try:
             enroll_obj.remove_enrollment()
-        except Exception as e:
+        except Exception as ex:
             print("\n*******************************")
             print("There are errors with the input")
-            if type(e) == pymongo.errors.WriteError:
+            if type(ex) == pymongo.errors.WriteError:
                 print("\tAt least one invalid field")
+                print("*******************************")
+            else:
+                print(ex)
+def add_section_to_course():
+    database = Records()
+    sectionNotAdded = True
+    while sectionNotAdded:
+
+        # make sure that the section exists
+        courseNotExist = True
+        while courseNotExist:
+            departmentAbbreviation = input("Department Abbreviation --> ")
+            courseNumber = int(input("Course Number -->"))
+            courseQuery = {"course_number": courseNumber,"dept_abrv": departmentAbbreviation}
+            result = database.courses.find_one(courseQuery)
+            if (result is not None):
+                courseNotExist = False
+            else:
+                print("Could not find course!")
+
+
+        # removed check, relying on uniqueness constraints
+        # if section passes uniqueness constraints, it's a unique
+        # section and it cannot already be in a course
+        sectionNumber = int(input("Section number --> "))
+        semester = input("Semester --> ")
+        sectionYear = int(input("Section Year --> "))
+        building = input("Building --> ")
+        room = int(input("Room --> "))
+        schedule = input("Schedule --> ")
+        startTime = input("Start Time --> ")
+        instructor = input("Instructor --> ")
+
+        section = Section(result['_id'],sectionNumber, semester, sectionYear, building, room, schedule, startTime, instructor)
+        try:
+            # add section to section collection
+            section.add_section()
+
+            # get section ID of the section we just added
+            sectionAdded = database.sections.find_one({"section_number":sectionNumber})
+
+            # update the course collection
+            updateCourse = {'$push': {'sections': sectionAdded['_id']}}
+            database.courses.update_one(courseQuery, updateCourse)
+            sectionNotAdded = False
+
+        except Exception as ex:
+            sectionNotAdded = True
+            print("\n*******************************")
+            print("There are errors with the input")
+            if type(ex) == pymongo.errors.WriteError:
+                print(ex)
+                print("*******************************")
+            elif type(ex) == pymongo.errors.DuplicateKeyError:
+                print("\tSection would violate at least one uniqueness constraint")
                 print("*******************************")
             else:
                 print(ex)
@@ -557,6 +614,7 @@ def startNewDatabase():
     database.create_collection("students", **student_validator)
     database.create_collection("majors", **major_validator)
     database.create_collection("courses", **course_validator)
+    database.create_collection("sections", **section_validator)
 
     # apply uniqueness constraints
     for constraint in department_constraints:
@@ -567,6 +625,8 @@ def startNewDatabase():
         database["majors"].create_index(constraint, unique=True)
     for constraint in course_constraints:
         database["courses"].create_index(constraint, unique=True)
+    for constraint in section_constraints:
+        database["sections"].create_index(constraint, unique=True)
 
     
 
