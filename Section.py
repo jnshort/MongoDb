@@ -33,7 +33,8 @@ class Section:
             "room": self.room,
             "schedule": self.schedule,
             "start_time": self.start_time,
-            "instructor": self.instructor
+            "instructor": self.instructor,
+            "students": self.get_student_list()
         }
         return section
 
@@ -56,3 +57,17 @@ class Section:
         self.active = False
         
         rec.sections.delete_one({"section_number":self.section_number})
+
+    def get_student_list(self):
+        """Returns the list of students in this section from the database.
+        If the section is not yet in the database, it will instead return an empty list
+        :return:    List of student objectIds
+        """
+        rec = Records()
+
+        section = rec.sections.find_one({"course_id": self.courseId, "section_number": self.section_number})
+
+        if section:
+            return section["students"]
+        else:
+            return []

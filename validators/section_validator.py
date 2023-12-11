@@ -46,6 +46,16 @@ section_validator = {
                         'bsonType': 'string',
                         'description': 'person who teaches the section'
                     },
+                    'students': {
+                        'bsonType': 'array',
+                        'description': 'a list of student objectId',
+                        'minItems': 0,
+                        'uniqueItems': True,
+                        'items': {
+                            'bsonType': 'objectId',
+                            'description': 'reference to a student'
+                        }
+                    }
                 },
             }
         }

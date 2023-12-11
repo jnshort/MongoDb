@@ -60,7 +60,7 @@ def add_department():
         name = input("Enter department name --> ")
         abrv = input("Enter abbreviation --> ")
         chair = input("Enter chair --> ")
-        building = input("Enter building -->")
+        building = input("Enter building --> ")
         office = input("Enter office (must be an integer)--> ")
         while not office.isnumeric():
             office = input("must be an integer --> ")
@@ -206,8 +206,8 @@ def add_enrollment_by_student():
     student = None
     valid_input = False
     while not valid_input:
-        firstName = input("Enter first name -->")
-        lastName = input("Enter last name -->")
+        firstName = input("Enter first name --> ")
+        lastName = input("Enter last name --> ")
         studentQuery = {"first_name": firstName, "last_name":lastName}
 
         student = database.students.find_one(studentQuery)
@@ -222,9 +222,9 @@ def add_enrollment_by_student():
     sectionNum = ""
     grade_type = None
     while not valid_section:
-        courseName = input("Enter course name -->")
-        sectionNum = input("Enter section number -->")
-        grade_type = input("Enter 1 for Pass/Fail, or 2 for Letter Grade -->")
+        courseName = input("Enter course name --> ")
+        sectionNum = input("Enter section number --> ")
+        grade_type = input("Enter 1 for Pass/Fail, or 2 for Letter Grade --> ")
         course = rec.courses.find_one({"course_name": courseName})
         if course:
             valid_section = True
@@ -238,13 +238,13 @@ def add_enrollment_by_student():
     field = ""
     match grade_type:
         case 1:
-            field += input("Enter application date -->")
+            field += input("Enter application date --> ")
 
         case 2:
-            field += input("Enter minimum satisfactory grade -->")
+            field += input("Enter minimum satisfactory grade --> ")
             while field.upper() not in ["A", "B", "C", "D", "F"]:
                 print("Invalid grade, valid choices are: A, B, C, D, F")
-                field = input("Enter minium satisfactory grade -->")
+                field = input("Enter minium satisfactory grade --> ")
     course_obj = Course(course["dept_abrv"], course["course_number"], course["course_name"], course["description"], course["units"])
     enrollment_obj = Enrollment(student_obj, course_obj, int(sectionNum), grade_type, field)
     try:
@@ -267,8 +267,8 @@ def remove_enrollment_by_student():
     student = None
     valid_student = False
     while not valid_student:
-        firstName = input("Enter first name -->")
-        lastName = input("Enter last name -->")
+        firstName = input("Enter first name --> ")
+        lastName = input("Enter last name --> ")
         studentQuery = {"first_name": firstName, "last_name":lastName}
 
         student = database.students.find_one(studentQuery)
@@ -278,7 +278,7 @@ def remove_enrollment_by_student():
     valid_course = False
     course = None
     while not valid_course:
-        course_name = input("Enter course name -->")
+        course_name = input("Enter course name --> ")
         course = rec.courses.find_one({"course_name":course_name})
         if course:
             valid_course = True
@@ -316,8 +316,8 @@ def remove_student():
     rec = Records()
     valid_student = False
     
-    firstName = input("Enter first name -->")
-    lastName = input("Enter last name -->")
+    firstName = input("Enter first name --> ")
+    lastName = input("Enter last name --> ")
     studentQuery = {"first_name": firstName, "last_name": lastName}
 
     student = database.students.find_one(studentQuery)
@@ -342,7 +342,7 @@ def remove_course():
 
     valid_department = False
     while not valid_department:
-        deptAbrv = input("Enter department abbreviation -->")
+        deptAbrv = input("Enter department abbreviation --> ")
         departmentQuery = { "department_abbreviation": deptAbrv}
 
         department = database.departments.find_one(departmentQuery)
@@ -352,7 +352,7 @@ def remove_course():
     valid_course = False
     course = None
     while not valid_course:
-        course_name = input("Enter course name -->")
+        course_name = input("Enter course name --> ")
         course = rec.courses.find_one({"course_name": course_name})
         if course:
             valid_course = True
@@ -382,7 +382,7 @@ def add_section_to_course():
         courseNotExist = True
         while courseNotExist:
             departmentAbbreviation = input("Department Abbreviation --> ")
-            courseNumber = int(input("Course Number -->"))
+            courseNumber = int(input("Course Number --> "))
             courseQuery = {"course_number": courseNumber,"dept_abrv": departmentAbbreviation}
             result = database.courses.find_one(courseQuery)
             if (result is not None):
@@ -474,7 +474,7 @@ def add_student_to_major():
     #find major student wants to add
     majorFound = False
     while not majorFound:
-        majorName = input("Enter major -->")
+        majorName = input("Enter major --> ")
         majorQuery = {"name":majorName}
         major = database.majors.find_one(majorQuery)
 
