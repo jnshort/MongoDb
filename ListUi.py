@@ -87,6 +87,50 @@ def list_majors_by_student():
 
     print("-----------------------------------------------------")
 
+"""
+********************************************************************************* 
+
+ List Enrollments
+ 
+ *********************************************************************************
+"""
+def list_enrollments_menu():
+    menu = """\nWhat kind of Enrollment list?
+        1) Enrollments by Student
+        """
+    inp = 0
+    while inp not in [1]:
+        print(menu)
+        inp = int(input('Choice # --> '))
+        if inp == 1:
+            list_enrollments_by_student()
+
+
+
+
+def list_enrollments_by_student():
+    database = Records()
+    studentNotFound = True
+
+    while studentNotFound:
+        firstName = input("First name --> ")
+        lastName = input("Last name --> ")
+
+        studentQuery = {"first_name":firstName, "last_name":lastName}
+        student = database.students.find_one(studentQuery)
+        if result is not None:
+            studentNotFound = False
+        else:
+            print("Could not find the student!")
+
+    print("\n-----------------------------------------------------")
+    print(f"Listing {firstName} {lastName}'s enrollments")
+
+    for enrollment in student["enrollments"]:
+        course = database.courses.find_one({"_id": enrollment["course"]})
+        print(f"Course: {course["course_name"]} Section #{enrollment["section_number"]}")
+    print("-----------------------------------------------------")
+
 
 """
 ********************************************************************************* 
@@ -103,7 +147,7 @@ def list_students_menu():
         4) Return to main menu"""
 
     inp = 0
-    while inp not in [1, 2, 3,4]:
+    while inp not in [1, 2, 3, 4]:
         print(menu)
         inp = int(input("Choice # --> "))
 
@@ -112,8 +156,7 @@ def list_students_menu():
     if inp == 2:
         list_students_in_majors()
     if inp == 3:
-        #todo list all students in section
-        pass
+        list_students_by_section()
 
 def list_all_students():
     database = Records()
@@ -121,6 +164,27 @@ def list_all_students():
     if result is not None:
         for student in result:
             print(student['first_name'], " ", student['last_name'])
+
+def list_students_by_section():
+    database = Records()
+    sectionNotFound = True
+    while sectionNotFound:
+        course_number = input("Course number --> ")
+        course = database.courses.find_one({"course_number":course_number})
+        section_number = input("Section number --> ")
+        section = database.sections.find_one({"_id":section_number, "course_id": course["_id"]})
+        if section is not None:
+            sectionNotFound = False
+        else:
+            print("Could not find the section!")
+
+    print("\n-----------------------------------------------------")
+    print(f"Students enrolled in {course["course_name"]}: section #{section_number}")
+    for student_id in section["students"]:
+        student = database.students.find_one({"_id": student_id})
+        text = f"{student["first_name"]} {student["last_name"]}\n"
+        print(text)
+    print("-----------------------------------------------------")
 
 """
 ********************************************************************************* 
@@ -133,11 +197,12 @@ def list_courses_menu():
     menu = """\nWhich student collection would you like to list?
         1) All Courses
         2) All Courses in Department
-        3) Return to Main Menu
+        3) All Sections in a Course
+        4) Return to Main Menu
         """
 
     inp = 0
-    while inp not in [1, 2, 3]:
+    while inp not in [1, 2, 3, 4]:
         print(menu)
         inp = int(input("Choice # --> "))
 
@@ -145,6 +210,8 @@ def list_courses_menu():
         list_all_courses()
     if inp == 2:
         list_courses_in_department()
+    if inp == 3:
+        list_sections_by_course()
 
 def list_all_courses():
     database = Records()
@@ -152,6 +219,7 @@ def list_all_courses():
     if result is not None:
         for course in result:
             print(course['course_name'], " ", course['course_number'], "Units: ", course['units'])
+
 def list_courses_in_department():
     database = Records()
     departmentNotFound = True
@@ -170,3 +238,22 @@ def list_courses_in_department():
         courseFound = database.courses.find_one(courseQuery)
         if courseFound is not None:
             print(courseFound['course_name'], " ", courseFound['course_number'], "Units: ", courseFound['units'])
+
+def list_sections_by_course():
+    database = Records()
+    courseNotFound = True
+    while courseNotFound:
+        course_number = input("Course Number")
+        course = database.courses.find_one({"course_number": course_number})
+        if course:
+            courseNotFoud = False
+        else:
+            print("Could not find the course!")
+    print("\n-----------------------------------------------------")
+    print(f"Sections for {course["course_name"]}")
+    for section_id in course["sections"]:
+        section = database.sections.find_one({"_id": section_id})
+        print(f"Section {section["section_number"]} {section["semester"]} {section["section_year"]}")
+        print(f"{section["building"]} room {section["room"]}")
+        print(f"Meets on {section["schedule"]} at {section["start_time"]}")
+        print(f"Instructor: {section["instructor"]}")
