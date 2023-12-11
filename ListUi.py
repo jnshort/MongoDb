@@ -12,7 +12,8 @@ def list_majors_menu():
     menu = """\nWhat kind of Major list?
         1) Students in Major
         2) Majors in Departments
-        3) Majors a Student has declared
+        3) Majors a Student has declared'
+        4) Return to main menu
         """
     inp = 0
     while inp not in [1,2,3]:
@@ -97,6 +98,7 @@ def list_majors_by_student():
 def list_enrollments_menu():
     menu = """\nWhat kind of Enrollment list?
         1) Enrollments by Student
+        2) Return to main menu
         """
     inp = 0
     while inp not in [1]:
