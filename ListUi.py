@@ -1,5 +1,7 @@
 from Major import Major
+from Student import Student
 from Records import Records
+from Course import Course
 
 """
 ********************************************************************************* 
@@ -41,7 +43,9 @@ def list_students_in_majors():
         query = {'_id':student}
         result = database.students.find_one(query)
         if result is not None:
-            print(result['first_name'], " ", result['last_name'])
+            printStudent = Student()
+            printStudent.load_from_db(result)
+            print(printStudent)
     print("-----------------------------------------------------")
 
 def list_majors_in_departments():
@@ -62,7 +66,9 @@ def list_majors_in_departments():
         majorQuery = {'_id':major}
         majorResult = database.majors.find_one(majorQuery)
         if majorResult is not None:
-            print(majorResult['name'])
+            printMajor = Major()
+            printMajor.load_from_db(majorResult)
+            print(printMajor)
     print("-----------------------------------------------------")
 
 def list_majors_by_student():
@@ -84,7 +90,10 @@ def list_majors_by_student():
     print("Majors declared by ", firstName, " ", lastName)
     for major in result['student_majors']:
         majorName = database.majors.find_one({"_id":major['major']})
-        print(majorName['name'])
+        if majorName is not None:
+            printMajor = Major()
+            printMajor.load_from_db(majorName)
+            print(printMajor)
 
     print("-----------------------------------------------------")
 
@@ -120,7 +129,7 @@ def list_enrollments_by_student():
 
         studentQuery = {"first_name":firstName, "last_name":lastName}
         student = database.students.find_one(studentQuery)
-        if result is not None:
+        if student is not None:
             studentNotFound = False
         else:
             print("Could not find the student!")
@@ -130,7 +139,7 @@ def list_enrollments_by_student():
 
     for enrollment in student["enrollments"]:
         course = database.courses.find_one({"_id": enrollment["course"]})
-        print(f"Course: {course["course_name"]} Section #{enrollment["section_number"]}")
+        print(f"Course: {course['course_name']} Section #{enrollment['section_number']}")
     print("-----------------------------------------------------")
 
 
@@ -165,7 +174,10 @@ def list_all_students():
     result = database.students.find({})
     if result is not None:
         for student in result:
-            print(student['first_name'], " ", student['last_name'])
+            printStudent = Student()
+            printStudent.load_from_db(student)
+            print(printStudent)
+
 
 def list_students_by_section():
     database = Records()
@@ -181,10 +193,10 @@ def list_students_by_section():
             print("Could not find the section!")
 
     print("\n-----------------------------------------------------")
-    print(f"Students enrolled in {course["course_name"]}: section #{section_number}")
+    print(f"Students enrolled in {course['course_name']}: section #{section_number}")
     for student_id in section["students"]:
         student = database.students.find_one({"_id": student_id})
-        text = f"{student["first_name"]} {student["last_name"]}\n"
+        text = f"{student['first_name']} {student['last_name']}\n"
         print(text)
     print("-----------------------------------------------------")
 
@@ -218,9 +230,14 @@ def list_courses_menu():
 def list_all_courses():
     database = Records()
     result = database.courses.find({})
+    print("\n-----------------------------------------------------")
+    print("Listing all courses: ")
     if result is not None:
         for course in result:
-            print(course['course_name'], " ", course['course_number'], "Units: ", course['units'])
+            printCourse = Course()
+            printCourse.load_from_db(course)
+            print(printCourse)
+            print("-----------------------------------------------------")
 
 def list_courses_in_department():
     database = Records()
@@ -235,11 +252,16 @@ def list_courses_in_department():
         else:
             print("Could not find department!")
 
+    print("\n-----------------------------------------------------")
+    print("Listing all courses in: ", department['name'])
     for course in department['courses']:
         courseQuery = {'_id':course}
         courseFound = database.courses.find_one(courseQuery)
         if courseFound is not None:
-            print(courseFound['course_name'], " ", courseFound['course_number'], "Units: ", courseFound['units'])
+            printCourse = Course()
+            printCourse.load_from_db(courseFound)
+            print(printCourse)
+            print("\n-----------------------------------------------------")
 
 def list_sections_by_course():
     database = Records()
@@ -252,10 +274,10 @@ def list_sections_by_course():
         else:
             print("Could not find the course!")
     print("\n-----------------------------------------------------")
-    print(f"Sections for {course["course_name"]}")
+    print(f"Sections for {course['course_name']}")
     for section_id in course["sections"]:
         section = database.sections.find_one({"_id": section_id})
-        print(f"Section {section["section_number"]} {section["semester"]} {section["section_year"]}")
-        print(f"{section["building"]} room {section["room"]}")
-        print(f"Meets on {section["schedule"]} at {section["start_time"]}")
-        print(f"Instructor: {section["instructor"]}")
+        print(f"Section {section['section_number']} {section['semester']} {section['section_year']}")
+        print(f"{section['building']} room {section['room']}")
+        print(f"Meets on {section['schedule']} at {section['start_time']}")
+        print(f"Instructor: {section['instructor']}")

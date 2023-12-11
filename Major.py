@@ -7,11 +7,25 @@ from Student import Student
 
 class Major:
 
-    def __init__(self, name: str, description: str, department: str):
+    def __init__(self, name: str = "", description: str = "", department: str = ""):
         self.name = name
         self.description = description
         self.department = department
+        self.department_name = "Not Found!"
 
+
+    def load_from_db(self, database_file):
+        database = Records()
+        departmentQuery = {'_id':database_file['department']}
+        department = database.departments.find_one(departmentQuery)
+        if department is not None:
+            self.department_name = department['name']
+        else:
+            self.department_name = "Not Found!"
+        database.departments.find_one()
+        self.name = database_file['name']
+        self.description = database_file['description']
+        self.students = database_file['students']
 
     def dict_repr(self) -> dict:
         major = {
@@ -67,3 +81,8 @@ class Major:
     def get_id(self):
         rec = Records()
         return rec.majors.find_one({"name":self.name})["_id"]
+
+    def __str__(self):
+        text = f"Name: {self.name} Department: {self.department_name} "
+        text += f"Description: {self.description}"
+        return text

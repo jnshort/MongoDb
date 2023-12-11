@@ -8,12 +8,19 @@ from StudentMajor import StudentMajor
 # hello world
 class Student:
     
-    def __init__(self, lastName: str, firstName: str, email: str):
+    def __init__(self, lastName: str = "", firstName: str = "", email: str = ""):
         self.lastName: str = lastName
         self.firstName: str = firstName
         self.email: str = email
         self.active: bool = False
 
+    def load_from_db(self, database_file):
+        self.lastName = database_file['last_name']
+        self.firstName = database_file['first_name']
+        self.email = database_file['email']
+        self.student_majors = database_file['student_majors']
+        self.enrollments = database_file['enrollments']
+        self.studentId = database_file['_id']
 
 
     def dict_repr(self) -> dict:
@@ -77,7 +84,7 @@ class Student:
         :return:    String
         """
         text = f"First Name: {self.firstName}, Last Name: {self.lastName}\n"
-        text += f"\temail: {self.email}"
+        text += f"\temail: {self.email}, ID: {self.studentId}"
         return text
 
 
