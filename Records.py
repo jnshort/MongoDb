@@ -20,7 +20,7 @@ class Records:
 
     def __init__(self):
         if not Records._initialized:
-            self.db_connect = MongoClient(db) #, tlsCAFile=certifi.where()
+            self.db_connect = MongoClient(db , tlsCAFile=certifi.where())
             self.departments = self.db_connect.singlecollection.departments
             self.students = self.db_connect.singlecollection.students
             self.majors = self.db_connect.singlecollection.majors
