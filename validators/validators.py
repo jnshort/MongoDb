@@ -117,6 +117,9 @@ student_validator = {
                                     {
                                         'bsonType': 'object',
                                         'properties': {
+                                            'type': {
+                                                'bsonType': 'string'
+                                            },
                                             'application_date':{
                                                 'bsonType':'string'
                                             },
@@ -131,7 +134,10 @@ student_validator = {
                                     {
                                         'bsonType': 'object',
                                         'properties': {
-                                            'letter_grade': {
+                                            'type': {
+                                                'bsonType': 'string'
+                                            },
+                                            'min_satisfactory': {
                                                 'bsonType':'string'
                                             },
                                             'course': {
