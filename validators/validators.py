@@ -113,7 +113,7 @@ student_validator = {
                             'bsonType': 'array',
                             'description': 'list of student enrollemnts',
                             'items':{
-                                'oneOf':[
+                                'anyOf':[
                                     {
                                         'bsonType': 'object',
                                         'properties': {

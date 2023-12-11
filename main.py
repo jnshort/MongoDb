@@ -212,7 +212,7 @@ def add_enrollment_by_student():
         student = database.students.find_one(studentQuery)
         if student:
             valid_input = True
-    student_obj = Student(student["first_name"], student["last_name"], student["email"])
+    student_obj = Student(student["last_name"], student["first_name"], student["email"])
 
     student_enrollments = student["enrollments"]
     # choose section to add to (and check student doesn't already have enrollment)
@@ -223,7 +223,7 @@ def add_enrollment_by_student():
     while not valid_section:
         courseName = input("Enter course name -->")
         sectionNum = input("Enter section number -->")
-        grade_type = input("Enter 1 for Pass/Fail, or 2")
+        grade_type = input("Enter 1 for Pass/Fail, or 2 for Letter Grade -->")
         course = rec.courses.find_one({"course_name": courseName})
         if course:
             valid_section = True
@@ -237,15 +237,15 @@ def add_enrollment_by_student():
     field = ""
     match grade_type:
         case 1:
-            field += input("Enter application date")
+            field += input("Enter application date -->")
 
         case 2:
-            field += input("Enter minimum satisfactory grade")
+            field += input("Enter minimum satisfactory grade -->")
             while field.upper() not in ["A", "B", "C", "D", "F"]:
                 print("Invalid grade, valid choices are: A, B, C, D, F")
-                field = input("Enter minium satisfactory grade")
+                field = input("Enter minium satisfactory grade -->")
     course_obj = Course(course["dept_abrv"], course["course_number"], course["course_name"], course["description"], course["units"])
-    enrollment_obj = Enrollment(student_obj, course_obj, sectionNum, grade_type, field)
+    enrollment_obj = Enrollment(student_obj, course_obj, int(sectionNum), grade_type, field)
     try:
         enrollment_obj.add_enrollment()
     except Exception as ex:
