@@ -12,6 +12,7 @@ from validators.major_validator import major_validator
 from validators.course_validator import course_validator
 from validators.section_validator import section_validator
 from constraints import department_constraints, student_constraints, major_constraints, course_constraints, section_constraints
+import ListUi
 
 database_name = "singlecollection"
 database = Records()
@@ -486,13 +487,13 @@ def add_student_to_major():
     studentMajor = StudentMajor(declarationDate, major['_id'])
 
     try:
+        # add student to students inside given major
+        updateMajor = {'$push': {'students': student['_id']}}
+        database.majors.update_one(majorQuery, updateMajor)
+
         #add studentMajor to student_majors inside given student
         updateStudent = {'$push': {'student_majors':studentMajor.dict_repr()}}
         database.students.update_one(studentQuery, updateStudent )
-
-        #add student to students inside given major
-        updateMajor = {'$push':{'students':student['_id']}}
-        database.majors.update_one(majorQuery, updateMajor)
     except Exception as ex:
         print("\n*******************************")
         print("There are errors with the input")
@@ -560,61 +561,9 @@ def list_menu():
             print()
         print("--------------------")
     if inp == 2:
-        list_majors_menu()
+        ListUi.list_majors_menu()
             
-def list_majors_menu():
-    menu = """\nWhat kind of Major list?
-        1) Students in Major
-        2) Majors in Departments
-        3) Majors a Student has declared
-        """
-    inp = 0
-    while inp not in [1,2,3]:
-        print(menu)
-        inp = int(input('Choice # --> '))
-        if inp == 1:
-            # todo
-            list_students_in_majors()
-            pass
-        elif inp == 2:
-            #todo
-            #list_majors_in_departments()
-            pass
-        elif inp == 3:
-            #todo
-            list_majors_by_student()
 
-def list_students_in_majors():
-    majorName = input("Major name -->")
-    description = "test"
-    department = "test"
-
-    testMajor = Major(majorName, description, department)
-    for student in testMajor.dict_repr()['students']:
-        print(student)
-
-def list_majors_by_student():
-    database = Records()
-
-    studentNotFound = True
-    while studentNotFound:
-        firstName = input("First name --> ")
-        lastName = input("Last name --> ")
-
-        studentQuery = {"first_name":firstName, "last_name":lastName}
-        result = database.students.find_one(studentQuery)
-        if result is not None:
-            studentNotFound = False
-        else:
-            print("Could not find the student!")
-
-    print("\n-----------------------------------------------------")
-    print("Majors declared by ", firstName, " ", lastName)
-    for major in result['student_majors']:
-        majorName = database.majors.find_one({"_id":major['major']})
-        print(majorName['name'])
-
-    print("-----------------------------------------------------")
 
 def list_students_menu():
     #todo
