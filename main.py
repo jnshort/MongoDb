@@ -310,6 +310,68 @@ def remove_enrollment():
                 print("*******************************")
             else:
                 print(ex)
+
+def remove_student():
+    rec = Records()
+    valid_student = False
+    
+    firstName = input("Enter first name -->")
+    lastName = input("Enter last name -->")
+    studentQuery = {"first_name": firstName, "last_name": lastName}
+
+    student = database.students.find_one(studentQuery)
+    if student:
+        valid_student = True
+
+    if valid_student:
+        student_obj = Student(student["first_name"], student["last_name"], student["email"])
+        try:
+            student_obj.remove_student()
+        except Exception as ex:
+            print("\n*******************************")
+            print("There are errors with the input")
+            if type(ex) == pymongo.errors.WriteError:
+                print("\tAt least one invalid field")
+                print("*******************************")
+            else:
+                print(ex)
+
+def remove_course():
+    rec = Records()
+
+    valid_department = False
+    while not valid_department:
+        deptAbrv = input("Enter department abbreviation -->")
+        departmentQuery = { "department_abbreviation": deptAbrv}
+
+        department = database.departments.find_one(departmentQuery)
+        if department:
+            valid_student = True
+
+    valid_course = False
+    course = None
+    while not valid_course:
+        course_name = input("Enter course name -->")
+        course = rec.courses.find_one({"course_name": course_name})
+        if course:
+            valid_course = True
+        else:
+            print("Unable to find course, enter a valid course name")
+
+    if valid_course:
+        course_obj = Course(course["dept_abrv"], course["course_number"], course["course_name"], course["description"],
+                            course["units"])
+        try:
+            course_obj.remove_course()
+        except Exception as ex:
+            print("\n*******************************")
+            print("There are errors with the input")
+            if type(ex) == pymongo.errors.WriteError:
+                print("\tAt least one invalid field")
+                print("*******************************")
+            else:
+                print(ex)
+
 def add_section_to_course():
     database = Records()
     sectionNotAdded = True
