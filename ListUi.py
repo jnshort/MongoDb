@@ -1,6 +1,13 @@
 from Major import Major
 from Records import Records
 
+"""
+********************************************************************************* 
+
+ List Majors Section
+ 
+ *********************************************************************************
+"""
 def list_majors_menu():
     menu = """\nWhat kind of Major list?
         1) Students in Major
@@ -84,3 +91,87 @@ def list_majors_by_student():
         print(majorName['name'])
 
     print("-----------------------------------------------------")
+
+
+"""
+********************************************************************************* 
+
+ List Students Section
+
+ *********************************************************************************
+"""
+def list_students_menu():
+    menu = """\nWhich student collection would you like to list?
+        1) All Students
+        2) All Students in Major
+        3) All Students in Section
+        4) Return to main menu"""
+
+    inp = 0
+    while inp not in [1, 2, 3,4]:
+        print(menu)
+        inp = int(input("Choice # --> "))
+
+    if inp == 1:
+        list_all_students()
+    if inp == 2:
+        list_students_in_majors()
+    if inp == 3:
+        #todo list all students in section
+        pass
+
+def list_all_students():
+    database = Records()
+    result = database.students.find({})
+    if result is not None:
+        for student in result:
+            print(student['first_name'], " ", student['last_name'])
+
+"""
+********************************************************************************* 
+
+ List Course Section
+
+ *********************************************************************************
+"""
+def list_courses_menu():
+    menu = """\nWhich student collection would you like to list?
+        1) All Courses
+        2) All Courses in Department
+        3) Return to Main Menu
+        """
+
+    inp = 0
+    while inp not in [1, 2, 3]:
+        print(menu)
+        inp = int(input("Choice # --> "))
+
+    if inp == 1:
+        list_all_courses()
+    if inp == 2:
+        list_courses_in_department()
+
+def list_all_courses():
+    database = Records()
+    result = database.courses.find({})
+    if result is not None:
+        for course in result:
+            print(course['course_name'], " ", course['course_number'], "Units: ", course['units'])
+def list_courses_in_department():
+    database = Records()
+    departmentNotFound = True
+
+    while departmentNotFound:
+        abbreviation = input("Department Abbreviation --> ")
+        query = {'abbreviation': abbreviation}
+        department = database.departments.find_one(query)
+        if department is not None:
+            departmentNotFound = False
+        else:
+            print("Could not find department!")
+
+    for course in department['courses']:
+        courseQuery = {'_id':course}
+        courseFound = database.courses.find_one(courseQuery)
+        if courseFound is not None:
+            print(courseFound['course_name'], " ", courseFound['course_number'], "Units: ", courseFound['units'])
