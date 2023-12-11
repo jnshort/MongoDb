@@ -38,18 +38,19 @@ class Enrollment:
 
     def add_enrollment(self):
         rec = Records()
-
         student = rec.students.find_one({"last_name": self.student.lastName ,"first_name": self.student.firstName})
         if student:
             enrollments = student["enrollments"]
         else:
             raise KeyError("Student not found")
 
-
+        
         section = rec.sections.find_one({"course_id": self.course.get_id(), "section_number": self.sectionNum})
         
+
         if section:
             enrollments.append(self.dict_repr())
+            print(enrollments)
             filter = {"last_name": self.student.lastName ,"first_name": self.student.firstName}
             rec.students.update_one(filter, {"$set": {"enrollments": enrollments}})
             return True
