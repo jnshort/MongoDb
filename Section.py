@@ -65,9 +65,11 @@ class Section:
         """
         rec = Records()
 
-        section = rec.sections.find_one({"course_id": self.courseId, "section_number": self.section_number})
-
-        if section:
-            return section["students"]
-        else:
-            return []
+        students = []
+        query = {'course_id':self.courseId, 'section_number':self.section_number, 'semester':self.semester}
+        section = rec.sections.find_one(query)
+        students = []
+        if section is not None:
+            for student in section['students']:
+                students.append(student)
+        return students
