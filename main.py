@@ -546,9 +546,11 @@ def list_menu():
     menu ="""\nWhich collection would you like to list?
     1) Department
     2) Majors
-    3) Return to main menu"""
+    3) Students
+    4) Courses
+    5) Return to main menu"""
     inp = 0
-    while inp not in [1,2,3]:
+    while inp not in [1,2,3,4,5]:
         print(menu)
         inp = int(input("Choice # --> "))
     
@@ -562,12 +564,13 @@ def list_menu():
         print("--------------------")
     if inp == 2:
         ListUi.list_majors_menu()
-            
+    if inp == 3:
+        ListUi.list_students_menu()
+    if inp == 4:
+        ListUi.list_courses_menu()
 
 
-def list_students_menu():
-    #todo
-    pass
+
 
 def main_menu():
     menu ="""\nManage Database
