@@ -33,7 +33,7 @@ def add_menu():
     7) Student to Course
     8) Return to main menu"""
     inp = 0
-    while inp not in [1,2,3,4,5,6]:
+    while inp not in [1,2,3,4,5,6,7]:
         print(menu)
         inp = int(input("Choice # --> "))
     
@@ -50,7 +50,7 @@ def add_menu():
     elif inp == 6:
         add_student_to_major()
     elif inp == 7:
-        add_enrollment()
+        add_enrollment_by_student()
 
 def add_department():
     getting_input = True
@@ -198,7 +198,7 @@ def add_course_to_department():
             else:
                 print(ex)
 
-def add_enrollment():
+def add_enrollment_by_student():
     rec = Records()
 
     # get student to add
@@ -260,7 +260,7 @@ def add_enrollment():
         else:
             print(ex)
 
-def remove_enrollment():
+def remove_enrollment_by_student():
     rec = Records()
 
     student = None
