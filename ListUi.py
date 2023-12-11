@@ -19,15 +19,10 @@ def list_majors_menu():
         print(menu)
         inp = int(input('Choice # --> '))
         if inp == 1:
-            # todo
             list_students_in_majors()
-            pass
         elif inp == 2:
-            #todo
             list_majors_in_departments()
-            pass
         elif inp == 3:
-            #todo
             list_majors_by_student()
 
 def list_students_in_majors():
