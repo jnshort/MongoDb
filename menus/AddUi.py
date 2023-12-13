@@ -32,7 +32,7 @@ def add_menu():
     7) Student to Course
     8) Return to main menu"""
     inp = 0
-    while inp not in [1, 2, 3, 4, 5, 6, 7]:
+    while inp not in [1, 2, 3, 4, 5, 6, 7, 8]:
         print(menu)
         inp = int(input("Choice # --> "))
 

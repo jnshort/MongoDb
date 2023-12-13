@@ -56,7 +56,7 @@ def list_majors_menu():
         4) Return to main menu
         """
     inp = 0
-    while inp not in [1,2,3]:
+    while inp not in [1,2,3,4]:
         print(menu)
         inp = int(input('Choice # --> '))
         if inp == 1:
@@ -149,7 +149,7 @@ def list_enrollments_menu():
         2) Return to main menu
         """
     inp = 0
-    while inp not in [1]:
+    while inp not in [1,2]:
         print(menu)
         inp = int(input('Choice # --> '))
         if inp == 1:

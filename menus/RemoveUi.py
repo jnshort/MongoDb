@@ -21,9 +21,9 @@ def remove_menu():
     5) Section
     6) Enrollment
     7) Undeclare Student from Major
-    5) Return to main menu"""
+    8) Return to main menu"""
     inp = 0
-    while inp not in [1, 2, 3, 4, 5, 6, 7]:
+    while inp not in [1, 2, 3, 4, 5, 6, 7,8]:
         print(menu)
         inp = int(input("Choice # --> "))
 
