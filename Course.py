@@ -5,19 +5,25 @@ from Records import Records
 
 class Course:
     sections = []
-    def __init__(self, dept_abrv: str, course_number: int, course_name: str, description: str, units: int):
+    def __init__(self, dept_abrv: str = "", course_number: int = 0, course_name: str = "", description: str = "", units: int = 0):
         self.dept_abrv: str = dept_abrv
         self.course_number: int = course_number
         self.course_name: str = course_name
         self.description: str = description
         self.units: int = units
-        self.db = MongoClient(db)
-        self.active: bool = False
 
     def checkFields(self) -> bool:
         return (
             len(self.course_number) <= 700 and
             len(self.units) <= 5)
+
+    def load_from_db(self, database_file):
+        self.dept_abrv = database_file['dept_abrv']
+        self.course_number = database_file['course_number']
+        self.course_name = database_file['course_name']
+        self.description = database_file['description']
+        self.units = database_file['units']
+        self.sections = database_file['sections']
 
     def dict_repr(self) -> dict:
         """Returns a dictionary representation of the class.
@@ -62,3 +68,9 @@ class Course:
     def get_id(self):
         rec = Records()
         return rec.courses.find_one({"course_name":self.course_name})["_id"]
+
+    def __str__(self):
+        text = f"\nCourse: {self.course_name} \nNumber: {self.course_number} \nDepartment: {self.dept_abrv}"
+        text += f"\nDescription: {self.description}"
+        text += f"\nUnits: {self.units}"
+        return text

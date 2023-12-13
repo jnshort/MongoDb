@@ -12,6 +12,7 @@ from validators.major_validator import major_validator
 from validators.course_validator import course_validator
 from validators.section_validator import section_validator
 from constraints import department_constraints, student_constraints, major_constraints, course_constraints, section_constraints
+import ListUi
 
 database_name = "singlecollection"
 database = Records()
@@ -33,7 +34,7 @@ def add_menu():
     7) Student to Course
     8) Return to main menu"""
     inp = 0
-    while inp not in [1,2,3,4,5,6]:
+    while inp not in [1,2,3,4,5,6,7]:
         print(menu)
         inp = int(input("Choice # --> "))
     
@@ -50,7 +51,7 @@ def add_menu():
     elif inp == 6:
         add_student_to_major()
     elif inp == 7:
-        add_enrollment()
+        add_enrollment_by_student()
 
 def add_department():
     getting_input = True
@@ -59,7 +60,7 @@ def add_department():
         name = input("Enter department name --> ")
         abrv = input("Enter abbreviation --> ")
         chair = input("Enter chair --> ")
-        building = input("Enter building -->")
+        building = input("Enter building --> ")
         office = input("Enter office (must be an integer)--> ")
         while not office.isnumeric():
             office = input("must be an integer --> ")
@@ -198,21 +199,21 @@ def add_course_to_department():
             else:
                 print(ex)
 
-def add_enrollment():
+def add_enrollment_by_student():
     rec = Records()
 
     # get student to add
     student = None
     valid_input = False
     while not valid_input:
-        firstName = input("Enter first name -->")
-        lastName = input("Enter last name -->")
+        firstName = input("Enter first name --> ")
+        lastName = input("Enter last name --> ")
         studentQuery = {"first_name": firstName, "last_name":lastName}
 
         student = database.students.find_one(studentQuery)
         if student:
             valid_input = True
-    student_obj = Student(student["first_name"], student["last_name"], student["email"])
+    student_obj = Student(student["last_name"], student["first_name"], student["email"])
 
     student_enrollments = student["enrollments"]
     # choose section to add to (and check student doesn't already have enrollment)
@@ -221,10 +222,14 @@ def add_enrollment():
     sectionNum = ""
     grade_type = None
     while not valid_section:
-        courseName = input("Enter course name -->")
-        sectionNum = input("Enter section number -->")
-        grade_type = input("Enter 1 for Pass/Fail, or 2")
-        course = rec.courses.find_one({"course_name": courseName})
+        courseNumber = input("Enter course number --> ")
+        sectionNum = input("Enter section number --> ")
+        grade_type = input("Enter 1 for Pass/Fail, or 2 for Letter Grade --> ")
+        try:
+            course = rec.courses.find_one({"course_number": int(courseNumber)})
+        except:
+            print("Course number must be an interger between 100 and 700")
+            pass
         if course:
             valid_section = True
         else:
@@ -237,15 +242,16 @@ def add_enrollment():
     field = ""
     match grade_type:
         case 1:
-            field += input("Enter application date")
+            field += input("Enter application date --> ")
 
         case 2:
-            field += input("Enter minimum satisfactory grade")
+            field = ""
+            field += input("Enter minimum satisfactory grade --> ")
             while field.upper() not in ["A", "B", "C", "D", "F"]:
                 print("Invalid grade, valid choices are: A, B, C, D, F")
-                field = input("Enter minium satisfactory grade")
+                field = input("Enter minium satisfactory grade --> ")
     course_obj = Course(course["dept_abrv"], course["course_number"], course["course_name"], course["description"], course["units"])
-    enrollment_obj = Enrollment(student_obj, course_obj, sectionNum, grade_type, field)
+    enrollment_obj = Enrollment(student_obj, course_obj, int(sectionNum), grade_type, field)
     try:
         enrollment_obj.add_enrollment()
     except Exception as ex:
@@ -260,14 +266,14 @@ def add_enrollment():
         else:
             print(ex)
 
-def remove_enrollment():
+def remove_enrollment_by_student():
     rec = Records()
 
     student = None
     valid_student = False
     while not valid_student:
-        firstName = input("Enter first name -->")
-        lastName = input("Enter last name -->")
+        firstName = input("Enter first name --> ")
+        lastName = input("Enter last name --> ")
         studentQuery = {"first_name": firstName, "last_name":lastName}
 
         student = database.students.find_one(studentQuery)
@@ -277,13 +283,16 @@ def remove_enrollment():
     valid_course = False
     course = None
     while not valid_course:
-        course_name = input("Enter course name -->")
-        course = rec.courses.find_one({"course_name":course_name})
+        course_number = input("Enter course number --> ")
+        try:
+            course = rec.courses.find_one({"course_number": int(course_number)})
+        except:
+            print("Course nummber must be an interger between 100 and 700")
+            pass
         if course:
             valid_course = True
         else:
-            print("Unable to find course, enter a valid course name")
-    
+            print("Unable to find course, enter a valid course number")
 
     if not student["enrollments"]:
         print("Student does not have any enrollments to remove")
@@ -291,15 +300,21 @@ def remove_enrollment():
 
     enrollment_found = False
     enroll_to_rem = None
+    type = 0
     for enroll in student["enrollments"]:
         if enroll["course"] == course["_id"]:
             enroll_to_rem = enroll
             enrollment_found = True
+            match enroll["type"]:
+                case "Pass Fail":
+                    type += 1
+                case "Letter Grade":
+                    type += 2
     
-    if enrollment_found:
-        student_obj = Student(student["first_name"], student["last_name"], student["email"])
+    if enrollment_found and (type in [1,2]):
+        student_obj = Student(student["last_name"], student["first_name"], student["email"])
         course_obj = Course(course["dept_abrv"], course["course_number"], course["course_name"], course["description"], course["units"])
-        enroll_obj = Enrollment(student_obj, course_obj, enroll["section_number"], enroll["type"])
+        enroll_obj = Enrollment(student_obj, course_obj, enroll_to_rem["section_number"], type)
         try:
             enroll_obj.remove_enrollment()
         except Exception as ex:
@@ -310,13 +325,18 @@ def remove_enrollment():
                 print("*******************************")
             else:
                 print(ex)
+    else:
+        print("\n*******************************")
+        print("There are errors with the input")
+        print("\tUnable to find enrollment")
+        print("*******************************")
 
 def remove_student():
     rec = Records()
     valid_student = False
     
-    firstName = input("Enter first name -->")
-    lastName = input("Enter last name -->")
+    firstName = input("Enter first name --> ")
+    lastName = input("Enter last name --> ")
     studentQuery = {"first_name": firstName, "last_name": lastName}
 
     student = database.students.find_one(studentQuery)
@@ -341,7 +361,7 @@ def remove_course():
 
     valid_department = False
     while not valid_department:
-        deptAbrv = input("Enter department abbreviation -->")
+        deptAbrv = input("Enter department abbreviation --> ")
         departmentQuery = { "department_abbreviation": deptAbrv}
 
         department = database.departments.find_one(departmentQuery)
@@ -351,7 +371,7 @@ def remove_course():
     valid_course = False
     course = None
     while not valid_course:
-        course_name = input("Enter course name -->")
+        course_name = input("Enter course name --> ")
         course = rec.courses.find_one({"course_name": course_name})
         if course:
             valid_course = True
@@ -381,7 +401,7 @@ def add_section_to_course():
         courseNotExist = True
         while courseNotExist:
             departmentAbbreviation = input("Department Abbreviation --> ")
-            courseNumber = int(input("Course Number -->"))
+            courseNumber = int(input("Course Number --> "))
             courseQuery = {"course_number": courseNumber,"dept_abrv": departmentAbbreviation}
             result = database.courses.find_one(courseQuery)
             if (result is not None):
@@ -473,7 +493,7 @@ def add_student_to_major():
     #find major student wants to add
     majorFound = False
     while not majorFound:
-        majorName = input("Enter major -->")
+        majorName = input("Enter major --> ")
         majorQuery = {"name":majorName}
         major = database.majors.find_one(majorQuery)
 
@@ -486,13 +506,13 @@ def add_student_to_major():
     studentMajor = StudentMajor(declarationDate, major['_id'])
 
     try:
+        # add student to students inside given major
+        updateMajor = {'$push': {'students': student['_id']}}
+        database.majors.update_one(majorQuery, updateMajor)
+
         #add studentMajor to student_majors inside given student
         updateStudent = {'$push': {'student_majors':studentMajor.dict_repr()}}
         database.students.update_one(studentQuery, updateStudent )
-
-        #add student to students inside given major
-        updateMajor = {'$push':{'students':student['_id']}}
-        database.majors.update_one(majorQuery, updateMajor)
     except Exception as ex:
         print("\n*******************************")
         print("There are errors with the input")
@@ -506,6 +526,15 @@ def add_student_to_major():
             print(ex)
 
 
+def remove_major():
+    pass
+
+def remove_section():
+    pass
+
+def undeclare_student():
+    pass
+
 def remove_menu():
     """Prints a menu for removing from a collectin.
     Prompts the user for necessary information and removes
@@ -515,29 +544,45 @@ def remove_menu():
     rec = Records()
     menu = """\nWhat would you like to remove?
     1) Department
-    2) Return to main menu"""
+    2) Major
+    3) Student
+    4) Course
+    5) Section
+    6) Enrollment
+    7) Undeclare Student from Major
+    5) Return to main menu"""
     inp = 0
-    while inp not in [1,2]:
+    while inp not in [1,2,3,4,5,6,7]:
         print(menu)
         inp = int(input("Choice # --> "))
     
-    
-    if inp == 1:
-        name = input("Enter department name --> ")
-        found = False
-        to_del = None
-        col = rec.department_list()
-        for dept in col:
-            if dept['name'] == name:
-                found = True
-                to_del = load_dept(dept)
-        if found:
-            to_del.remove_dept()
-            print("Department removed")
-        else:
-            print("Failed to find department")
-
-            
+    match inp:
+        case 1:
+            name = input("Enter department name --> ")
+            found = False
+            to_del = None
+            col = rec.department_list()
+            for dept in col:
+                if dept['name'] == name:
+                    found = True
+                    to_del = load_dept(dept)
+            if found:
+                to_del.remove_dept()
+                print("Department removed")
+            else:
+                print("Failed to find department")
+        case 2:
+            remove_major()
+        case 3:
+            remove_student()
+        case 4:
+            remove_course()
+        case 5:
+            remove_section()
+        case 6:
+            remove_enrollment_by_student()
+        case 7:
+            undeclare_student()
 
 
 def list_menu():
@@ -545,9 +590,12 @@ def list_menu():
     menu ="""\nWhich collection would you like to list?
     1) Department
     2) Majors
-    3) Return to main menu"""
+    3) Students
+    4) Courses
+    5) Enrollments
+    5) Return to main menu"""
     inp = 0
-    while inp not in [1,2,3]:
+    while inp not in [1,2,3,4,5]:
         print(menu)
         inp = int(input("Choice # --> "))
     
@@ -560,65 +608,16 @@ def list_menu():
             print()
         print("--------------------")
     if inp == 2:
-        list_majors_menu()
-            
-def list_majors_menu():
-    menu = """\nWhat kind of Major list?
-        1) Students in Major
-        2) Majors in Departments
-        3) Majors a Student has declared
-        """
-    inp = 0
-    while inp not in [1,2,3]:
-        print(menu)
-        inp = int(input('Choice # --> '))
-        if inp == 1:
-            # todo
-            list_students_in_majors()
-            pass
-        elif inp == 2:
-            #todo
-            #list_majors_in_departments()
-            pass
-        elif inp == 3:
-            #todo
-            list_majors_by_student()
+        ListUi.list_majors_menu()
+    if inp == 3:
+        ListUi.list_students_menu()
+    if inp == 4:
+        ListUi.list_courses_menu()
+    if inp == 5:
+        ListUi.list_enrollments_menu()
 
-def list_students_in_majors():
-    majorName = input("Major name -->")
-    description = "test"
-    department = "test"
 
-    testMajor = Major(majorName, description, department)
-    for student in testMajor.dict_repr()['students']:
-        print(student)
 
-def list_majors_by_student():
-    database = Records()
-
-    studentNotFound = True
-    while studentNotFound:
-        firstName = input("First name --> ")
-        lastName = input("Last name --> ")
-
-        studentQuery = {"first_name":firstName, "last_name":lastName}
-        result = database.students.find_one(studentQuery)
-        if result is not None:
-            studentNotFound = False
-        else:
-            print("Could not find the student!")
-
-    print("\n-----------------------------------------------------")
-    print("Majors declared by ", firstName, " ", lastName)
-    for major in result['student_majors']:
-        majorName = database.majors.find_one({"_id":major['major']})
-        print(majorName['name'])
-
-    print("-----------------------------------------------------")
-
-def list_students_menu():
-    #todo
-    pass
 
 def main_menu():
     menu ="""\nManage Database

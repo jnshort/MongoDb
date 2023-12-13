@@ -1,7 +1,7 @@
 section_validator = {
         'validator': {
             '$jsonSchema': {
-                'description': 'A course associated with a particular department at a university',
+                'description': 'A section associated with a specific course in a department',
                 'required': ['course_id','section_number', 'semester', 'section_year', 'building'],
                 'additionalProperties': False,
                 'properties': {
@@ -46,6 +46,16 @@ section_validator = {
                         'bsonType': 'string',
                         'description': 'person who teaches the section'
                     },
+                    'students': {
+                        'bsonType': 'array',
+                        'description': 'a list of student objectId',
+                        'minItems': 0,
+                        'uniqueItems': True,
+                        'items': {
+                            'bsonType': 'objectId',
+                            'description': 'reference to a student'
+                        }
+                    }
                 },
             }
         }

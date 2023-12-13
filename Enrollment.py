@@ -23,12 +23,14 @@ class Enrollment:
     def dict_repr(self):
         if self.type == 1:
             enroll = {
+                "type": "Pass Fail",
                 "course": self.course.get_id(),
                 "section_number": self.sectionNum,
-                "application_data": self.applicationDate
+                "application_date": self.applicationDate
             }
         elif self.type == 2:
             enroll = {
+                "type": "Letter Grade",
                 "course": self.course.get_id(),
                 "section_number": self.sectionNum,
                 "min_satisfactory": self.minSatisfactory
@@ -38,46 +40,55 @@ class Enrollment:
 
     def add_enrollment(self):
         rec = Records()
+        student = rec.students.find_one({"last_name": self.student.lastName ,"first_name": self.student.firstName})
+        if student:
+            enrollments = student["enrollments"]
+        else:
+            raise KeyError("Student not found")
 
-        student = rec.students.find_one({"lastname": self.students.lastname ,"firstname": self.students.firstname})
-        enrollments = student["enrollments"]
-
-
-        course = rec.courses.find_one({"course": self.course.get_id()})
-        section_list = course["sections"]
-
-        section_found = False
-        for section in section_list:
-            if (section["section_number"] == self.sectionNum) and (section["course"]):
-                section_found = True
         
-        if section_found:
+        section = rec.sections.find_one({"course_id": self.course.get_id(), "section_number": self.sectionNum})
+        
+
+        if section:
+            student_ids = section["students"]
+            student_ids.append(student["_id"])
             enrollments.append(self.dict_repr())
-            filter = {"lastname": self.students.lastname ,"firstname": self.students.firstname}
-            rec.students.update_one(filter, {"$set": {"enrollments": enrollments}})
+            filter1 = {"last_name": self.student.lastName ,"first_name": self.student.firstName}
+            filter2 = {"course_id": self.course.get_id(), "section_number": self.sectionNum}
+            rec.students.update_one(filter1, {"$set": {"enrollments": enrollments}})
+            rec.sections.update_one(filter2, {'$set': {"students": student_ids}})
+
             return True
         else: #throw error myself since I have to do constrainsts of embedded docs clientside
-            raise ValueError("Could not find section")
-        
+            return False
+
 
 
     def remove_enrollment(self):
         rec = Records()
         
-        student = rec.students.find_one({"lastname": self.students.lastname ,"firstname": self.students.firstname})
+        student = rec.students.find_one({"last_name": self.student.lastName ,"first_name": self.student.firstName})
         enrollments = student["enrollments"]
 
+        section = rec.sections.find_one({"course_id": self.course.get_id(), "section_number": self.sectionNum})
+        student_ids = section["students"]
+        
         enrollment_found = False
         for enroll in enrollments:
             if enroll["course"] == self.course.get_id():
                 enrollments.remove(enroll)
                 enrollment_found = True
         
+        for student_id in student_ids:
+            if student_id == student["_id"]:
+                student_ids.remove(student_id)
+
         if enrollment_found:
-            filter = {"lastname": self.students.lastname ,"firstname": self.students.firstname}
-            rec.students.update_one(filter, {"$set": {"enrollments": enrollments}})
+            filter1 = {"last_name": self.student.lastName ,"first_name": self.student.firstName}
+            filter2 = {"course_id": self.course.get_id(), "section_number": self.sectionNum}
+            rec.students.update_one(filter1, {"$set": {"enrollments": enrollments}})
+            rec.sections.update_one(filter2, {'$set': {"students": student_ids}})
             return True
         else:
-            return False
-        
-    
+            raise KeyError("Enrollment does not exist")

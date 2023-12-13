@@ -7,13 +7,20 @@ from StudentMajor import StudentMajor
 
 # hello world
 class Student:
-    studentMajors = []
-    def __init__(self, lastName: str, firstName: str, email: str):
+    
+    def __init__(self, lastName: str = "", firstName: str = "", email: str = ""):
         self.lastName: str = lastName
         self.firstName: str = firstName
         self.email: str = email
         self.active: bool = False
 
+    def load_from_db(self, database_file):
+        self.lastName = database_file['last_name']
+        self.firstName = database_file['first_name']
+        self.email = database_file['email']
+        self.student_majors = database_file['student_majors']
+        self.enrollments = database_file['enrollments']
+        self.studentId = database_file['_id']
 
 
     def dict_repr(self) -> dict:
@@ -24,6 +31,8 @@ class Student:
             "last_name": self.lastName,
             "first_name": self.firstName,
             "email": self.email,
+            "student_majors": self.get_majors(),
+            "enrollments": self.get_enrollments()
         }
         return student
 
@@ -36,24 +45,46 @@ class Student:
         rec = Records()
         rec.students.insert_one(self.dict_repr())
 
-    """
+    def get_majors(self):
+        rec = Records()
+
+        student = rec.students.find_one({"first_name": self.firstName, "last_name": self.lastName})
+
+        if not student:
+            return []
+        else:
+            majors = student["student_majors"]
+            return majors
+        
+
+    def get_enrollments(self):
+        rec = Records()
+
+        student = rec.students.find_one({"first_name": self.firstName, "last_name": self.lastName})
+
+        if not student:
+            return []
+        else:
+            enrolls = student["enrollments"]
+            return enrolls
+
     def remove_dept(self):
-        """""""Removes this department from the database.
+        """"Removes this department from the database.
         Main has already verified that this dept is in the database.
         :return:    None
-        """"""
+        """
         rec = Records()
         self.active = False
 
         # to_del = rec.db_connect.singlecollection.departments.find()
         rec.departments.delete_one({"name": self.name})
-"""
+
     def __str__(self):
         """Returns a string representation of the department.
         :return:    String
         """
         text = f"First Name: {self.firstName}, Last Name: {self.lastName}\n"
-        text += f"\temail: {self.email}"
+        text += f"\temail: {self.email}, ID: {self.studentId}"
         return text
 
 

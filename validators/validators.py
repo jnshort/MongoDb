@@ -113,10 +113,13 @@ student_validator = {
                             'bsonType': 'array',
                             'description': 'list of student enrollemnts',
                             'items':{
-                                'oneOf':[
+                                'anyOf':[
                                     {
                                         'bsonType': 'object',
                                         'properties': {
+                                            'type': {
+                                                'bsonType': 'string'
+                                            },
                                             'application_date':{
                                                 'bsonType':'string'
                                             },
@@ -131,7 +134,10 @@ student_validator = {
                                     {
                                         'bsonType': 'object',
                                         'properties': {
-                                            'letter_grade': {
+                                            'type': {
+                                                'bsonType': 'string'
+                                            },
+                                            'min_satisfactory': {
                                                 'bsonType':'string'
                                             },
                                             'course': {

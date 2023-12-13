@@ -38,9 +38,9 @@ course_validator = {
                         'items': {
                             'bsonType': 'objectId',
                             'description': 'reference to a section'
-                         }
+                            }
+                        }
                     }
-                    }
+                }
             }
-        }
-}
+        }       
