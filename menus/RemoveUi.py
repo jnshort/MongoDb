@@ -5,6 +5,7 @@ from classes.Major import Major
 from classes.Course import Course
 from classes.Enrollment import Enrollment
 from classes.Department import Department
+from classes.Section import Section
 
 from utils import load_dept
 def remove_menu():
@@ -157,18 +158,29 @@ def remove_student():
     if student:
         valid_student = True
 
-    if valid_student:
-        student_obj = Student(student["first_name"], student["last_name"], student["email"])
-        try:
-            student_obj.remove_student()
-        except Exception as ex:
-            print("\n*******************************")
-            print("There are errors with the input")
-            if type(ex) == pymongo.errors.WriteError:
-                print("\tAt least one invalid field")
-                print("*******************************")
-            else:
-                print(ex)
+    # todo something about enrollments
+    enrollments = len(student['enrollments'])
+    if enrollments > 0:
+        print("Student is still enrolled in courses!")
+
+    #todo something about majors
+    majors = len(student['student_majors'])
+    if majors > 0:
+        print("Student still has majors declared!")
+    if majors == 0 and enrollments == 0:
+        if valid_student:
+            student_obj = Student()
+            student_obj.load_from_db(student)
+            try:
+                student_obj.remove_student()
+            except Exception as ex:
+                print("\n*******************************")
+                print("There are errors with the input")
+                if type(ex) == pymongo.errors.WriteError:
+                    print("\tAt least one invalid field")
+                    print("*******************************")
+                else:
+                    print(ex)
 
 
 def remove_course():
@@ -181,7 +193,9 @@ def remove_course():
 
         department = rec.departments.find_one(departmentQuery)
         if department:
-            valid_student = True
+            valid_department = True
+        else:
+            print("Could not find department!")
 
     valid_course = False
     course = None
@@ -193,19 +207,22 @@ def remove_course():
         else:
             print("Unable to find course, enter a valid course name")
 
-    if valid_course:
-        course_obj = Course(course["dept_abrv"], course["course_number"], course["course_name"], course["description"],
-                            course["units"])
-        try:
-            course_obj.remove_course()
-        except Exception as ex:
-            print("\n*******************************")
-            print("There are errors with the input")
-            if type(ex) == pymongo.errors.WriteError:
-                print("\tAt least one invalid field")
-                print("*******************************")
-            else:
-                print(ex)
+    if len(course['sections']) > 0:
+        print("Course still has sections!")
+    else:
+        if valid_course:
+            course_obj = Course()
+            course_obj.load_from_db(course)
+            try:
+                course_obj.remove_course()
+            except Exception as ex:
+                print("\n*******************************")
+                print("There are errors with the input")
+                if type(ex) == pymongo.errors.WriteError:
+                    print("\tAt least one invalid field")
+                    print("*******************************")
+                else:
+                    print(ex)
 
 
 def remove_major():
@@ -214,34 +231,37 @@ def remove_major():
     valid_department = False
     while not valid_department:
         deptAbrv = input("Enter department abbreviation --> ")
-        departmentQuery = {"department_abbreviation": deptAbrv}
+        departmentQuery = {"abbreviation": deptAbrv}
 
         department = rec.departments.find_one(departmentQuery)
         if department:
-            valid_major = True
+            valid_department = True
 
     valid_major = False
     major = None
     while not valid_major:
         major_name = input("Enter major name --> ")
-        major = rec.majors.find_one({"major_name": major_name})
+        major = rec.majors.find_one({"name": major_name})
         if major:
             valid_major = True
         else:
             print("Unable to find major, enter a valid major name")
-
-    if valid_major:
-        major_obj = Major(major["major_name"], major["description"], major["department"], major["description"])
-        try:
-            major_obj.remove_major()
-        except Exception as ex:
-            print("\n*******************************")
-            print("There are errors with the input")
-            if type(ex) == pymongo.errors.WriteError:
-                print("\tAt least one invalid field")
-                print("*******************************")
-            else:
-                print(ex)
+    if len(major['students']) > 0:
+        print("Major still has students declaired!")
+    else:
+        if valid_major:
+            major_obj = Major()
+            major_obj.load_from_db(major)
+            try:
+                major_obj.remove_major()
+            except Exception as ex:
+                print("\n*******************************")
+                print("There are errors with the input")
+                if type(ex) == pymongo.errors.WriteError:
+                    print("\tAt least one invalid field")
+                    print("*******************************")
+                else:
+                    print(ex)
 
 
 def remove_section():
@@ -254,7 +274,7 @@ def remove_section():
 
         department = rec.departments.find_one(departmentQuery)
         if department:
-            valid_student = True
+            valid_department = True
 
     valid_course = False
     course = None
@@ -267,16 +287,75 @@ def remove_section():
     valid_section = False
     section = None
     while not valid_section:
-        section_number = input("Enter section number --> ")
-        section = rec.sections.find_one({"section_number": section_number})
-        if section:
+        section_number = int(input("Enter section number --> "))
+        section_query = {'course_id':course['_id'], 'section_number':section_number}
+        section = rec.sections.find_one(section_query)
+        if section is not None:
             valid_section = True
+        else:
+            print("Could not find section")
+    if len(section['students']) > 0:
+        print("Section still has students!")
+    else:
+        if valid_section:
+            section_obj = Section()
+            section_obj.load_from_db(section)
+            try:
+                section_obj.remove_section()
+            except Exception as ex:
+                print("\n*******************************")
+                print("There are errors with the input")
+                if type(ex) == pymongo.errors.WriteError:
+                    print("\tAt least one invalid field")
+                    print("*******************************")
+                else:
+                    print(ex)
 
-    if valid_section:
-        section_obj = Section(section["courseId"], section["section_number"], section["semester"], section["section_year"],
-                            section["building"], section["room"], section["schedule"], section["start_time"], section["instructor"])
+
+def undeclare_student():
+    rec = Records()
+
+    valid_student = False
+    while not valid_student:
+        firstName = input("Enter first name --> ")
+        lastName = input("Enter last name --> ")
+        studentQuery = {"first_name": firstName, "last_name": lastName}
+
+        student = rec.students.find_one(studentQuery)
+        if student:
+            valid_student = True
+
+    student_obj = Student()
+    student_obj.load_from_db(student)
+
+    majors_list = student_obj.get_majors()
+
+    valid_major = False
+    major = None
+    while not valid_major:
+        major_name = input("Enter major name --> ")
+        major = rec.majors.find_one({"name": major_name})
+        if major:
+            valid_major = True
+        else:
+            print("Unable to find major, enter a valid major name")
+
+    major_removed = False
+    for declared_major in majors_list:
+        if declared_major["major"] == major["_id"]:
+            majors_list.remove(declared_major)
+            major_removed = True
+    
+    students_in_major = major["students"]
+    for student_id in students_in_major:
+        if student_id == student_obj.get_id():
+            students_in_major.remove(student_id)
+            student_removed = True
+
+    if major_removed and student_removed:
         try:
-            section_obj.remove_section()
+            rec.students.update_one(studentQuery, {"$set": {"student_majors": majors_list}})
+            rec.majors.update_one({"name": major_name}, {"$set": {"students": students_in_major}})
         except Exception as ex:
             print("\n*******************************")
             print("There are errors with the input")
@@ -285,7 +364,5 @@ def remove_section():
                 print("*******************************")
             else:
                 print(ex)
-
-
-def undeclare_student():
-    pass
+    else:
+        print("Student does not have that major declared!")

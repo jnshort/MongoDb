@@ -1,7 +1,7 @@
 from Records import Records
 
 class Major:
-
+    id = ""
     def __init__(self, name: str = "", description: str = "", department: str = ""):
         self.name = name
         self.description = description
@@ -21,6 +21,8 @@ class Major:
         self.name = database_file['name']
         self.description = database_file['description']
         self.students = database_file['students']
+        self.department = database_file['department']
+        self.id = database_file['_id']
 
     def dict_repr(self) -> dict:
         major = {
@@ -59,7 +61,7 @@ class Major:
         rec.majors.insert_one(self.dict_repr())
 
 
-    def remove_dept(self):
+    def remove_major(self):
         rec = Records()
         """
         if not self.students: # can only delete majors with no students
@@ -68,10 +70,20 @@ class Major:
         else:
             return False
         """
-        if len(self.dict_repr()['students']) > 0:
-            rec.majors.delete_one({"name": self.name})
-            return True
-        return False
+
+        # update departments
+        department_query = {'_id':self.department}
+        update_department_query = {'$pull': {'majors': self.id}}
+        rec.departments.update_one(department_query,update_department_query)
+
+        # delete self
+        rec.majors.delete_one({'_id':self.id})
+
+
+
+
+
+
 
     def get_id(self):
         rec = Records()

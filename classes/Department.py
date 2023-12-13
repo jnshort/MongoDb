@@ -2,6 +2,8 @@ import pymongo
 from pymongo import MongoClient
 from db import db 
 from Records import Records
+from classes.Course import Course
+from classes.Major import Major
 
 # hello world
 class Department:
@@ -34,11 +36,11 @@ class Department:
 
     def load_from_db(self, db_file):
         self.name: str = db_file['name']
-        self.abbreviation: str = db_file['abrv']
-        self.chair: str = db_file['chair']
+        self.abbreviation: str = db_file['abbreviation']
+        self.chair: str = db_file['chair_name']
         self.building: str = db_file['building']
         self.office: int = db_file['office']
-        self.desc: str = db_file['desc']
+        self.desc: str = db_file['description']
         self.courses = db_file['courses']
         self.majors = db_file['majors']
 
@@ -60,7 +62,28 @@ class Department:
         :return:    None
         """
         rec = Records()
-        rec.departments.delete_one({"name":self.name})
+
+        # remove courses in department
+        for course in self.courses:
+            query = {'_id':course}
+            result = rec.courses.find_one(query)
+            if result is not None:
+                temp_course = Course()
+                temp_course.load_from_db(result)
+                temp_course.remove_course()
+
+        # remove majors in department
+        for major in self.majors:
+            query = {'_id':major}
+            result = rec.majors.find_one(query)
+            if result is not None:
+                temp_major = Major()
+                temp_major.load_from_db(result)
+                temp_major.remove_major()
+
+        # remove self
+        rec.departments.delete_one({'abbreviation': self.abbreviation})
+
 
 
     def __str__(self):

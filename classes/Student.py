@@ -74,7 +74,7 @@ class Student:
         self.active = False
 
         # to_del = rec.db_connect.singlecollection.departments.find()
-        rec.students.delete_one({"name": self.name})
+        rec.students.delete_one({"first_name": self.firstName, 'last_name':self.lastName})
 
     def __str__(self):
         """Returns a string representation of the department.
