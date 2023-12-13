@@ -61,7 +61,7 @@ class Enrollment:
 
             return True
         else: #throw error myself since I have to do constrainsts of embedded docs clientside
-            raise KeyError("Section not found")
+            return False
 
 
 
@@ -71,13 +71,14 @@ class Enrollment:
         student = rec.students.find_one({"last_name": self.student.lastName ,"first_name": self.student.firstName})
         enrollments = student["enrollments"]
 
-        section = rec.sections.find_one({"course_id": self.course.get_id, "section_number": self.sectionNum})
+        section = rec.sections.find_one({"course_id": self.course.get_id(), "section_number": self.sectionNum})
         student_ids = section["students"]
         
         enrollment_found = False
         for enroll in enrollments:
             if enroll["course"] == self.course.get_id():
                 enrollments.remove(enroll)
+                enrollment_found = True
         
         for student_id in student_ids:
             if student_id == student["_id"]:
@@ -90,4 +91,4 @@ class Enrollment:
             rec.sections.update_one(filter2, {'$set': {"students": student_ids}})
             return True
         else:
-            return False
+            raise KeyError("Enrollment does not exist")

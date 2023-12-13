@@ -222,10 +222,14 @@ def add_enrollment_by_student():
     sectionNum = ""
     grade_type = None
     while not valid_section:
-        courseName = input("Enter course name --> ")
+        courseNumber = input("Enter course number --> ")
         sectionNum = input("Enter section number --> ")
         grade_type = input("Enter 1 for Pass/Fail, or 2 for Letter Grade --> ")
-        course = rec.courses.find_one({"course_name": courseName})
+        try:
+            course = rec.courses.find_one({"course_number": int(courseNumber)})
+        except:
+            print("Course number must be an interger between 100 and 700")
+            pass
         if course:
             valid_section = True
         else:
@@ -241,6 +245,7 @@ def add_enrollment_by_student():
             field += input("Enter application date --> ")
 
         case 2:
+            field = ""
             field += input("Enter minimum satisfactory grade --> ")
             while field.upper() not in ["A", "B", "C", "D", "F"]:
                 print("Invalid grade, valid choices are: A, B, C, D, F")
@@ -278,13 +283,16 @@ def remove_enrollment_by_student():
     valid_course = False
     course = None
     while not valid_course:
-        course_name = input("Enter course name --> ")
-        course = rec.courses.find_one({"course_name":course_name})
+        course_number = input("Enter course number --> ")
+        try:
+            course = rec.courses.find_one({"course_number": int(course_number)})
+        except:
+            print("Course nummber must be an interger between 100 and 700")
+            pass
         if course:
             valid_course = True
         else:
-            print("Unable to find course, enter a valid course name")
-    
+            print("Unable to find course, enter a valid course number")
 
     if not student["enrollments"]:
         print("Student does not have any enrollments to remove")
@@ -292,15 +300,21 @@ def remove_enrollment_by_student():
 
     enrollment_found = False
     enroll_to_rem = None
+    type = 0
     for enroll in student["enrollments"]:
         if enroll["course"] == course["_id"]:
             enroll_to_rem = enroll
             enrollment_found = True
+            match enroll["type"]:
+                case "Pass Fail":
+                    type += 1
+                case "Letter Grade":
+                    type += 2
     
-    if enrollment_found:
-        student_obj = Student(student["first_name"], student["last_name"], student["email"])
+    if enrollment_found and (type in [1,2]):
+        student_obj = Student(student["last_name"], student["first_name"], student["email"])
         course_obj = Course(course["dept_abrv"], course["course_number"], course["course_name"], course["description"], course["units"])
-        enroll_obj = Enrollment(student_obj, course_obj, enroll["section_number"], enroll["type"])
+        enroll_obj = Enrollment(student_obj, course_obj, enroll_to_rem["section_number"], type)
         try:
             enroll_obj.remove_enrollment()
         except Exception as ex:
@@ -311,6 +325,11 @@ def remove_enrollment_by_student():
                 print("*******************************")
             else:
                 print(ex)
+    else:
+        print("\n*******************************")
+        print("There are errors with the input")
+        print("\tUnable to find enrollment")
+        print("*******************************")
 
 def remove_student():
     rec = Records()
