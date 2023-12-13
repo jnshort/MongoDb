@@ -229,10 +229,10 @@ def list_students_by_section():
     database = Records()
     sectionNotFound = True
     while sectionNotFound:
-        course_number = input("Course number --> ")
+        course_number = int(input("Course number --> "))
         course = database.courses.find_one({"course_number":course_number})
-        section_number = input("Section number --> ")
-        section = database.sections.find_one({"_id":section_number, "course_id": course["_id"]})
+        section_number = int(input("Section number --> "))
+        section = database.sections.find_one({"section_number":section_number, "course_id": course["_id"]})
         if section is not None:
             sectionNotFound = False
         else:
@@ -242,8 +242,10 @@ def list_students_by_section():
     print(f"Students enrolled in {course['course_name']}: section #{section_number}")
     for student_id in section["students"]:
         student = database.students.find_one({"_id": student_id})
-        text = f"{student['first_name']} {student['last_name']}\n"
-        print(text)
+        if student is not None:
+            tempStudent = Student()
+            tempStudent.load_from_db(student)
+            print(tempStudent)
     print("-----------------------------------------------------")
 
 """
