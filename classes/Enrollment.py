@@ -3,6 +3,7 @@ from classes.Student import Student
 
 from classes.Course import Course
 
+# force a commit
 class Enrollment:
     def __init__(self, student: Student, course: Course, sectionNum: int, type: int, field: str = ""):
         # type 1 = PassFail, type 2 = LetterGrade
