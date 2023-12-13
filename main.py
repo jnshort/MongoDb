@@ -526,6 +526,15 @@ def add_student_to_major():
             print(ex)
 
 
+def remove_major():
+    pass
+
+def remove_section():
+    pass
+
+def undeclare_student():
+    pass
+
 def remove_menu():
     """Prints a menu for removing from a collectin.
     Prompts the user for necessary information and removes
@@ -535,32 +544,45 @@ def remove_menu():
     rec = Records()
     menu = """\nWhat would you like to remove?
     1) Department
-    2) Enrollment
-    3) Return to main menu"""
+    2) Major
+    3) Student
+    4) Course
+    5) Section
+    6) Enrollment
+    7) Undeclare Student from Major
+    5) Return to main menu"""
     inp = 0
-    while inp not in [1,2]:
+    while inp not in [1,2,3,4,5,6,7]:
         print(menu)
         inp = int(input("Choice # --> "))
     
-    
-    if inp == 1:
-        name = input("Enter department name --> ")
-        found = False
-        to_del = None
-        col = rec.department_list()
-        for dept in col:
-            if dept['name'] == name:
-                found = True
-                to_del = load_dept(dept)
-        if found:
-            to_del.remove_dept()
-            print("Department removed")
-        else:
-            print("Failed to find department")
-    if inp == 2:
-        remove_enrollment_by_student()
-
-
+    match inp:
+        case 1:
+            name = input("Enter department name --> ")
+            found = False
+            to_del = None
+            col = rec.department_list()
+            for dept in col:
+                if dept['name'] == name:
+                    found = True
+                    to_del = load_dept(dept)
+            if found:
+                to_del.remove_dept()
+                print("Department removed")
+            else:
+                print("Failed to find department")
+        case 2:
+            remove_major()
+        case 3:
+            remove_student()
+        case 4:
+            remove_course()
+        case 5:
+            remove_section()
+        case 6:
+            remove_enrollment_by_student()
+        case 7:
+            undeclare_student()
 
 
 def list_menu():
