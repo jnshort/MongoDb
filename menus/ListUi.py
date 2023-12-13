@@ -1,8 +1,46 @@
-from Major import Major
-from Student import Student
+from classes.Major import Major
+from classes.Student import Student
 from Records import Records
-from Course import Course
+from classes.Course import Course
+from utils import load_dept
 
+"""
+********************************************************************************* 
+
+ Main List Menu
+
+ *********************************************************************************
+"""
+def list_menu():
+    rec = Records()
+    menu = """\nWhich collection would you like to list?
+    1) Department
+    2) Majors
+    3) Students
+    4) Courses
+    5) Enrollments
+    6) Return to main menu"""
+    inp = 0
+    while inp not in [1, 2, 3, 4, 5,6]:
+        print(menu)
+        inp = int(input("Choice # --> "))
+
+    if inp == 1:
+        print("\n--------------------")
+        print("Departments:")
+        col = rec.department_list()
+        for dept in col:
+            print(str(load_dept(dept)))
+            print()
+        print("--------------------")
+    if inp == 2:
+        list_majors_menu()
+    if inp == 3:
+        list_students_menu()
+    if inp == 4:
+        list_courses_menu()
+    if inp == 5:
+        list_enrollments_menu()
 """
 ********************************************************************************* 
 
@@ -18,7 +56,7 @@ def list_majors_menu():
         4) Return to main menu
         """
     inp = 0
-    while inp not in [1,2,3]:
+    while inp not in [1,2,3,4]:
         print(menu)
         inp = int(input('Choice # --> '))
         if inp == 1:
@@ -97,6 +135,7 @@ def list_majors_by_student():
 
     print("-----------------------------------------------------")
 
+
 """
 ********************************************************************************* 
 
@@ -110,7 +149,7 @@ def list_enrollments_menu():
         2) Return to main menu
         """
     inp = 0
-    while inp not in [1]:
+    while inp not in [1,2]:
         print(menu)
         inp = int(input('Choice # --> '))
         if inp == 1:
@@ -141,12 +180,12 @@ def list_enrollments_by_student():
         text = ""
         match enrollment["type"]:
             case "Letter Grade":
-                text += f"Minimum Grade: {enrollment["min_satisfactory"]}"
+                text += f"Minimum Grade: {enrollment['min_satisfactory']}"
             case "Pass Fail":
-                text += f"Application Date: {str(enrollment["application_date"])}"
-        course = database.courses.find_one({"_id": enrollment["course"]})
+                text += f"Application Date: {str(enrollment['application_date'])}"
+        course = database.courses.find_one({"_id": enrollment['course']})
         print(f"Course: {course['course_name']} \t\tSection #{enrollment['section_number']}")
-        print(f"\tGrading Option: {enrollment["type"]} \t{text}")
+        print(f"\tGrading Option: {enrollment['type']} \t{text}")
     print("-----------------------------------------------------")
 
 
