@@ -313,4 +313,56 @@ def remove_section():
 
 
 def undeclare_student():
-    pass
+    rec = Records()
+
+    valid_student = False
+    while not valid_student:
+        firstName = input("Enter first name --> ")
+        lastName = input("Enter last name --> ")
+        studentQuery = {"first_name": firstName, "last_name": lastName}
+
+        student = rec.students.find_one(studentQuery)
+        if student:
+            valid_student = True
+
+    student_obj = Student()
+    student_obj.load_from_db(student)
+
+    majors_list = student_obj.get_majors()
+
+    valid_major = False
+    major = None
+    while not valid_major:
+        major_name = input("Enter major name --> ")
+        major = rec.majors.find_one({"name": major_name})
+        if major:
+            valid_major = True
+        else:
+            print("Unable to find major, enter a valid major name")
+
+    major_removed = False
+    for declared_major in majors_list:
+        if declared_major["major"] == major["_id"]:
+            majors_list.remove(declared_major)
+            major_removed = True
+    
+    students_in_major = major["students"]
+    for student_id in students_in_major:
+        if student_id == student_obj.get_id():
+            students_in_major.remove(student_id)
+            student_removed = True
+
+    if major_removed and student_removed:
+        try:
+            rec.students.update_one(studentQuery, {"$set": {"student_majors": majors_list}})
+            rec.majors.update_one({"name": major_name}, {"$set": {"students": students_in_major}})
+        except Exception as ex:
+            print("\n*******************************")
+            print("There are errors with the input")
+            if type(ex) == pymongo.errors.WriteError:
+                print("\tAt least one invalid field")
+                print("*******************************")
+            else:
+                print(ex)
+    else:
+        print("Student does not have that major declared!")
