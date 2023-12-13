@@ -1,9 +1,4 @@
-import pymongo
-from pymongo import MongoClient
-from db import db
 from Records import Records
-from Department import Department
-from Student import Student
 
 class Major:
 

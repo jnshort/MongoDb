@@ -1,8 +1,5 @@
-import pymongo
-from pymongo import MongoClient
-from db import db
 from Records import Records
-from StudentMajor import StudentMajor
+
 
 
 # hello world
@@ -68,7 +65,7 @@ class Student:
             enrolls = student["enrollments"]
             return enrolls
 
-    def remove_dept(self):
+    def remove_student(self):
         """"Removes this department from the database.
         Main has already verified that this dept is in the database.
         :return:    None
@@ -77,7 +74,7 @@ class Student:
         self.active = False
 
         # to_del = rec.db_connect.singlecollection.departments.find()
-        rec.departments.delete_one({"name": self.name})
+        rec.students.delete_one({"name": self.name})
 
     def __str__(self):
         """Returns a string representation of the department.

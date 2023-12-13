@@ -1,11 +1,9 @@
-import pymongo
-from pymongo import MongoClient
-from db import db
 from Records import Records
-from Student import Student
-from Section import Section
-from Course import Course
+from classes.Student import Student
 
+from classes.Course import Course
+
+# force a commit
 class Enrollment:
     def __init__(self, student: Student, course: Course, sectionNum: int, type: int, field: str = ""):
         # type 1 = PassFail, type 2 = LetterGrade
