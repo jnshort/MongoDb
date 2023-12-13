@@ -245,7 +245,46 @@ def remove_major():
 
 
 def remove_section():
-    pass
+    rec = Records()
+
+    valid_department = False
+    while not valid_department:
+        deptAbrv = input("Enter department abbreviation --> ")
+        departmentQuery = {"abbreviation": deptAbrv}
+
+        department = rec.departments.find_one(departmentQuery)
+        if department:
+            valid_student = True
+
+    valid_course = False
+    course = None
+    while not valid_course:
+        course_name = input("Enter course name --> ")
+        course = rec.courses.find_one({"course_name": course_name})
+        if course:
+            valid_course = True
+
+    valid_section = False
+    section = None
+    while not valid_section:
+        section_number = input("Enter section number --> ")
+        section = rec.sections.find_one({"section_number": section_number})
+        if section:
+            valid_section = True
+
+    if valid_section:
+        section_obj = Section(section["courseId"], section["section_number"], section["semester"], section["section_year"],
+                            section["building"], section["room"], section["schedule"], section["start_time"], section["instructor"])
+        try:
+            section_obj.remove_section()
+        except Exception as ex:
+            print("\n*******************************")
+            print("There are errors with the input")
+            if type(ex) == pymongo.errors.WriteError:
+                print("\tAt least one invalid field")
+                print("*******************************")
+            else:
+                print(ex)
 
 
 def undeclare_student():
