@@ -138,8 +138,15 @@ def list_enrollments_by_student():
     print(f"Listing {firstName} {lastName}'s enrollments")
 
     for enrollment in student["enrollments"]:
+        text = ""
+        match enrollment["type"]:
+            case "Letter Grade":
+                text += f"Minimum Grade: {enrollment["min_satisfactory"]}"
+            case "Pass Fail":
+                text += f"Application Date: {str(enrollment["application_date"])}"
         course = database.courses.find_one({"_id": enrollment["course"]})
-        print(f"Course: {course['course_name']} Section #{enrollment['section_number']}")
+        print(f"Course: {course['course_name']} \t\tSection #{enrollment['section_number']}")
+        print(f"\tGrading Option: {enrollment["type"]} \t{text}")
     print("-----------------------------------------------------")
 
 

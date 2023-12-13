@@ -99,7 +99,7 @@ student_validator = {
                             'additionalProperties':False,
                             'properties': {
                                 'declaration_date': {
-                                    'bsonType':'string',
+                                    'bsonType':'date',
                                     'description':'date that a student delcared the given major',
                                 },
                                 'major': {
@@ -121,7 +121,7 @@ student_validator = {
                                                 'bsonType': 'string'
                                             },
                                             'application_date':{
-                                                'bsonType':'string'
+                                                'bsonType':'date'
                                             },
                                             'course': {
                                                 'bsonType': 'objectId',
