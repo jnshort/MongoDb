@@ -181,7 +181,9 @@ def remove_course():
 
         department = rec.departments.find_one(departmentQuery)
         if department:
-            valid_student = True
+            valid_department = True
+        else:
+            print("Could not find department!")
 
     valid_course = False
     course = None
@@ -194,8 +196,8 @@ def remove_course():
             print("Unable to find course, enter a valid course name")
 
     if valid_course:
-        course_obj = Course(course["dept_abrv"], course["course_number"], course["course_name"], course["description"],
-                            course["units"])
+        course_obj = Course()
+        course_obj.load_from_db(course)
         try:
             course_obj.remove_course()
         except Exception as ex:
