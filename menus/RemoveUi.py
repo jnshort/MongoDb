@@ -201,7 +201,9 @@ def remove_course():
     course = None
     while not valid_course:
         course_number = input("Enter course number --> ")
-        course = rec.courses.find_one({"course_number": course_number})
+        while not course_number.isnumeric():
+            course_number = input("Enter course number --> ")
+        course = rec.courses.find_one({"course_number": int(course_number)})
         if course:
             valid_course = True
         else:
@@ -280,7 +282,9 @@ def remove_section():
     course = None
     while not valid_course:
         course_number = input("Enter course number --> ")
-        course = rec.courses.find_one({"course_number": course_number})
+        while not course_number.isnumeric():
+            course_number = input("Enter course number --> ")
+        course = rec.courses.find_one({"course_number": int(course_number)})
         if course:
             valid_course = True
 
