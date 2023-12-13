@@ -29,19 +29,7 @@ def remove_menu():
 
     match inp:
         case 1:
-            name = input("Enter department name --> ")
-            found = False
-            to_del = None
-            col = rec.department_list()
-            for dept in col:
-                if dept['name'] == name:
-                    found = True
-                    to_del = load_dept(dept)
-            if found:
-                to_del.remove_dept()
-                print("Department removed")
-            else:
-                print("Failed to find department")
+           remove_department()
         case 2:
             remove_major()
         case 3:
@@ -54,6 +42,36 @@ def remove_menu():
             remove_enrollment_by_student()
         case 7:
             undeclare_student()
+
+def remove_department():
+    database = Records()
+
+    departmentNotFound = True
+    while departmentNotFound:
+        department_name = input("Enter department abbreviation --> ")
+        query = {"abbreviation":department_name}
+        result = database.departments.find_one(query)
+        if result is not None:
+            departmentNotFound = False
+        else:
+            print("Could not find the department!")
+
+    # Check that there are no courses associated with the department
+    course_count = len(result['courses'])
+    if course_count > 0:
+        print("Department still has courses associated with it!")
+
+    # Check that there are no majors associated with the department
+    major_count = len(result['majors'])
+    if major_count > 0:
+        print("Department still has majors associated with it!")
+
+    # Delete department if safe
+    if major_count == 0 and course_count == 0:
+        database.departments.delete_one(query)
+        print("Department removed!")
+
+
 
 
 def remove_enrollment_by_student():
