@@ -280,7 +280,7 @@ def remove_section():
     course = None
     while not valid_course:
         course_number = input("Enter course number --> ")
-        course = rec.courses.find_one({"course_number": course_number})
+        course = rec.courses.find_one({'dept_abrv':deptAbrv,"course_number": course_number})
         if course:
             valid_course = True
 
