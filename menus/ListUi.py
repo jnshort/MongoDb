@@ -19,9 +19,9 @@ def list_menu():
     3) Students
     4) Courses
     5) Enrollments
-    5) Return to main menu"""
+    6) Return to main menu"""
     inp = 0
-    while inp not in [1, 2, 3, 4, 5]:
+    while inp not in [1, 2, 3, 4, 5,6]:
         print(menu)
         inp = int(input("Choice # --> "))
 
