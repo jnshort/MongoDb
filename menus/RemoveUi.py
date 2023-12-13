@@ -272,26 +272,27 @@ def remove_section():
     while not valid_section:
         section_number = int(input("Enter section number --> "))
         section_query = {'course_id':course['_id'], 'section_number':section_number}
-        print(course['_id'])
         section = rec.sections.find_one(section_query)
         if section is not None:
             valid_section = True
         else:
             print("Could not find section")
-
-    if valid_section:
-        section_obj = Section()
-        section_obj.load_from_db(section)
-        try:
-            section_obj.remove_section()
-        except Exception as ex:
-            print("\n*******************************")
-            print("There are errors with the input")
-            if type(ex) == pymongo.errors.WriteError:
-                print("\tAt least one invalid field")
-                print("*******************************")
-            else:
-                print(ex)
+    if len(section['students']) > 0:
+        print("Section still has students!")
+    else:
+        if valid_section:
+            section_obj = Section()
+            section_obj.load_from_db(section)
+            try:
+                section_obj.remove_section()
+            except Exception as ex:
+                print("\n*******************************")
+                print("There are errors with the input")
+                if type(ex) == pymongo.errors.WriteError:
+                    print("\tAt least one invalid field")
+                    print("*******************************")
+                else:
+                    print(ex)
 
 
 def undeclare_student():
