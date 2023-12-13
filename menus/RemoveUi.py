@@ -1,5 +1,5 @@
 import pymongo
-from classes.Records import Records
+from Records import Records
 from classes.Student import Student
 from classes.Major import Major
 from classes.Course import Course

@@ -3,7 +3,7 @@ import pymongo
 
 # classes
 from classes.Department import Department
-from classes.Records import Records
+from Records import Records
 from classes.Major import Major
 from classes.Course import Course
 from classes.Student import Student

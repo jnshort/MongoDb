@@ -1,8 +1,5 @@
-import pymongo
-from pymongo import MongoClient
-from db import db
 from Records import Records
-from StudentMajor import StudentMajor
+
 
 
 # hello world

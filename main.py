@@ -1,5 +1,5 @@
 
-from classes.Records import Records
+from Records import Records
 from validators.validators import department_validator, student_validator
 from validators.major_validator import major_validator
 from validators.course_validator import course_validator

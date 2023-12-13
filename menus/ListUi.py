@@ -1,6 +1,6 @@
 from classes.Major import Major
 from classes.Student import Student
-from classes.Records import Records
+from Records import Records
 from classes.Course import Course
 from utils import load_dept
 
