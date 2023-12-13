@@ -553,7 +553,39 @@ def add_student_to_major():
 
 
 def remove_major():
-    pass
+    rec = Records()
+
+    valid_department = False
+    while not valid_department:
+        deptAbrv = input("Enter department abbreviation --> ")
+        departmentQuery = { "department_abbreviation": deptAbrv}
+
+        department = database.departments.find_one(departmentQuery)
+        if department:
+            valid_major = True
+
+    valid_major = False
+    major = None
+    while not valid_major:
+        major_name = input("Enter major name --> ")
+        major = rec.majors.find_one({"major_name": major_name})
+        if major:
+            valid_major = True
+        else:
+            print("Unable to find major, enter a valid major name")
+
+    if valid_major:
+        major_obj = Major(major["major_name"], major["description"], major["department"], major["description"])
+        try:
+            major_obj.remove_major()
+        except Exception as ex:
+            print("\n*******************************")
+            print("There are errors with the input")
+            if type(ex) == pymongo.errors.WriteError:
+                print("\tAt least one invalid field")
+                print("*******************************")
+            else:
+                print(ex)
 
 def remove_section():
     pass
