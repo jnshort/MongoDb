@@ -173,7 +173,7 @@ def remove_course():
     valid_department = False
     while not valid_department:
         deptAbrv = input("Enter department abbreviation --> ")
-        departmentQuery = {"department_abbreviation": deptAbrv}
+        departmentQuery = {"abbreviation": deptAbrv}
 
         department = rec.departments.find_one(departmentQuery)
         if department:
