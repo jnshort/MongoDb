@@ -216,24 +216,24 @@ def remove_major():
     valid_department = False
     while not valid_department:
         deptAbrv = input("Enter department abbreviation --> ")
-        departmentQuery = {"department_abbreviation": deptAbrv}
+        departmentQuery = {"abbreviation": deptAbrv}
 
         department = rec.departments.find_one(departmentQuery)
         if department:
-            valid_major = True
+            valid_department = True
 
     valid_major = False
     major = None
     while not valid_major:
         major_name = input("Enter major name --> ")
-        major = rec.majors.find_one({"major_name": major_name})
+        major = rec.majors.find_one({"name": major_name})
         if major:
             valid_major = True
         else:
             print("Unable to find major, enter a valid major name")
 
     if valid_major:
-        major_obj = Major(major["major_name"], major["description"], major["department"], major["description"])
+        major_obj = Major(major["name"], major["description"], major["department"])
         try:
             major_obj.remove_major()
         except Exception as ex:

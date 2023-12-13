@@ -59,7 +59,7 @@ class Major:
         rec.majors.insert_one(self.dict_repr())
 
 
-    def remove_dept(self):
+    def remove_major(self):
         rec = Records()
         """
         if not self.students: # can only delete majors with no students
@@ -68,10 +68,16 @@ class Major:
         else:
             return False
         """
-        if len(self.dict_repr()['students']) > 0:
+        if self.get_students_list() == []:
             rec.majors.delete_one({"name": self.name})
+            print(self.department)
+            dept = rec.departments.find_one({"_id": self.department})
+            for id in dept["majors"]:
+                if id == self.get_id():
+                    dept["majors"].remove(id)
+            rec.departments.update_one({"name": dept["name"]}, {"$set": {"majors": dept["majors"]}})
             return True
-        return False
+        print("Cannot delete a major with students declared")
 
     def get_id(self):
         rec = Records()
