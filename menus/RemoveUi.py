@@ -5,6 +5,7 @@ from classes.Major import Major
 from classes.Course import Course
 from classes.Enrollment import Enrollment
 from classes.Department import Department
+from classes.Section import Section
 
 from utils import load_dept
 def remove_menu():
@@ -256,7 +257,7 @@ def remove_section():
 
         department = rec.departments.find_one(departmentQuery)
         if department:
-            valid_student = True
+            valid_department = True
 
     valid_course = False
     course = None
@@ -269,14 +270,18 @@ def remove_section():
     valid_section = False
     section = None
     while not valid_section:
-        section_number = input("Enter section number --> ")
-        section = rec.sections.find_one({"section_number": section_number})
-        if section:
+        section_number = int(input("Enter section number --> "))
+        section_query = {'course_id':course['_id'], 'section_number':section_number}
+        print(course['_id'])
+        section = rec.sections.find_one(section_query)
+        if section is not None:
             valid_section = True
+        else:
+            print("Could not find section")
 
     if valid_section:
-        section_obj = Section(section["courseId"], section["section_number"], section["semester"], section["section_year"],
-                            section["building"], section["room"], section["schedule"], section["start_time"], section["instructor"])
+        section_obj = Section()
+        section_obj.load_from_db(section)
         try:
             section_obj.remove_section()
         except Exception as ex:
