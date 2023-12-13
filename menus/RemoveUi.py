@@ -196,19 +196,22 @@ def remove_course():
         else:
             print("Unable to find course, enter a valid course name")
 
-    if valid_course:
-        course_obj = Course()
-        course_obj.load_from_db(course)
-        try:
-            course_obj.remove_course()
-        except Exception as ex:
-            print("\n*******************************")
-            print("There are errors with the input")
-            if type(ex) == pymongo.errors.WriteError:
-                print("\tAt least one invalid field")
-                print("*******************************")
-            else:
-                print(ex)
+    if len(course['sections']) > 0:
+        print("Course still has sections!")
+    else:
+        if valid_course:
+            course_obj = Course()
+            course_obj.load_from_db(course)
+            try:
+                course_obj.remove_course()
+            except Exception as ex:
+                print("\n*******************************")
+                print("There are errors with the input")
+                if type(ex) == pymongo.errors.WriteError:
+                    print("\tAt least one invalid field")
+                    print("*******************************")
+                else:
+                    print(ex)
 
 
 def remove_major():
