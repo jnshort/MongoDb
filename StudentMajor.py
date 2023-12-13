@@ -2,10 +2,11 @@ import pymongo
 from pymongo import MongoClient
 from db import db
 from Records import Records
+import datetime
 
 class StudentMajor:
 
-    def __init__(self, declarationDate: str, major: str):
+    def __init__(self, declarationDate: datetime.datetime, major: str):
         self.declarationDate: str = declarationDate
         self.major: str = major
 
@@ -36,7 +37,7 @@ class StudentMajor:
         """Returns a string representation of the department.
         :return:    String
         """
-        text = f"Major: {self.major}, Declaration Date: {self.declarationDate}\n"
+        text = f"Major: {self.major}, Declaration Date: {str(self.declarationDate)}\n"
         return text
 
 

@@ -13,9 +13,34 @@ from validators.course_validator import course_validator
 from validators.section_validator import section_validator
 from constraints import department_constraints, student_constraints, major_constraints, course_constraints, section_constraints
 import ListUi
+import datetime
 
 database_name = "singlecollection"
 database = Records()
+
+def get_datetime()->datetime.datetime:
+    current_date = datetime.datetime.now()
+    valid = False
+    year = ""
+    month = ""
+    day = ""
+    while not valid:
+        year = input("Enter year (YYYY) --> ")
+        if year.isnumeric() and (int(year) <= current_date.year):
+            valid = True
+    valid = False
+    while not valid:
+        month = input("Enter month (MM) --> ")
+        if month.isnumeric() and (int(month) in range(1, 13)):
+            valid = True
+    valid = False
+    while not valid:
+        day = input("Enter year (DD) --> ")
+        if month.isnumeric() and (int(day) in range (1, 32)):
+            valid = True
+
+    return datetime.datetime(int(year), int(month), int(day))
+
 
 def add_menu():
     """Prints a menu for adding to a collection.
@@ -242,7 +267,8 @@ def add_enrollment_by_student():
     field = ""
     match grade_type:
         case 1:
-            field += input("Enter application date --> ")
+            print("Enter application date: ")
+            field = get_datetime()
 
         case 2:
             field = ""
@@ -502,7 +528,7 @@ def add_student_to_major():
         else:
             print("Could not find major!")
 
-    declarationDate = input("Declaration Date --> ")
+    declarationDate = get_datetime()
     studentMajor = StudentMajor(declarationDate, major['_id'])
 
     try:
