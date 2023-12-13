@@ -1,11 +1,10 @@
-import pymongo
-from pymongo import MongoClient
-from db import db
 from Records import Records
 
-class Section:
 
-    def __init__(self, courseId: str, section_number: int, semester: str, section_year: str, building: str, room: int, schedule: str, start_time: str, instructor: str):
+class Section:
+    students = []
+    id = ""
+    def __init__(self, courseId: str = "", section_number: int = 0, semester: str = "", section_year: str = "", building: str = "", room: int = "", schedule: str = "", start_time: str = "", instructor: str = ""):
         self.courseId = courseId
         self.section_number: int = section_number
         self.semester: str = semester
@@ -20,6 +19,18 @@ class Section:
         return (
             len(self.room) <= 1000)
 
+    def load_from_db(self, db_file):
+        self.id = db_file['_id']
+        self.courseId = db_file['course_id']
+        self.section_number = db_file['section_number']
+        self.semester = db_file['semester']
+        self.section_year = db_file['section_year']
+        self.building = db_file['building']
+        self.room = db_file['room']
+        self.schedule = db_file['schedule']
+        self.start_time = db_file['start_time']
+        self.instructor = db_file['instructor']
+        self.students = db_file['students']
     def dict_repr(self) -> dict:
         """Returns a dictionary representation of the class.
         :return:    dict
@@ -54,9 +65,15 @@ class Section:
         :return:    None
         """
         rec = Records()
-        self.active = False
-        
-        rec.sections.delete_one({"section_number":self.section_number})
+
+        # remove itself from sections list in course
+        course_query = {'_id':self.courseId}
+        course_update_query = update_department_query = {'$pull': {'sections': self.id}}
+        rec.courses.update_one(course_query,course_update_query)
+
+        # delete section
+        rec.sections.delete_one({"_id":self.id})
+
 
     def get_student_list(self):
         """Returns the list of students in this section from the database.

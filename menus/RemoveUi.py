@@ -181,7 +181,9 @@ def remove_course():
 
         department = rec.departments.find_one(departmentQuery)
         if department:
-            valid_student = True
+            valid_department = True
+        else:
+            print("Could not find department!")
 
     valid_course = False
     course = None
@@ -194,8 +196,8 @@ def remove_course():
             print("Unable to find course, enter a valid course name")
 
     if valid_course:
-        course_obj = Course(course["dept_abrv"], course["course_number"], course["course_name"], course["description"],
-                            course["units"])
+        course_obj = Course()
+        course_obj.load_from_db(course)
         try:
             course_obj.remove_course()
         except Exception as ex:
@@ -245,7 +247,46 @@ def remove_major():
 
 
 def remove_section():
-    pass
+    rec = Records()
+
+    valid_department = False
+    while not valid_department:
+        deptAbrv = input("Enter department abbreviation --> ")
+        departmentQuery = {"abbreviation": deptAbrv}
+
+        department = rec.departments.find_one(departmentQuery)
+        if department:
+            valid_student = True
+
+    valid_course = False
+    course = None
+    while not valid_course:
+        course_name = input("Enter course name --> ")
+        course = rec.courses.find_one({"course_name": course_name})
+        if course:
+            valid_course = True
+
+    valid_section = False
+    section = None
+    while not valid_section:
+        section_number = input("Enter section number --> ")
+        section = rec.sections.find_one({"section_number": section_number})
+        if section:
+            valid_section = True
+
+    if valid_section:
+        section_obj = Section(section["courseId"], section["section_number"], section["semester"], section["section_year"],
+                            section["building"], section["room"], section["schedule"], section["start_time"], section["instructor"])
+        try:
+            section_obj.remove_section()
+        except Exception as ex:
+            print("\n*******************************")
+            print("There are errors with the input")
+            if type(ex) == pymongo.errors.WriteError:
+                print("\tAt least one invalid field")
+                print("*******************************")
+            else:
+                print(ex)
 
 
 def undeclare_student():

@@ -2,9 +2,11 @@ import pymongo
 from pymongo import MongoClient
 from db import db
 from Records import Records
+from classes.Section import Section
 
 class Course:
     sections = []
+    id = ""
     def __init__(self, dept_abrv: str = "", course_number: int = 0, course_name: str = "", description: str = "", units: int = 0):
         self.dept_abrv: str = dept_abrv
         self.course_number: int = course_number
@@ -18,6 +20,7 @@ class Course:
             len(self.units) <= 5)
 
     def load_from_db(self, database_file):
+        self.id = database_file['_id']
         self.dept_abrv = database_file['dept_abrv']
         self.course_number = database_file['course_number']
         self.course_name = database_file['course_name']
@@ -60,10 +63,26 @@ class Course:
         Main has already verified that this course is in the database.
         :return:    None
         """
-        rec = Records()
-        self.active = False
+        database = Records()
 
-        rec.courses.delete_one({"course_name":self.course_name})
+        # reach up to Department to remove itself from course list
+        department_query = {'abbreviation':self.dept_abrv}
+        result = database.departments.find_one(department_query)
+        if result is not None:
+            update_department_query = {'$pull': {'courses': self.id}}
+            database.departments.update_one(department_query,update_department_query)
+
+        for section in self.sections:
+            section_query = {'_id':section}
+            result = database.sections.find_one(section_query)
+            if result is not None:
+                temp_section = Section()
+                temp_section.load_from_db(result)
+                temp_section.remove_section()
+
+        database.courses.delete_one({"_id":self.id})
+
+
 
     def get_id(self):
         rec = Records()
