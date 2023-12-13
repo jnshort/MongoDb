@@ -235,19 +235,22 @@ def remove_major():
             valid_major = True
         else:
             print("Unable to find major, enter a valid major name")
-
-    if valid_major:
-        major_obj = Major(major["name"], major["description"], major["department"])
-        try:
-            major_obj.remove_major()
-        except Exception as ex:
-            print("\n*******************************")
-            print("There are errors with the input")
-            if type(ex) == pymongo.errors.WriteError:
-                print("\tAt least one invalid field")
-                print("*******************************")
-            else:
-                print(ex)
+    if len(major['students']) > 0:
+        print("Major still has students declaired!")
+    else:
+        if valid_major:
+            major_obj = Major()
+            major_obj.load_from_db(major)
+            try:
+                major_obj.remove_major()
+            except Exception as ex:
+                print("\n*******************************")
+                print("There are errors with the input")
+                if type(ex) == pymongo.errors.WriteError:
+                    print("\tAt least one invalid field")
+                    print("*******************************")
+                else:
+                    print(ex)
 
 
 def remove_section():
