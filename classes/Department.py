@@ -5,7 +5,7 @@ from Records import Records
 
 # hello world
 class Department:
-    def __init__(self, name: str, abrv: str, chair: str, building: str, office: int, desc: str, courses=[], majors=[]):
+    def __init__(self, name: str = "", abrv: str = "", chair: str = "", building: str = "", office: int = 0, desc: str = "", courses=[], majors=[]):
         self.name: str = name
         self.abbreviation: str = abrv
         self.chair: str = chair
@@ -32,6 +32,15 @@ class Department:
         }
         return dept
 
+    def load_from_db(self, db_file):
+        self.name: str = db_file['name']
+        self.abbreviation: str = db_file['abrv']
+        self.chair: str = db_file['chair']
+        self.building: str = db_file['building']
+        self.office: int = db_file['office']
+        self.desc: str = db_file['desc']
+        self.courses = db_file['courses']
+        self.majors = db_file['majors']
 
     def add_dept(self):
         """Adds this department to the database and the 

@@ -4,6 +4,7 @@ from classes.Student import Student
 from classes.Major import Major
 from classes.Course import Course
 from classes.Enrollment import Enrollment
+from classes.Department import Department
 
 from utils import load_dept
 def remove_menu():
@@ -65,6 +66,9 @@ def remove_department():
     major_count = len(result['majors'])
     if major_count > 0:
         print("Department still has majors associated with it!")
+
+    department = Department()
+    department.load_from_db(result)
 
     # Delete department if safe
     if major_count == 0 and course_count == 0:
