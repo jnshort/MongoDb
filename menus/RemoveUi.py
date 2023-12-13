@@ -158,18 +158,29 @@ def remove_student():
     if student:
         valid_student = True
 
-    if valid_student:
-        student_obj = Student(student["first_name"], student["last_name"], student["email"])
-        try:
-            student_obj.remove_student()
-        except Exception as ex:
-            print("\n*******************************")
-            print("There are errors with the input")
-            if type(ex) == pymongo.errors.WriteError:
-                print("\tAt least one invalid field")
-                print("*******************************")
-            else:
-                print(ex)
+    # todo something about enrollments
+    enrollments = len(student['enrollments'])
+    if enrollments > 0:
+        print("Student is still enrolled in courses!")
+
+    #todo something about majors
+    majors = len(student['student_majors'])
+    if majors > 0:
+        print("Student still has majors declared!")
+    if majors == 0 and enrollments == 0:
+        if valid_student:
+            student_obj = Student()
+            student_obj.load_from_db(student)
+            try:
+                student_obj.remove_student()
+            except Exception as ex:
+                print("\n*******************************")
+                print("There are errors with the input")
+                if type(ex) == pymongo.errors.WriteError:
+                    print("\tAt least one invalid field")
+                    print("*******************************")
+                else:
+                    print(ex)
 
 
 def remove_course():
