@@ -1,8 +1,46 @@
-from Major import Major
-from Student import Student
-from Records import Records
-from Course import Course
+from classes.Major import Major
+from classes.Student import Student
+from classes.Records import Records
+from classes.Course import Course
+from utils import load_dept
 
+"""
+********************************************************************************* 
+
+ Main List Menu
+
+ *********************************************************************************
+"""
+def list_menu():
+    rec = Records()
+    menu = """\nWhich collection would you like to list?
+    1) Department
+    2) Majors
+    3) Students
+    4) Courses
+    5) Enrollments
+    5) Return to main menu"""
+    inp = 0
+    while inp not in [1, 2, 3, 4, 5]:
+        print(menu)
+        inp = int(input("Choice # --> "))
+
+    if inp == 1:
+        print("\n--------------------")
+        print("Departments:")
+        col = rec.department_list()
+        for dept in col:
+            print(str(load_dept(dept)))
+            print()
+        print("--------------------")
+    if inp == 2:
+        list_majors_menu()
+    if inp == 3:
+        list_students_menu()
+    if inp == 4:
+        list_courses_menu()
+    if inp == 5:
+        list_enrollments_menu()
 """
 ********************************************************************************* 
 
@@ -96,6 +134,7 @@ def list_majors_by_student():
             print(printMajor)
 
     print("-----------------------------------------------------")
+
 
 """
 ********************************************************************************* 
