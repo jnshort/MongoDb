@@ -33,6 +33,12 @@ class Major:
         }
         return major
 
+    def print_dict(self) -> dict:
+        major = {
+            "name": self.name,
+            "description": self.description,
+        }
+        return major
     def get_students_list(self):
 
         rec = Records()

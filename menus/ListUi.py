@@ -1,8 +1,10 @@
 from classes.Major import Major
 from classes.Student import Student
 from Records import Records
+from classes.Section import Section
 from classes.Course import Course
 from utils import load_dept
+import pprint
 
 """
 ********************************************************************************* 
@@ -83,7 +85,8 @@ def list_students_in_majors():
         if result is not None:
             printStudent = Student()
             printStudent.load_from_db(result)
-            print(printStudent)
+            pp = pprint.PrettyPrinter()
+            pp.pprint(printStudent.print_dict())
     print("-----------------------------------------------------")
 
 def list_majors_in_departments():
@@ -106,7 +109,8 @@ def list_majors_in_departments():
         if majorResult is not None:
             printMajor = Major()
             printMajor.load_from_db(majorResult)
-            print(printMajor)
+            pp = pprint.PrettyPrinter()
+            pp.pprint(printMajor.print_dict())
     print("-----------------------------------------------------")
 
 def list_majors_by_student():
@@ -131,7 +135,8 @@ def list_majors_by_student():
         if majorName is not None:
             printMajor = Major()
             printMajor.load_from_db(majorName)
-            print(printMajor)
+            pp = pprint.PrettyPrinter()
+            pp.pprint(printMajor.print_dict())
 
     print("-----------------------------------------------------")
 
@@ -222,7 +227,8 @@ def list_all_students():
         for student in result:
             printStudent = Student()
             printStudent.load_from_db(student)
-            print(printStudent)
+            pp = pprint.PrettyPrinter()
+            pp.pprint(printStudent.print_dict())
 
 
 def list_students_by_section():
@@ -248,8 +254,9 @@ def list_students_by_section():
         student = database.students.find_one({"_id": student_id})
         if student is not None:
             tempStudent = Student()
+            pp = pprint.PrettyPrinter()
             tempStudent.load_from_db(student)
-            print(tempStudent)
+            pp.pprint(tempStudent.print_dict())
     print("-----------------------------------------------------")
 
 """
@@ -291,7 +298,8 @@ def list_all_courses():
         for course in result:
             printCourse = Course()
             printCourse.load_from_db(course)
-            print(printCourse)
+            pp = pprint.PrettyPrinter()
+            pp.pprint(printCourse.print_dict())
             print("-----------------------------------------------------")
 
 def list_courses_in_department():
@@ -315,7 +323,9 @@ def list_courses_in_department():
         if courseFound is not None:
             printCourse = Course()
             printCourse.load_from_db(courseFound)
-            print(printCourse)
+            test = printCourse.print_dict();
+            pp = pprint.PrettyPrinter()
+            pp.pprint(test)
             print("\n-----------------------------------------------------")
 
 def list_sections_by_course():
@@ -335,9 +345,9 @@ def list_sections_by_course():
     print()
     for section_id in course["sections"]:
         section = database.sections.find_one({"_id": section_id})
-        print(f"Section {section['section_number']} {section['semester']} {section['section_year']}")
-        print(f"{section['building']} room {section['room']}")
-        print(f"Meets on {section['schedule']} at {section['start_time']}")
-        print(f"Instructor: {section['instructor']}")
-        print()
-    print("-----------------------------------------------------")
+        printSection = Section()
+        printSection.load_from_db(section)
+        pp = pprint.PrettyPrinter()
+        pp.pprint(printSection.print_dict())
+
+        print("-----------------------------------------------------")
