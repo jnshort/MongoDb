@@ -257,7 +257,7 @@ def list_students_by_section():
             pp = pprint.PrettyPrinter()
             tempStudent.load_from_db(student)
             pp.pprint(tempStudent.print_dict())
-    print("-----------------------------------------------------")
+            print("-----------------------------------------------------")
 
 """
 ********************************************************************************* 
