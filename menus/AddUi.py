@@ -32,23 +32,23 @@ def add_menu():
     7) Student to Course
     8) Return to main menu"""
     inp = 0
-    while inp not in [1, 2, 3, 4, 5, 6, 7, 8]:
+    while inp not in ["1", "2", "3", "4", "5", "6", "7", "8"]:
         print(menu)
-        inp = int(input("Choice # --> "))
+        inp = input("Choice # --> ")
 
-    if inp == 1:
+    if inp == "1":
         add_department()
-    elif inp == 2:
+    elif inp == "2":
         add_major_to_department()
-    elif inp == 3:
+    elif inp == "3":
         add_course_to_department()
-    elif inp == 4:
+    elif inp == "4":
         add_section_to_course()
-    elif inp == 5:
+    elif inp == "5":
         add_student()
-    elif inp == 6:
+    elif inp == "6":
         add_student_to_major()
-    elif inp == 7:
+    elif inp == "7":
         add_enrollment_by_student()
 
 

@@ -25,25 +25,27 @@ def remove_menu():
     7) Undeclare Student from Major
     8) Return to main menu"""
     inp = 0
-    while inp not in [1, 2, 3, 4, 5, 6, 7,8]:
+    while inp not in ["1", "2", "3", "4", "5", "6", "7", "8"]:
         print(menu)
-        inp = int(input("Choice # --> "))
+        inp = input("Choice # --> ")
 
     match inp:
-        case 1:
+        case "1":
             remove_department()
-        case 2:
+        case "2":
             remove_major()
-        case 3:
+        case "3":
             remove_student()
-        case 4:
+        case "4":
             remove_course()
-        case 5:
+        case "5":
             remove_section()
-        case 6:
+        case "6":
             remove_enrollment_by_student()
-        case 7:
+        case "7":
             undeclare_student()
+        case 8:
+            pass
 
 def remove_department():
     database = Records()

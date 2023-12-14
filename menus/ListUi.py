@@ -21,11 +21,11 @@ def list_menu():
     5) Enrollments
     6) Return to main menu"""
     inp = 0
-    while inp not in [1, 2, 3, 4, 5,6]:
+    while inp not in ["1", "2", "3", "4", "5", "6"]:
         print(menu)
-        inp = int(input("Choice # --> "))
+        inp = input("Choice # --> ")
 
-    if inp == 1:
+    if inp == "1":
         print("\n--------------------")
         print("Departments:")
         col = rec.department_list()
@@ -33,13 +33,13 @@ def list_menu():
             print(str(load_dept(dept)))
             print()
         print("--------------------")
-    if inp == 2:
+    elif inp == "2":
         list_majors_menu()
-    if inp == 3:
+    elif inp == "3":
         list_students_menu()
-    if inp == 4:
+    elif inp == "4":
         list_courses_menu()
-    if inp == 5:
+    elif inp == "5":
         list_enrollments_menu()
 """
 ********************************************************************************* 
@@ -56,15 +56,15 @@ def list_majors_menu():
         4) Return to main menu
         """
     inp = 0
-    while inp not in [1,2,3,4]:
+    while inp not in ["1","2","3","4"]:
         print(menu)
-        inp = int(input('Choice # --> '))
-        if inp == 1:
-            list_students_in_majors()
-        elif inp == 2:
-            list_majors_in_departments()
-        elif inp == 3:
-            list_majors_by_student()
+        inp = input('Choice # --> ')
+    if inp == "1":
+        list_students_in_majors()
+    elif inp == "2":
+        list_majors_in_departments()
+    elif inp == "3":
+        list_majors_by_student()
 
 def list_students_in_majors():
     database = Records()
@@ -149,10 +149,10 @@ def list_enrollments_menu():
         2) Return to main menu
         """
     inp = 0
-    while inp not in [1,2]:
+    while inp not in ["1","2"]:
         print(menu)
-        inp = int(input('Choice # --> '))
-        if inp == 1:
+        inp = input('Choice # --> ')
+        if inp == "1":
             list_enrollments_by_student()
 
 
@@ -204,15 +204,15 @@ def list_students_menu():
         4) Return to main menu"""
 
     inp = 0
-    while inp not in [1, 2, 3, 4]:
+    while inp not in ["1", "2", "3", "4"]:
         print(menu)
-        inp = int(input("Choice # --> "))
+        inp = input("Choice # --> ")
 
-    if inp == 1:
+    if inp == "1":
         list_all_students()
-    if inp == 2:
+    if inp == "2":
         list_students_in_majors()
-    if inp == 3:
+    if inp == "3":
         list_students_by_section()
 
 def list_all_students():
@@ -229,10 +229,14 @@ def list_students_by_section():
     database = Records()
     sectionNotFound = True
     while sectionNotFound:
-        course_number = int(input("Course number --> "))
-        course = database.courses.find_one({"course_number":course_number})
-        section_number = int(input("Section number --> "))
-        section = database.sections.find_one({"section_number":section_number, "course_id": course["_id"]})
+        course_number = input("Course number --> ")
+        while not course_number.isnumeric():
+            course_number = input("Course number --> ")
+        course = database.courses.find_one({"course_number": int(course_number)})
+        section_number = input("Section number --> ")
+        while not section_number.isnumeric():
+            section_number = input("Section number --> ")
+        section = database.sections.find_one({"section_number": int(section_number), "course_id": course["_id"]})
         if section is not None:
             sectionNotFound = False
         else:
@@ -264,16 +268,19 @@ def list_courses_menu():
         """
 
     inp = 0
-    while inp not in [1, 2, 3, 4]:
+    while inp not in ["1", "2", "3", "4"]:
         print(menu)
-        inp = int(input("Choice # --> "))
+        inp = input("Choice # --> ")
 
-    if inp == 1:
+    if inp == "1":
         list_all_courses()
-    if inp == 2:
+    elif inp == "2":
         list_courses_in_department()
-    if inp == 3:
+    elif inp == "3":
         list_sections_by_course()
+    elif inp == "4":
+        pass
+
 
 def list_all_courses():
     database = Records()
