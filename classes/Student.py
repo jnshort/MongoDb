@@ -33,6 +33,14 @@ class Student:
         }
         return student
 
+    def print_dict(self) -> dict:
+        student = {
+            "last_name": self.lastName,
+            "first_name": self.firstName,
+            "email": self.email,
+        }
+        return student
+
     def add_student(self):
         """Adds this department to the database and the
         records list of departments.

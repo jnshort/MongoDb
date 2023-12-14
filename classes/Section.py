@@ -49,6 +49,18 @@ class Section:
         }
         return section
 
+    def print_dict(self) -> dict:
+        section = {
+            "section_number": self.section_number,
+            "semester": self.semester,
+            "section_year": self.section_year,
+            "building": self.building,
+            "room": self.room,
+            "schedule": self.schedule,
+            "start_time": self.start_time,
+            "instructor": self.instructor,
+        }
+        return section
     def add_section(self):
         """Adds this section to the database and the
         records list of sections.

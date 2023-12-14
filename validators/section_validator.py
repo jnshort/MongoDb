@@ -24,7 +24,7 @@ section_validator = {
                         'description': 'year section is offered'
                     },
                     'building': {
-                        'bsonType': 'string',
+                        'enum': ['ANAC', 'CDC', 'DC', 'ECS', 'EN2', 'EN3', 'EN4', 'EN5', 'ET', 'HSCI', 'NUR', 'VEC'],
                         'description': 'building of a course section'
                     },
                     'room': {

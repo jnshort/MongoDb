@@ -42,6 +42,18 @@ class Course:
         }
         return course
 
+    def print_dict(self) -> dict:
+        """Returns a dictionary representation of the class.
+                :return:    dict
+                """
+        course = {
+            "dept_abrv": self.dept_abrv,
+            "course_number": self.course_number,
+            "course_name": self.course_name,
+            "description": self.description,
+            "units": self.units,
+        }
+        return course
     def get_sections_list(self):
         result = []
         for section in self.sections:

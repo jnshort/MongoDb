@@ -1,6 +1,4 @@
-import pymongo
-from pymongo import MongoClient
-from db import db 
+
 from Records import Records
 from classes.Course import Course
 from classes.Major import Major
