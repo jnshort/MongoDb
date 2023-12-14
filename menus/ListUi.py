@@ -14,6 +14,11 @@ import pprint
  *********************************************************************************
 """
 def list_menu():
+    """Prints a menu for listing items from a collectin.
+    Prompts the user for necessary information and print
+    a collection of the user's choice
+    :return:    None
+    """
     rec = Records()
     menu = """\nWhich collection would you like to list?
     1) Department
@@ -51,6 +56,11 @@ def list_menu():
  *********************************************************************************
 """
 def list_majors_menu():
+    """Prints a menu for listing majors from a collectin.
+       Prompts the user for necessary information and print
+       a collection of the user's choice
+       :return:    None
+       """
     menu = """\nWhat kind of Major list?
         1) Students in Major
         2) Majors in Departments
@@ -69,6 +79,10 @@ def list_majors_menu():
         list_majors_by_student()
 
 def list_students_in_majors():
+    """Prompts user for inputs to list the students that
+     have declared a particular major.
+    :return:    None
+    """
     database = Records()
     majorName = input("Major name -->")
 
@@ -90,6 +104,10 @@ def list_students_in_majors():
     print("-----------------------------------------------------")
 
 def list_majors_in_departments():
+    """Prompts user for inputs to list the majors
+    that a particular department offers.
+    :return:    None
+    """
     database = Records()
     departmentNotFound = True
     while departmentNotFound:
@@ -114,6 +132,10 @@ def list_majors_in_departments():
     print("-----------------------------------------------------")
 
 def list_majors_by_student():
+    """Prompts user for inputs to list all the majors
+    a particular student has declared.
+    :return:    None
+    """
     database = Records()
 
     studentNotFound = True
@@ -149,6 +171,11 @@ def list_majors_by_student():
  *********************************************************************************
 """
 def list_enrollments_menu():
+    """Prints a menu for listing enrollments. Prompts
+    the user for necessary information and displays enrollments
+    from a collection of the users choice.
+    :return:    None
+    """
     menu = """\nWhat kind of Enrollment list?
         1) Enrollments by Student
         2) Return to main menu
@@ -164,6 +191,10 @@ def list_enrollments_menu():
 
 
 def list_enrollments_by_student():
+    """Prompts user for inputs to list all the courses
+    a particular student is enrolled in.
+    :return:    None
+    """
     database = Records()
     studentNotFound = True
 
@@ -202,6 +233,11 @@ def list_enrollments_by_student():
  *********************************************************************************
 """
 def list_students_menu():
+    """Prints a menu for listing students from a collectin.
+    Prompts the user for necessary information and lists
+    students from a collection of their choice.
+    :return:    None
+    """
     menu = """\nWhich student collection would you like to list?
         1) All Students
         2) All Students in Major
@@ -221,6 +257,11 @@ def list_students_menu():
         list_students_by_section()
 
 def list_all_students():
+    """Does not prompt the user for input. Simply
+    lists all the students that are registered at
+    the school.
+    :return:    None
+    """
     database = Records()
     result = database.students.find({})
     if result is not None:
@@ -232,6 +273,10 @@ def list_all_students():
 
 
 def list_students_by_section():
+    """Prompts user for inputs to list all the students
+    that a particular section has.
+    :return:    None
+    """
     database = Records()
     sectionNotFound = True
     while sectionNotFound:
@@ -267,6 +312,11 @@ def list_students_by_section():
  *********************************************************************************
 """
 def list_courses_menu():
+    """Prints a menu for listing from a collectin.
+    Prompts the user for necessary information and lists
+    from collection of the user's choice.
+    :return:    None
+    """
     menu = """\nWhich student collection would you like to list?
         1) All Courses
         2) All Courses in Department
@@ -290,6 +340,10 @@ def list_courses_menu():
 
 
 def list_all_courses():
+    """Prompts user for inputs to list all the courses
+    that the school offers.
+    :return:    None
+    """
     database = Records()
     result = database.courses.find({})
     print("\n-----------------------------------------------------")
@@ -303,6 +357,10 @@ def list_all_courses():
             print("-----------------------------------------------------")
 
 def list_courses_in_department():
+    """Prompts user for inputs to list all the courses
+    a particular department offers.
+    :return:    None
+    """
     database = Records()
     departmentNotFound = True
 
@@ -329,6 +387,10 @@ def list_courses_in_department():
             print("\n-----------------------------------------------------")
 
 def list_sections_by_course():
+    """Prompts user for inputs to list all the sections
+    that a particular course offers.
+    :return:    None
+    """
     database = Records()
     courseFound = False
 
