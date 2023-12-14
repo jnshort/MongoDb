@@ -152,23 +152,8 @@ def add_course_to_department():
             else:
                 print("Could not find department!")
 
-        # checking if this course already exists in the department
-        courseInDepartment = True
-        while courseInDepartment:
-            courseName = input("Course name --> ")
-            courseNumber = int(input("Course number --> "))
-
-            # course is not in department unless one of the course references has the
-            # same name
-            courseInDepartment = False
-            for courseId in result['courses']:
-                exisitingCourse = database.courses.find_one({'_id': courseId})
-                if exisitingCourse is not None:
-                    if exisitingCourse['course_name'] == courseName:
-                        courseInDepartment = True
-            if courseInDepartment:
-                print("The department already offers this course!")
-
+        courseName = input("Course name --> ")
+        courseNumber = int(input("Course number --> "))
         description = input("Description --> ")
         units = int(input("Units --> "))
 
