@@ -31,7 +31,7 @@ def remove_menu():
 
     match inp:
         case 1:
-           remove_department()
+            remove_department()
         case 2:
             remove_major()
         case 3:
