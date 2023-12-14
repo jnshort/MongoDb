@@ -312,7 +312,8 @@ def add_section_to_course():
             section.add_section()
 
             # get section ID of the section we just added
-            sectionAdded = database.sections.find_one({"section_number":sectionNumber})
+            sectionQuery = section.dict_repr()
+            sectionAdded = database.sections.find_one(sectionQuery)
 
             # update the course collection
             updateCourse = {'$push': {'sections': sectionAdded['_id']}}
