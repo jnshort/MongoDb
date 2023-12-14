@@ -54,7 +54,11 @@ class Course:
             "units": self.units,
         }
         return course
-    def get_sections_list(self):
+    
+    def get_sections_list(self) -> list:
+        """Returns a list of section ids that this course has
+        :return:    list
+        """
         result = []
         for section in self.sections:
             result.append(section.dict_repr())
@@ -97,10 +101,16 @@ class Course:
 
 
     def get_id(self):
+        """Returns the id stored in the database of this course
+        :return:    objectId
+        """
         rec = Records()
         return rec.courses.find_one({"course_name":self.course_name})["_id"]
 
     def __str__(self):
+        """Returns a string representation of this course
+        :return:    String
+        """
         text = f"\nCourse: {self.course_name} \nNumber: {self.course_number} \nDepartment: {self.dept_abrv}"
         text += f"\nDescription: {self.description}"
         text += f"\nUnits: {self.units}"

@@ -50,7 +50,10 @@ class Student:
         rec = Records()
         rec.students.insert_one(self.dict_repr())
 
-    def get_majors(self):
+    def get_majors(self) -> list:
+        """Returns a list of majors the student has declared
+        :return:    list
+        """
         rec = Records()
 
         student = rec.students.find_one({"first_name": self.firstName, "last_name": self.lastName})
@@ -63,6 +66,9 @@ class Student:
         
 
     def get_enrollments(self):
+        """Returns a list of enrollments the student is enrolled in
+        :return:    list
+        """
         rec = Records()
 
         student = rec.students.find_one({"first_name": self.firstName, "last_name": self.lastName})
@@ -94,5 +100,8 @@ class Student:
 
 
     def get_id(self):
+        """Returns the id stored in the database of this student
+        :return:    objectId
+        """
         rec = Records()
         return rec.students.find_one({"first_name":self.firstName, "last_name": self.lastName})["_id"]

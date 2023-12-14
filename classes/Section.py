@@ -20,6 +20,10 @@ class Section:
             len(self.room) <= 1000)
 
     def load_from_db(self, db_file):
+        """Takes a document from the database and fills in the attributes of the
+        object with values from the database.
+        :return:    None
+        """
         self.id = db_file['_id']
         self.courseId = db_file['course_id']
         self.section_number = db_file['section_number']
@@ -31,6 +35,8 @@ class Section:
         self.start_time = db_file['start_time']
         self.instructor = db_file['instructor']
         self.students = db_file['students']
+
+
     def dict_repr(self) -> dict:
         """Returns a dictionary representation of the class.
         :return:    dict
@@ -50,6 +56,9 @@ class Section:
         return section
 
     def print_dict(self) -> dict:
+        """Returns an abbrviated dictionary of the class 
+        for display purposes
+        :return:    None"""
         section = {
             "section_number": self.section_number,
             "semester": self.semester,
@@ -61,6 +70,7 @@ class Section:
             "instructor": self.instructor,
         }
         return section
+    
     def add_section(self):
         """Adds this section to the database and the
         records list of sections.
