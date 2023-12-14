@@ -3,6 +3,9 @@ from classes.Department import Department
 
 
 def get_datetime()->datetime.datetime:
+    """Promts user for year month and day, and returns a datetime object
+    representing the date
+    :return:    datetime"""
     current_date = datetime.datetime.now()
     valid = False
     year = ""
@@ -28,6 +31,7 @@ def get_datetime()->datetime.datetime:
 def load_dept(dept: dict) -> Department:
     """Takes a dictionary returned by MongoDb representing a department document
     and creates a Departent object of that document.
+    :return:    Department
     """
     name = dept["name"]
     abrv = dept["abbreviation"]

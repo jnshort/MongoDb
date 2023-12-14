@@ -33,6 +33,9 @@ class Department:
         return dept
 
     def load_from_db(self, db_file):
+        """Fills in fields of Department object from values in the database
+        :return:    None
+        """
         self.name: str = db_file['name']
         self.abbreviation: str = db_file['abbreviation']
         self.chair: str = db_file['chair_name']
@@ -94,6 +97,9 @@ class Department:
         return text
 
     def get_id(self):
+        """Returns the id stored in the database of this department
+        :return:    objectId
+        """
         rec = Records()
         return rec.departments.find_one({"name":self.name})["_id"]
 

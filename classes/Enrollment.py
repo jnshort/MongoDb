@@ -18,7 +18,10 @@ class Enrollment:
             self.minSatisfactory = field
 
 
-    def dict_repr(self):
+    def dict_repr(self) -> dict:
+        """Returns a dictionary representation of this enrollment object
+        :return:    dict
+        """
         if self.type == 1:
             enroll = {
                 "type": "Pass Fail",
@@ -37,6 +40,9 @@ class Enrollment:
 
 
     def add_enrollment(self):
+        """Adds this enrollment to the database
+        :return:    None
+        """
         rec = Records()
         student = rec.students.find_one({"last_name": self.student.lastName ,"first_name": self.student.firstName})
         if student:
@@ -64,6 +70,8 @@ class Enrollment:
 
 
     def remove_enrollment(self):
+        """Removes an enrollment with attributes matching this object from the database
+        :return:    None"""
         rec = Records()
         
         student = rec.students.find_one({"last_name": self.student.lastName ,"first_name": self.student.firstName})

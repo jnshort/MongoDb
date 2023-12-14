@@ -10,6 +10,10 @@ class Major:
 
 
     def load_from_db(self, database_file):
+        """Takes document from database and fills in attributes of Major object
+        to match
+        :return:    None
+        """
         database = Records()
         departmentQuery = {'_id':database_file['department']}
         department = database.departments.find_one(departmentQuery)
@@ -25,6 +29,9 @@ class Major:
         self.id = database_file['_id']
 
     def dict_repr(self) -> dict:
+        """Returns a dictionary representation of this Major with all attributes
+        :return:    dict
+        """
         major = {
             "name": self.name,
             "description": self.description,
@@ -34,12 +41,22 @@ class Major:
         return major
 
     def print_dict(self) -> dict:
+        """Returns an abbreviated dictionary representation of this Major 
+        for display purposes.
+        :return:    dict
+        """
+
         major = {
             "name": self.name,
             "description": self.description,
         }
         return major
-    def get_students_list(self):
+    
+
+    def get_students_list(self) -> list:
+        """Returns a list of students who are declared to this major
+        :return:    list
+        """
 
         rec = Records()
         """
@@ -63,11 +80,17 @@ class Major:
         return students
     
     def add_major(self):
+        """Adds a Major to the database with attributes matching those of this object
+        :return:    None
+        """
         rec = Records()
         rec.majors.insert_one(self.dict_repr())
 
 
     def remove_major(self):
+        """Removes a Major from the database with attributes matching those
+        of this object
+        :return:    None"""
         rec = Records()
         """
         if not self.students: # can only delete majors with no students
@@ -86,16 +109,17 @@ class Major:
         rec.majors.delete_one({'_id':self.id})
 
 
-
-
-
-
-
     def get_id(self):
+        """Returns the id stored in the database of this Major
+        :return:    objectId
+        """
         rec = Records()
         return rec.majors.find_one({"name":self.name})["_id"]
 
     def __str__(self):
+        """Returns a string representation of this Major for listing
+        :return:    String
+        """
         text = f"Name: {self.name} Department: {self.department_name} "
         text += f"Description: {self.description}"
         return text
