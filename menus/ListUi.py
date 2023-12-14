@@ -313,19 +313,24 @@ def list_courses_in_department():
 
 def list_sections_by_course():
     database = Records()
-    courseNotFound = True
-    while courseNotFound:
-        course_number = input("Course Number")
-        course = database.courses.find_one({"course_number": course_number})
+    courseFound = False
+
+    while not courseFound:
+        courseNum = input("Course number --> ")
+        while not courseNum.isnumeric():
+            courseNum = input("Course number --> ")
+        course = database.courses.find_one({"course_number": int(courseNum)})
         if course:
-            courseNotFoud = False
-        else:
-            print("Could not find the course!")
+            courseFound = True
+
     print("\n-----------------------------------------------------")
     print(f"Sections for {course['course_name']}")
+    print()
     for section_id in course["sections"]:
         section = database.sections.find_one({"_id": section_id})
         print(f"Section {section['section_number']} {section['semester']} {section['section_year']}")
         print(f"{section['building']} room {section['room']}")
         print(f"Meets on {section['schedule']} at {section['start_time']}")
         print(f"Instructor: {section['instructor']}")
+        print()
+    print("-----------------------------------------------------")
