@@ -10,10 +10,12 @@ from classes.Student import Student
 from classes.Enrollment import Enrollment
 from classes.Section import Section
 from classes.StudentMajor import StudentMajor
+import pprint
 
 # other
 from utils import get_datetime
 
+pp = pprint.PrettyPrinter()
 
 def add_menu():
     """Prints a menu for adding to a collection.
@@ -77,12 +79,14 @@ def add_department():
             print("There are errors with the input")
             if type(ex) == pymongo.errors.WriteError:
                 print("\tAt least one invalid field")
+                pp.pprint(ex)
                 print("*******************************")
             elif type(ex) == pymongo.errors.DuplicateKeyError:
                 print("\tDepartment would violate at least one uniqueness constraint")
+                pp.pprint(ex)
                 print("*******************************")
             else:
-                print(ex)
+                pp.pprint(ex)
 
 
 def add_major_to_department():
@@ -127,12 +131,14 @@ def add_major_to_department():
             print("There are errors with the input")
             if type(ex) == pymongo.errors.WriteError:
                 print("\tAt least one invalid field")
+                pp.pprint(ex)
                 print("*******************************")
             elif type(ex) == pymongo.errors.DuplicateKeyError:
                 print("\tMajor would violate at least one uniqueness constraint")
+                pp.pprint(ex)
                 print("*******************************")
             else:
-                print(ex)
+                pp.pprint(ex)
 
 
 def add_course_to_department():
@@ -177,13 +183,14 @@ def add_course_to_department():
             print("There are errors with the input")
             if type(ex) == pymongo.errors.WriteError:
                 print("\tAt least one invalid field")
-                print(ex)
+                pp.pprint(ex)
                 print("*******************************")
             elif type(ex) == pymongo.errors.DuplicateKeyError:
                 print("\tCourse would violate at least one uniqueness constraint")
+                pp.pprint(ex)
                 print("*******************************")
             else:
-                print(ex)
+                pp.pprint(ex)
 
 
 def add_enrollment_by_student():
@@ -248,12 +255,14 @@ def add_enrollment_by_student():
         print("There are errors with the input")
         if type(ex) == pymongo.errors.WriteError:
             print("\tAt least one invalid field")
+            pp.pprint(ex)
             print("*******************************")
         elif type(ex) == ValueError:
             print("\tStudent is already enrolled in that course")
+            pp.pprint(ex)
             print("*******************************")
         else:
-            print(ex)
+            pp.pprint(ex)
 def add_section_to_course():
     database = Records()
     sectionNotAdded = True
@@ -303,13 +312,14 @@ def add_section_to_course():
             print("\n*******************************")
             print("There are errors with the input")
             if type(ex) == pymongo.errors.WriteError:
-                print(ex)
+                pp.pprint(ex)
                 print("*******************************")
             elif type(ex) == pymongo.errors.DuplicateKeyError:
                 print("\tSection would violate at least one uniqueness constraint")
+                pp.pprint(ex)
                 print("*******************************")
             else:
-                print(ex)
+                pp.pprint(ex)
 
 
 
@@ -328,12 +338,14 @@ def add_student():
             print("There are errors with the input")
             if type(ex) == pymongo.errors.WriteError:
                 print("\tAt least one invalid field")
+                pp.pprint(ex)
                 print("*******************************")
             elif type(ex) == pymongo.errors.DuplicateKeyError:
                 print("\tStudent would violate at least one uniqueness constraint")
+                pp.pprint(ex)
                 print("*******************************")
             else:
-                print(ex)
+                pp.pprint(ex)
 
 
 def add_student_to_major():
@@ -381,10 +393,12 @@ def add_student_to_major():
         print("There are errors with the input")
         if type(ex) == pymongo.errors.WriteError:
             print("\tAt least one invalid field\n\tHas the student already declared this major?")
+            pp.pprint(ex)
             print("*******************************")
         elif type(ex) == pymongo.errors.DuplicateKeyError:
             print("\tStudent would violate at least one uniqueness constraint")
+            pp.pprint(ex)
             print("*******************************")
         else:
-            print(ex)
+            pp.pprint(ex)
 
