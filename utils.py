@@ -1,5 +1,7 @@
 import datetime
 from classes.Department import Department
+
+
 def get_datetime()->datetime.datetime:
     current_date = datetime.datetime.now()
     valid = False

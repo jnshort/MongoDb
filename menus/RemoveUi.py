@@ -48,6 +48,10 @@ def remove_menu():
             pass
 
 def remove_department():
+    """Prompts user for inputs to remove a department
+    and removes the departement from the database.
+    :return:    None
+    """
     database = Records()
 
     departmentNotFound = True
@@ -82,6 +86,10 @@ def remove_department():
 
 
 def remove_enrollment_by_student():
+    """Prompts user for inputs to remove an enrollment from a student
+    and removes the enrollment from the database.
+    :return:    None
+    """
     rec = Records()
 
     student = None
@@ -149,6 +157,10 @@ def remove_enrollment_by_student():
 
 
 def remove_student():
+    """Prompts user for inputs to remove a student
+    and removes the student from the database.
+    :return:    None
+    """
     database = Records()
     valid_student = False
 
@@ -186,6 +198,10 @@ def remove_student():
 
 
 def remove_course():
+    """Prompts user for inputs to remove a course
+    and removes the course from the database.
+    :return:    None
+    """
     rec = Records()
 
     valid_department = False
@@ -230,6 +246,10 @@ def remove_course():
 
 
 def remove_major():
+    """Prompts user for inputs to remove a major
+    and removes the major from the database.
+    :return:    None
+    """
     rec = Records()
 
     valid_department = False
@@ -269,6 +289,10 @@ def remove_major():
 
 
 def remove_section():
+    """Prompts user for inputs to remove a section
+    and removes the section from the database.
+    :return:    None
+    """
     rec = Records()
 
     valid_department = False
@@ -319,6 +343,10 @@ def remove_section():
 
 
 def undeclare_student():
+    """Prompts user for inputs to remove a major and student
+    and removes the major from the student in the database.
+    :return:    None
+    """
     rec = Records()
 
     valid_student = False
