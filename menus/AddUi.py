@@ -55,6 +55,11 @@ def add_menu():
 
 
 def add_department():
+    """Prompts user for inputs to add a department and writes
+    the department to the database.
+    :return:    None
+    """
+
     getting_input = True
     while getting_input:
         print("\nAdding Department:")
@@ -90,6 +95,10 @@ def add_department():
 
 
 def add_major_to_department():
+    """Prompts user for inputs to add a major to a department
+    and writes the major to the database
+    :return:    None
+    """
     database = Records()
     department_id = 0
 
@@ -142,6 +151,10 @@ def add_major_to_department():
 
 
 def add_course_to_department():
+    """Prompts user for inputs to add a course to a department
+    and writes the major to the database
+    :return:    None
+    """
     database = Records()
 
     courseNotAdded = True
@@ -194,6 +207,11 @@ def add_course_to_department():
 
 
 def add_enrollment_by_student():
+    """Prompts user for inputs to add an enrollment to a student
+    and writes the enrollment to the database
+    :return:    None
+    """
+
     rec = Records()
 
     # get student to add
@@ -264,6 +282,10 @@ def add_enrollment_by_student():
         else:
             pp.pprint(ex)
 def add_section_to_course():
+    """Prompts user for inputs to add a section to a course
+    and writes the course to the database
+    :return:    None
+    """
     database = Records()
     sectionNotAdded = True
     while sectionNotAdded:
@@ -324,6 +346,10 @@ def add_section_to_course():
 
 
 def add_student():
+    """Prompts user for inputs to add a student
+    and writes the student to the database
+    :return:    None
+    """
     studentNotAdded = True
     while studentNotAdded:
         firstName = input("Enter first name --> ")
@@ -349,6 +375,10 @@ def add_student():
 
 
 def add_student_to_major():
+    """Prompts user for inputs to add a student to a major
+    and writes the StudentMajor to the database
+    :return:    None
+    """
     database = Records()
     studentFound = False
 
