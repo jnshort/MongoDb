@@ -10,10 +10,12 @@ from classes.Student import Student
 from classes.Enrollment import Enrollment
 from classes.Section import Section
 from classes.StudentMajor import StudentMajor
+import pprint
 
 # other
 from utils import get_datetime
 
+pp = pprint.PrettyPrinter()
 
 def add_menu():
     """Prints a menu for adding to a collection.
@@ -53,10 +55,6 @@ def add_menu():
 
 
 def add_department():
-    """Prompts user for inputs to add a department and writes
-    the department to the database.
-    :return:    None
-    """
     getting_input = True
     while getting_input:
         print("\nAdding Department:")
@@ -81,19 +79,17 @@ def add_department():
             print("There are errors with the input")
             if type(ex) == pymongo.errors.WriteError:
                 print("\tAt least one invalid field")
+                pp.pprint(ex)
                 print("*******************************")
             elif type(ex) == pymongo.errors.DuplicateKeyError:
                 print("\tDepartment would violate at least one uniqueness constraint")
+                pp.pprint(ex)
                 print("*******************************")
             else:
-                print(ex)
+                pp.pprint(ex)
 
 
 def add_major_to_department():
-    """Prompts user for inputs to add a major to a department
-    and writes the major to the database
-    :return:    None
-    """
     database = Records()
     department_id = 0
 
@@ -135,19 +131,17 @@ def add_major_to_department():
             print("There are errors with the input")
             if type(ex) == pymongo.errors.WriteError:
                 print("\tAt least one invalid field")
+                pp.pprint(ex)
                 print("*******************************")
             elif type(ex) == pymongo.errors.DuplicateKeyError:
                 print("\tMajor would violate at least one uniqueness constraint")
+                pp.pprint(ex)
                 print("*******************************")
             else:
-                print(ex)
+                pp.pprint(ex)
 
 
 def add_course_to_department():
-    """Prompts user for inputs to add a course to a department
-    and writes the major to the database
-    :return:    None
-    """
     database = Records()
 
     courseNotAdded = True
@@ -189,20 +183,17 @@ def add_course_to_department():
             print("There are errors with the input")
             if type(ex) == pymongo.errors.WriteError:
                 print("\tAt least one invalid field")
-                print(ex)
+                pp.pprint(ex)
                 print("*******************************")
             elif type(ex) == pymongo.errors.DuplicateKeyError:
                 print("\tCourse would violate at least one uniqueness constraint")
+                pp.pprint(ex)
                 print("*******************************")
             else:
-                print(ex)
+                pp.pprint(ex)
 
 
 def add_enrollment_by_student():
-    """Prompts user for inputs to add an enrollment to a student
-    and writes the enrollment to the database
-    :return:    None
-    """
     rec = Records()
 
     # get student to add
@@ -264,19 +255,15 @@ def add_enrollment_by_student():
         print("There are errors with the input")
         if type(ex) == pymongo.errors.WriteError:
             print("\tAt least one invalid field")
+            pp.pprint(ex)
             print("*******************************")
         elif type(ex) == ValueError:
             print("\tStudent is already enrolled in that course")
+            pp.pprint(ex)
             print("*******************************")
         else:
-            print(ex)
-
-
+            pp.pprint(ex)
 def add_section_to_course():
-    """Prompts user for inputs to add a section to a course
-    and writes the course to the database
-    :return:    None
-    """
     database = Records()
     sectionNotAdded = True
     while sectionNotAdded:
@@ -325,21 +312,18 @@ def add_section_to_course():
             print("\n*******************************")
             print("There are errors with the input")
             if type(ex) == pymongo.errors.WriteError:
-                print(ex)
+                pp.pprint(ex)
                 print("*******************************")
             elif type(ex) == pymongo.errors.DuplicateKeyError:
                 print("\tSection would violate at least one uniqueness constraint")
+                pp.pprint(ex)
                 print("*******************************")
             else:
-                print(ex)
+                pp.pprint(ex)
 
 
 
 def add_student():
-    """Prompts user for inputs to add a student
-    and writes the student to the database
-    :return:    None
-    """
     studentNotAdded = True
     while studentNotAdded:
         firstName = input("Enter first name --> ")
@@ -354,19 +338,17 @@ def add_student():
             print("There are errors with the input")
             if type(ex) == pymongo.errors.WriteError:
                 print("\tAt least one invalid field")
+                pp.pprint(ex)
                 print("*******************************")
             elif type(ex) == pymongo.errors.DuplicateKeyError:
                 print("\tStudent would violate at least one uniqueness constraint")
+                pp.pprint(ex)
                 print("*******************************")
             else:
-                print(ex)
+                pp.pprint(ex)
 
 
 def add_student_to_major():
-    """Prompts user for inputs to add a student to a major
-    and writes the StudentMajor to the database
-    :return:    None
-    """
     database = Records()
     studentFound = False
 
@@ -411,10 +393,12 @@ def add_student_to_major():
         print("There are errors with the input")
         if type(ex) == pymongo.errors.WriteError:
             print("\tAt least one invalid field\n\tHas the student already declared this major?")
+            pp.pprint(ex)
             print("*******************************")
         elif type(ex) == pymongo.errors.DuplicateKeyError:
             print("\tStudent would violate at least one uniqueness constraint")
+            pp.pprint(ex)
             print("*******************************")
         else:
-            print(ex)
+            pp.pprint(ex)
 
