@@ -31,7 +31,7 @@ def remove_menu():
 
     match inp:
         case 1:
-           remove_department()
+            remove_department()
         case 2:
             remove_major()
         case 3:
@@ -200,8 +200,10 @@ def remove_course():
     valid_course = False
     course = None
     while not valid_course:
-        course_number = int(input("Enter course number --> "))
-        course = rec.courses.find_one({'dept_abrv':deptAbrv,"course_number": course_number})
+        course_number = input("Enter course number --> ")
+        while not course_number.isnumeric():
+            course_number = input("Enter course number --> ")
+        course = rec.courses.find_one({"course_number": int(course_number)})
         if course:
             valid_course = True
         else:
@@ -279,8 +281,10 @@ def remove_section():
     valid_course = False
     course = None
     while not valid_course:
-        course_number = int(input("Enter course number --> "))
-        course = rec.courses.find_one({'dept_abrv':deptAbrv,"course_number": course_number})
+        course_number = input("Enter course number --> ")
+        while not course_number.isnumeric():
+            course_number = input("Enter course number --> ")
+        course = rec.courses.find_one({"course_number": int(course_number)})
         if course:
             valid_course = True
 
